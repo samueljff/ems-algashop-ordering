@@ -51,8 +51,12 @@ public class Customer {
         this.setLoyaltyPoints(0);
     }
 
-    public void addLoayltyPoints(Integer points) {
-
+    public void addLoyaltyPoints(Integer loyaltyPointsAdded) {
+        verifyIfChangeable();
+        if (loyaltyPointsAdded <= 0){
+            throw  new IllegalArgumentException();
+        }
+            this.setLoyaltyPoints(this.loyaltyPoints + loyaltyPointsAdded);
     }
 
     public void archive() {
@@ -143,19 +147,19 @@ public class Customer {
 
     private void setFullName(String fullName) {
         Objects.requireNonNull(fullName, VALIDATION_ERROR_FULLNAME_IS_NULL);
-        if(fullName.isBlank()){
+        if (fullName.isBlank()) {
             throw new IllegalArgumentException(VALIDATION_ERROR_FULLNAME_IS_BLANK);
         }
         this.fullName = fullName;
     }
 
     private void setBirthDate(LocalDate birthDate) {
-        if(birthDate == null){
+        if (birthDate == null) {
             this.birthDate = null;
             return;
         }
 
-        if(birthDate.isAfter(LocalDate.now())){
+        if (birthDate.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException(VALIDATION_ERROR_BIRTHDATE_MUST_IN_PAST);
         }
         this.birthDate = birthDate;
@@ -197,11 +201,14 @@ public class Customer {
 
     private void setLoyaltyPoints(Integer loyaltyPoints) {
         Objects.requireNonNull(loyaltyPoints);
+        if (loyaltyPoints < 0) {
+            throw new IllegalArgumentException();
+        }
         this.loyaltyPoints = loyaltyPoints;
     }
 
     private void verifyIfChangeable() {
-        if (this.isArchived()){
+        if (this.isArchived()) {
             throw new CustomerArchivedException();
         }
     }
