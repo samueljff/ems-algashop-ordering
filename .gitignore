@@ -1,9 +1,17 @@
 HELP.md
-.gradle
+
+# Gradle
+.gradle/
+caches/
+daemon/
+native/
+wrapper/
 build/
+# Gradle Wrapper (mantém apenas os arquivos importantes)
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+!gradle/wrapper/gradle-wrapper.properties
 
 ### STS ###
 .apt_generated
