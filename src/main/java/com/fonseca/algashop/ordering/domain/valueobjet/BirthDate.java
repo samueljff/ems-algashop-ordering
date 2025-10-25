@@ -4,6 +4,7 @@ import com.fonseca.algashop.ordering.domain.exceptions.ErrorMessages;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public record BirthDate(LocalDate value) {
@@ -16,7 +17,7 @@ public record BirthDate(LocalDate value) {
     }
 
     public Integer age() {
-        return (int) Duration.between(value, LocalDate.now()).toDays();
+        return (int) ChronoUnit.DAYS.between(value, LocalDate.now());
     }
 
     @Override
