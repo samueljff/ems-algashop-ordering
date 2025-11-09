@@ -59,4 +59,27 @@ class OrderTest {
         Assertions.assertThatExceptionOfType(UnsupportedOperationException.class)
                 .isThrownBy(items::clear);
     }
+
+    @Test
+    public void shouldCalculateTotals(){
+        Order order = Order.draft(new CustomerId());
+        ProductId productId = new ProductId();
+
+        order.addItem(
+                productId,
+                new ProductName("Mouse pad"),
+                new Money("100"),
+                new Quantity(2)
+        );
+
+        order.addItem(
+                productId,
+                new ProductName("Ram Memory"),
+                new Money("50"),
+                new Quantity(1)
+        );
+
+        Assertions.assertThat(order.totalAmount()).isEqualTo(new Money("250"));
+        Assertions.assertThat(order.totalItems()).isEqualTo(new Quantity(3));
+    }
 }
