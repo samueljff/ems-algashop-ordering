@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.entity;
 
+import com.fonseca.algashop.ordering.domain.exceptions.OrderStatusCannotBeChangedException;
 import com.fonseca.algashop.ordering.domain.valueobjet.Money;
 import com.fonseca.algashop.ordering.domain.valueobjet.ProductName;
 import com.fonseca.algashop.ordering.domain.valueobjet.Quantity;
@@ -43,7 +44,7 @@ class OrderTest {
     }
 
     @Test
-    public void shouldGenerateExceptionWhenTryToChangeItemSet(){
+    public void shouldGenerateExceptionWhenTryToChangeItemSet() {
         Order order = Order.draft(new CustomerId());
         ProductId productId = new ProductId();
 
@@ -61,7 +62,7 @@ class OrderTest {
     }
 
     @Test
-    public void shouldCalculateTotals(){
+    public void shouldCalculateTotals() {
         Order order = Order.draft(new CustomerId());
         ProductId productId = new ProductId();
 
@@ -81,5 +82,21 @@ class OrderTest {
 
         Assertions.assertThat(order.totalAmount()).isEqualTo(new Money("250"));
         Assertions.assertThat(order.totalItems()).isEqualTo(new Quantity(3));
+    }
+
+    @Test
+    public void givenDraftOrder_whenPlace_shouldChangeToPlaced() {
+        Order order = Order.draft(new CustomerId());
+        order.place();
+        Assertions.assertThat(order.isPlaced()).isTrue();
+    }
+
+    @Test
+    public void givenPlacedOrder_whenTryToPlace_shouldGenerateException() {
+        Order order = Order.draft(new CustomerId());
+        order.place();
+
+        Assertions.assertThatExceptionOfType(OrderStatusCannotBeChangedException.class)
+                .isThrownBy(order::place);
     }
 }
