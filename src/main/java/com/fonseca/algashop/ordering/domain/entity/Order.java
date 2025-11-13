@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.entity;
 
+import com.fonseca.algashop.ordering.domain.exceptions.OrderCannotBePlacedException;
 import com.fonseca.algashop.ordering.domain.exceptions.OrderInvalidShippingDeliveryDateException;
 import com.fonseca.algashop.ordering.domain.exceptions.OrderStatusCannotBeChangedException;
 import com.fonseca.algashop.ordering.domain.valueobjet.*;
@@ -106,8 +107,18 @@ public class Order {
     }
 
     public void place() {
-        //TODO BUSINESS RULES
+        Objects.requireNonNull(this.shipping());
+        Objects.requireNonNull(this.billing());
+        Objects.requireNonNull(this.expectedDeliveryDate());
+        Objects.requireNonNull(this.shippingCost());
+        Objects.requireNonNull(this.paymentMethod());
+        Objects.requireNonNull(this.items());
+
+        if (items().isEmpty()){
+            throw new OrderCannotBePlacedException(this.id);
+        }
         this.changeStatus(OrderStatus.PLACED);
+        this.setPlacedAt(OffsetDateTime.now());
     }
 
     public void changePaymentMethod(PaymentMethod paymentMethod) {
