@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.valueobjet;
 
+import com.fonseca.algashop.ordering.domain.exceptions.ProductOutOfStockException;
 import com.fonseca.algashop.ordering.domain.valueobjet.id.ProductId;
 import lombok.Builder;
 
@@ -13,5 +14,15 @@ public record Product(ProductId id, ProductName name, Money price, Boolean inSto
         Objects.requireNonNull(name);
         Objects.requireNonNull(price);
         Objects.requireNonNull(inStock);
+    }
+
+    public void checkOutOfStock() {
+        if (isOutOfStock()) {
+            throw new ProductOutOfStockException(this.id());
+        }
+    }
+
+    private boolean isOutOfStock() {
+        return !inStock();
     }
 }
