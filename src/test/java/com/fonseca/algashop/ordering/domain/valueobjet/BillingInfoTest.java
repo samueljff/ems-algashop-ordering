@@ -1,9 +1,8 @@
 package com.fonseca.algashop.ordering.domain.valueobjet;
 
+import com.fonseca.algashop.ordering.domain.entity.OrderTestDataBuilder;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class BillingInfoTest {
     @Test
@@ -201,11 +200,11 @@ class BillingInfoTest {
                 .complement(null)
                 .build();
 
+        Shipping shipping = OrderTestDataBuilder.aShipping();
         BillingInfo billingInfo = new BillingInfo(fullName, document, phone, address);
-        ShippingInfo shippingInfo = new ShippingInfo(fullName, document, phone, address);
 
         // then
-        Assertions.assertThat(billingInfo).isNotEqualTo(shippingInfo);
-        Assertions.assertThat(billingInfo.getClass()).isNotEqualTo(shippingInfo.getClass());
+        Assertions.assertThat(billingInfo).isNotEqualTo(shipping);
+        Assertions.assertThat(billingInfo.getClass()).isNotEqualTo(shipping.getClass());
     }
 }
