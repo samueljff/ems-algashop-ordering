@@ -1,8 +1,8 @@
 package com.fonseca.algashop.ordering.domain.entity;
 
 import com.fonseca.algashop.ordering.domain.exceptions.CustomerArchivedException;
-import com.fonseca.algashop.ordering.domain.valueobjet.*;
-import com.fonseca.algashop.ordering.domain.valueobjet.id.CustomerId;
+import com.fonseca.algashop.ordering.domain.valueObject.*;
+import com.fonseca.algashop.ordering.domain.valueObject.id.CustomerId;
 import lombok.Builder;
 
 import java.time.OffsetDateTime;

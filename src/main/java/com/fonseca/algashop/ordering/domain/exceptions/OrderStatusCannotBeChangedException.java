@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.domain.exceptions;
 
 import com.fonseca.algashop.ordering.domain.entity.OrderStatus;
-import com.fonseca.algashop.ordering.domain.valueobjet.id.OrderId;
+import com.fonseca.algashop.ordering.domain.valueObject.id.OrderId;
 
 import static com.fonseca.algashop.ordering.domain.exceptions.ErrorMessages.ERROR_ORDER_STATUS_CANNOT_BE_CHANGE;
 

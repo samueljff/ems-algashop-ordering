@@ -1,10 +1,7 @@
 package com.fonseca.algashop.ordering.domain.entity;
 
-import com.fonseca.algashop.ordering.domain.valueobjet.Money;
-import com.fonseca.algashop.ordering.domain.valueobjet.ProductName;
-import com.fonseca.algashop.ordering.domain.valueobjet.Quantity;
-import com.fonseca.algashop.ordering.domain.valueobjet.id.OrderId;
-import com.fonseca.algashop.ordering.domain.valueobjet.id.ProductId;
+import com.fonseca.algashop.ordering.domain.valueObject.Quantity;
+import com.fonseca.algashop.ordering.domain.valueObject.id.OrderId;
 import org.junit.jupiter.api.Test;
 
 class OrderItemTest {

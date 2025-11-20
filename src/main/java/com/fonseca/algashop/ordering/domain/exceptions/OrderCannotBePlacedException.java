@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.domain.exceptions;
 
-import com.fonseca.algashop.ordering.domain.valueobjet.id.OrderId;
+import com.fonseca.algashop.ordering.domain.valueObject.id.OrderId;
 
 import static com.fonseca.algashop.ordering.domain.exceptions.ErrorMessages.*;
 

@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.domain.entity;
 
 import com.fonseca.algashop.ordering.domain.exceptions.CustomerArchivedException;
-import com.fonseca.algashop.ordering.domain.valueobjet.*;
+import com.fonseca.algashop.ordering.domain.valueObject.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -4,10 +4,10 @@ import com.fonseca.algashop.ordering.domain.exceptions.OrderCannotBePlacedExcept
 import com.fonseca.algashop.ordering.domain.exceptions.OrderDoesNotContainOrderItemException;
 import com.fonseca.algashop.ordering.domain.exceptions.OrderInvalidShippingDeliveryDateException;
 import com.fonseca.algashop.ordering.domain.exceptions.OrderStatusCannotBeChangedException;
-import com.fonseca.algashop.ordering.domain.valueobjet.*;
-import com.fonseca.algashop.ordering.domain.valueobjet.id.CustomerId;
-import com.fonseca.algashop.ordering.domain.valueobjet.id.OrderId;
-import com.fonseca.algashop.ordering.domain.valueobjet.id.OrderItemId;
+import com.fonseca.algashop.ordering.domain.valueObject.*;
+import com.fonseca.algashop.ordering.domain.valueObject.id.CustomerId;
+import com.fonseca.algashop.ordering.domain.valueObject.id.OrderId;
+import com.fonseca.algashop.ordering.domain.valueObject.id.OrderItemId;
 import lombok.Builder;
 
 import java.math.BigDecimal;
