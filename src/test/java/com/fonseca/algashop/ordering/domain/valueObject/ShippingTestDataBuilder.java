@@ -7,7 +7,7 @@ public class ShippingTestDataBuilder {
     public ShippingTestDataBuilder() {
     }
 
-    public static ShippingTestDataBuilder anOrder() {
+    public static ShippingTestDataBuilder anShipping() {
 
         return new ShippingTestDataBuilder();
     }

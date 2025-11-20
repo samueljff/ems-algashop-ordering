@@ -9,18 +9,14 @@ class ShippingTest {
     @Test
     void givenValidData_whenCreateShippingWithBuilder_thenShouldSucceed() {
         // given/when
-        Document document = new Document("112-33-2321");
-        Phone phone = new Phone("111-441-1244");
-        FullName fullName = new FullName("John", "Doe");
-
-        Address address = ShippingTestDataBuilder.anAddress();
         Shipping shipping = ShippingTestDataBuilder.aShipping();
+        Shipping order = OrderTestDataBuilder.aShipping();
 
         // then
-        Assertions.assertThat(shipping.recipient().fullName()).isEqualTo(fullName);
-        Assertions.assertThat(shipping.recipient().document()).isEqualTo(document);
-        Assertions.assertThat(shipping.recipient().phone()).isEqualTo(phone);
-        Assertions.assertThat(shipping.address()).isEqualTo(address);
+        Assertions.assertThat(shipping.recipient().fullName()).isEqualTo(order.recipient().fullName());
+        Assertions.assertThat(shipping.recipient().document()).isEqualTo(order.recipient().document());
+        Assertions.assertThat(shipping.recipient().phone()).isEqualTo(order.recipient().phone());
+        Assertions.assertThat(shipping.address()).isEqualTo(order.address());
     }
 
     @Test
