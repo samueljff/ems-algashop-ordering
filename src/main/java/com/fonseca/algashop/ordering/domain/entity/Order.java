@@ -1,9 +1,6 @@
 package com.fonseca.algashop.ordering.domain.entity;
 
-import com.fonseca.algashop.ordering.domain.exceptions.OrderCannotBePlacedException;
-import com.fonseca.algashop.ordering.domain.exceptions.OrderDoesNotContainOrderItemException;
-import com.fonseca.algashop.ordering.domain.exceptions.OrderInvalidShippingDeliveryDateException;
-import com.fonseca.algashop.ordering.domain.exceptions.OrderStatusCannotBeChangedException;
+import com.fonseca.algashop.ordering.domain.exceptions.*;
 import com.fonseca.algashop.ordering.domain.valueObject.*;
 import com.fonseca.algashop.ordering.domain.valueObject.id.CustomerId;
 import com.fonseca.algashop.ordering.domain.valueObject.id.OrderId;
@@ -83,6 +80,7 @@ public class Order {
     public void addItem(Product product, Quantity quantity) {
         Objects.requireNonNull(product);
         Objects.requireNonNull(quantity);
+        verifyIfChangeable();
 
         product.checkOutOfStock();
 
@@ -114,16 +112,19 @@ public class Order {
 
     public void changePaymentMethod(PaymentMethod paymentMethod) {
         Objects.requireNonNull(paymentMethod);
+        verifyIfChangeable();
         this.setPaymentMethod(paymentMethod);
     }
 
     public void changeBilling(Billing billing) {
         Objects.requireNonNull(billing);
+        verifyIfChangeable();
         this.setBilling(billing);
     }
 
     public void changeShipping(Shipping newShipping) {
         Objects.requireNonNull(newShipping);
+        verifyIfChangeable();
 
         if (newShipping.expectedDate().isBefore(LocalDate.now())) {
             throw new OrderInvalidShippingDeliveryDateException(this.id());
@@ -135,7 +136,7 @@ public class Order {
     public void changeItemQuantity(OrderItemId orderItemId, Quantity quantity) {
         Objects.requireNonNull(orderItemId);
         Objects.requireNonNull(quantity);
-
+        verifyIfChangeable();
         OrderItem orderItem = this.findOrderItem(orderItemId);
         orderItem.changeQuantity(quantity);
 
@@ -255,6 +256,12 @@ public class Order {
                 .filter(i -> i.id().equals(orderItemId))
                 .findFirst()
                 .orElseThrow(()-> new OrderDoesNotContainOrderItemException(this.id(), orderItemId));
+    }
+
+    private void verifyIfChangeable() {
+        if (!this.isDraft()) {
+            throw new OrderCannotBeEditedException(this.id(), this.status());
+        }
     }
 
     private void setId(OrderId id) {
