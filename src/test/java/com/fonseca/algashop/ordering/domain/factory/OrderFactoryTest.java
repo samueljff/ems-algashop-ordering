@@ -4,6 +4,7 @@ import com.fonseca.algashop.ordering.domain.entity.Order;
 import com.fonseca.algashop.ordering.domain.entity.OrderTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.entity.PaymentMethod;
 import com.fonseca.algashop.ordering.domain.entity.ProductTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.exceptions.ErrorMessages;
 import com.fonseca.algashop.ordering.domain.exceptions.OrderCannotBeEditedException;
 import com.fonseca.algashop.ordering.domain.valueObject.Billing;
 import com.fonseca.algashop.ordering.domain.valueObject.Product;
@@ -66,5 +67,9 @@ class OrderFactoryTest {
         ThrowableAssert.ThrowingCallable changePaymentTask = () -> order.changePaymentMethod(PaymentMethod.CREDIT_CARD);
         Assertions.assertThatExceptionOfType(OrderCannotBeEditedException.class)
                 .isThrownBy(changePaymentTask);
+
+        Assertions.assertThatThrownBy(() -> order.changeBilling(billing))
+                .isInstanceOf(OrderCannotBeEditedException.class)
+                .hasMessage(String.format(ErrorMessages.ERROR_ORDER_CANNOT_BE_EDITED, order.id(), order.status()));
     }
 }
