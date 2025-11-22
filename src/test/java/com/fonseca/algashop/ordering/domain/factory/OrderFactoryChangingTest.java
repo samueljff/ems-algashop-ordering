@@ -1,8 +1,11 @@
-package com.fonseca.algashop.ordering.domain.entity;
+package com.fonseca.algashop.ordering.domain.factory;
 
+import com.fonseca.algashop.ordering.domain.entity.Order;
+import com.fonseca.algashop.ordering.domain.entity.OrderTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.entity.PaymentMethod;
+import com.fonseca.algashop.ordering.domain.entity.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.exceptions.ErrorMessages;
 import com.fonseca.algashop.ordering.domain.exceptions.OrderCannotBeEditedException;
-import com.fonseca.algashop.ordering.domain.factory.OrderFactory;
 import com.fonseca.algashop.ordering.domain.valueObject.Billing;
 import com.fonseca.algashop.ordering.domain.valueObject.Product;
 import com.fonseca.algashop.ordering.domain.valueObject.Quantity;
