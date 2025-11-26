@@ -7,6 +7,8 @@ import com.fonseca.algashop.ordering.domain.valueObject.id.ProductId;
 
 public class ProductTestDataBuilder {
 
+    public static final ProductId DEFAULT_PRODUCT_ID = new ProductId();
+
     private ProductTestDataBuilder() {
     }
 
