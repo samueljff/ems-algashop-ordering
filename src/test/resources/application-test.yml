@@ -14,3 +14,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: 'true'
+    open-in-view: false  # ← ADICIONAR para remover warning
+    properties:
+      hibernate:
+        format_sql: true

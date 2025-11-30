@@ -67,6 +67,10 @@ tasks.register('integrationTest', Test) {
     classpath = sourceSets.test.runtimeClasspath
     shouldRunAfter test
     useJUnitPlatform()
+    jvmArgs(
+            '-XX:+EnableDynamicAgentLoading', // Permite carregamento dinâmico de agentes Java (necessário para Mockito no JDK 21+)
+            '-Xshare:off' // Desabilita (Class Data Sharing) para evitar warning de bootstrap classpath
+    )
     testLogging {
         events('passed')
     }
