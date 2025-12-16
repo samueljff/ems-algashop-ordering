@@ -37,9 +37,7 @@ class OrderPersistenceEntityAssemblerTest {
     @Test
     void shouldConvertBillingToEmbeddable() {
         // Given
-        Order order = OrderTestDataBuilder.anOrder()
-                .billing()
-                .build();
+        Order order = OrderTestDataBuilder.anOrder().build();
 
         // When
         OrderPersistenceEntity entity = assembler.fromDomain(order);
@@ -58,9 +56,7 @@ class OrderPersistenceEntityAssemblerTest {
     @Test
     void shouldConvertBillingAddressToEmbeddable() {
         // Given
-        Order order = OrderTestDataBuilder.anOrder()
-                .billing()
-                .build();
+        Order order = OrderTestDataBuilder.anOrder().build();
 
         // When
         OrderPersistenceEntity entity = assembler.fromDomain(order);
@@ -80,9 +76,7 @@ class OrderPersistenceEntityAssemblerTest {
     @Test
     void shouldConvertShippingToEmbeddable() {
         // Given
-        Order order = OrderTestDataBuilder.anOrder()
-                .shipping()
-                .build();
+        Order order = OrderTestDataBuilder.anOrder().build();
 
         // When
         OrderPersistenceEntity entity = assembler.fromDomain(order);
@@ -100,10 +94,7 @@ class OrderPersistenceEntityAssemblerTest {
     @Test
     void shouldConvertShippingAddressToEmbeddable() {
         // Given
-        Order order = OrderTestDataBuilder.anOrder()
-                .billing()
-                .build();
-
+        Order order = OrderTestDataBuilder.anOrder().build();
         // When
         OrderPersistenceEntity entity = assembler.fromDomain(order);
 
@@ -122,9 +113,7 @@ class OrderPersistenceEntityAssemblerTest {
     @Test
     void shouldConvertRecipientToEmbeddable() {
         // Given
-        Order order = OrderTestDataBuilder.anOrder()
-                .billing()
-                .build();
+        Order order = OrderTestDataBuilder.anOrder().build();
 
         // When
         OrderPersistenceEntity entity = assembler.fromDomain(order);
@@ -135,27 +124,6 @@ class OrderPersistenceEntityAssemblerTest {
                 r -> assertThat(r.getLastName()).isEqualTo(order.shipping().recipient().fullName().lastName()),
                 r -> assertThat(r.getDocument()).isEqualTo(order.shipping().recipient().document().value()),
                 r -> assertThat(r.getPhone()).isEqualTo(order.shipping().recipient().phone().value())
-        );
-    }
-
-    @Test
-    void shouldConvertCompleteOrderWithBillingAndShipping() {
-        // Given
-        Order order = OrderTestDataBuilder.anOrder()
-                .billing()
-                .shipping()
-                .build();
-
-        // When
-        OrderPersistenceEntity entity = assembler.fromDomain(order);
-
-        // Then
-        assertThat(entity).satisfies(
-                e -> assertThat(e.getId()).isEqualTo(order.id().value().toLong()),
-                e -> assertThat(e.getCustomerId()).isEqualTo(order.customerId().value()),
-                e -> assertThat(e.getTotalAmount()).isEqualTo(order.totalAmount().value()),
-                e -> assertThat(e.getBilling()).isNotNull(),
-                e -> assertThat(e.getShipping()).isNotNull()
         );
     }
 

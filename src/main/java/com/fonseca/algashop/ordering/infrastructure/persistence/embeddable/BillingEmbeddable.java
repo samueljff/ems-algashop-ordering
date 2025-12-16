@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.embeddable;
 
+import com.fonseca.algashop.ordering.domain.model.valueObject.Email;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class BillingEmbeddable {
     private String lastName;
     private String document;
     private String phone;
-
+    private String email;
     @Embedded
     private AddressEmbeddable address;
 }

@@ -1,5 +1,10 @@
 package com.fonseca.algashop.ordering.domain.model.valueObject;
 
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.ShippingEmbeddable;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ShippingTestDataBuilder {
@@ -25,6 +30,20 @@ public class ShippingTestDataBuilder {
                 .build();
     }
 
+    public static ShippingEmbeddable aShippingEmbeddable() {
+        return ShippingEmbeddable.builder()
+                .cost(new BigDecimal("10"))
+                .expectedDate(LocalDate.now().plusWeeks(1))
+                .address(anAddressEmbeddable())
+                .recipient(RecipientEmbeddable.builder()
+                        .firstName("John")
+                        .lastName("Doe")
+                        .document("112-33-2321")
+                        .phone("111-441-1244")
+                        .build())
+                .build();
+    }
+
     public static Address anAddress() {
         return Address.builder()
                 .street("Bourbon Street")
@@ -34,6 +53,18 @@ public class ShippingTestDataBuilder {
                 .city("Montfort")
                 .state("South Carolina")
                 .zipCode(new ZipCode("79911")).build();
+    }
+
+    public static AddressEmbeddable anAddressEmbeddable() {
+        return AddressEmbeddable.builder()
+                .street("Bourbon Street")
+                .number("1234")
+                .neighborhood("North Ville")
+                .complement("apt. 11")
+                .city("Montfort")
+                .state("South Carolina")
+                .zipCode("79911")
+                .build();
     }
 
     public static Shipping aShippingAlt() {

@@ -1,5 +1,8 @@
 package com.fonseca.algashop.ordering.domain.model.valueObject;
 
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
+
 public class BillingTestDataBuilder {
 
     public BillingTestDataBuilder() {
@@ -18,6 +21,28 @@ public class BillingTestDataBuilder {
                 .fullName(new FullName("John", "Doe"))
                 .email(new Email("jhon.doe@gmail.com"))
                 .build();
+    }
+
+    public static BillingEmbeddable aBillingEmbeddable() {
+        return BillingEmbeddable.builder()
+                .address(anAddressEmbeddable())
+                .document(String.valueOf(new Document("225-09-1992")))
+                .phone(String.valueOf(new Phone("123-111-9911")))
+                .firstName("Doe")
+                .lastName("Doe")
+                .email("jhon.doe@gmail.com")
+                .build();
+    }
+
+    public static AddressEmbeddable anAddressEmbeddable() {
+        return AddressEmbeddable.builder()
+                .street("Bourbon Street")
+                .number("1234")
+                .neighborhood("North Ville")
+                .complement("apt. 11")
+                .city("Montfort")
+                .state("South Carolina")
+                .zipCode(String.valueOf(new ZipCode("79911"))).build();
     }
 
     public static Address anAddress() {
