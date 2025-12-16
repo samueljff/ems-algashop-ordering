@@ -1,17 +1,25 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.assembler;
 
 import com.fonseca.algashop.ordering.domain.model.entity.Order;
+import com.fonseca.algashop.ordering.domain.model.valueObject.Address;
+import com.fonseca.algashop.ordering.domain.model.valueObject.Billing;
+import com.fonseca.algashop.ordering.domain.model.valueObject.Recipient;
+import com.fonseca.algashop.ordering.domain.model.valueObject.Shipping;
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.ShippingEmbeddable;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderPersistenceEntityAssembler {
 
-    public OrderPersistenceEntity fromDomain(Order order){
+    public OrderPersistenceEntity fromDomain(Order order) {
         return merge(new OrderPersistenceEntity(), order);
     }
 
-    public OrderPersistenceEntity merge(OrderPersistenceEntity orderPersistenceEntity, Order order){
+    public OrderPersistenceEntity merge(OrderPersistenceEntity orderPersistenceEntity, Order order) {
         orderPersistenceEntity.setId(order.id().value().toLong());
         orderPersistenceEntity.setCustomerId(order.customerId().value());
         orderPersistenceEntity.setTotalAmount(order.totalAmount().value());
@@ -23,6 +31,62 @@ public class OrderPersistenceEntityAssembler {
         orderPersistenceEntity.setCanceledAt(order.canceledAt());
         orderPersistenceEntity.setReadyAt(order.readyAt());
         orderPersistenceEntity.setVersion(order.version());
+        orderPersistenceEntity.setBilling(convertBillingToEmbeddable(order.billing()));
+        orderPersistenceEntity.setShipping(convertShippingToEmbeddable(order.shipping()));
         return orderPersistenceEntity;
+    }
+
+    private ShippingEmbeddable convertShippingToEmbeddable(Shipping shipping) {
+        if (shipping == null) {
+            return null;
+        }
+        var builder = ShippingEmbeddable.builder()
+                .expectedDate(shipping.expectedDate())
+                .cost(shipping.cost().value())
+                .address(convertAddressToEmbeddable(shipping.address()))
+                .recipient(convertRecipientToEmbeddable(shipping.recipient()))
+                .build();
+        return builder;
+    }
+
+    private BillingEmbeddable convertBillingToEmbeddable(Billing billing) {
+        if (billing == null) {
+            return null;
+        }
+        return BillingEmbeddable.builder()
+                .firstName(billing.fullName().firstName())
+                .lastName(billing.fullName().lastName())
+                .document(billing.document().value())
+                .phone(billing.phone().value())
+                .address(convertAddressToEmbeddable(billing.address()))
+                .build();
+    }
+
+    private AddressEmbeddable convertAddressToEmbeddable(Address address) {
+        if (address == null) {
+            return null;
+        }
+        return AddressEmbeddable.builder()
+                .city(address.city())
+                .state(address.state())
+                .number(address.number())
+                .street(address.street())
+                .complement(address.complement())
+                .neighborhood(address.neighborhood())
+                .zipCode(address.zipCode().value())
+                .build();
+    }
+
+    private RecipientEmbeddable convertRecipientToEmbeddable(Recipient recipient) {
+        if (recipient == null) {
+            return null;
+        }
+
+        return RecipientEmbeddable.builder()
+                .firstName(recipient.fullName().firstName())
+                .lastName(recipient.fullName().lastName())
+                .document(recipient.document().value())
+                .phone(recipient.phone().value())
+                .build();
     }
 }

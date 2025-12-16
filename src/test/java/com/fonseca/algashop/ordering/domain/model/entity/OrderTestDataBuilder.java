@@ -133,12 +133,12 @@ public class OrderTestDataBuilder {
         return this;
     }
 
-    public OrderTestDataBuilder shipping(Shipping shipping) {
+    public OrderTestDataBuilder shipping() {
         this.shipping = shipping;
         return this;
     }
 
-    public OrderTestDataBuilder billing(Billing billing) {
+    public OrderTestDataBuilder billing() {
         this.billing = billing;
         return this;
     }
