@@ -1,8 +1,8 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.repository;
 
 import com.fonseca.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
-import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntityTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntityTestDataBuilder;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

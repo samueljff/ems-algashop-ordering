@@ -122,7 +122,7 @@ public class OrderPersistenceEntity {
         }
 
         items.forEach(i -> i.setOrder(this));
-        setItems(items);
+        this.setItems(items);
     }
 
     public void addItem(OrderItemPersistenceEntity item) {
