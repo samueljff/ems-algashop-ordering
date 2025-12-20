@@ -1,6 +1,7 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.disassembler;
 
 import com.fonseca.algashop.ordering.domain.model.entity.Order;
+import com.fonseca.algashop.ordering.domain.model.entity.OrderItem;
 import com.fonseca.algashop.ordering.domain.model.entity.OrderStatus;
 import com.fonseca.algashop.ordering.domain.model.entity.PaymentMethod;
 import com.fonseca.algashop.ordering.domain.model.valueObject.BillingTestDataBuilder;
@@ -9,9 +10,12 @@ import com.fonseca.algashop.ordering.domain.model.valueObject.Quantity;
 import com.fonseca.algashop.ordering.domain.model.valueObject.ShippingTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.OrderId;
+import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntityTestDataBuilder;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -33,7 +37,8 @@ class OrderPersistenceEntityDisassemblerTest {
                 s -> assertThat(s.canceledAt()).isEqualTo(persistenceEntity.getCanceledAt()),
                 s -> assertThat(s.readyAt()).isEqualTo(persistenceEntity.getReadyAt()),
                 s -> assertThat(s.status()).isEqualTo(OrderStatus.valueOf(persistenceEntity.getStatus())),
-                s -> assertThat(s.paymentMethod()).isEqualTo(PaymentMethod.valueOf(persistenceEntity.getPaymentMethod()))
+                s -> assertThat(s.paymentMethod()).isEqualTo(PaymentMethod.valueOf(persistenceEntity.getPaymentMethod())),
+                s -> assertThat(s.items().size()).isEqualTo(persistenceEntity.getItems().size())
         );
     }
 
