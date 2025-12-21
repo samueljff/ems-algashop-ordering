@@ -104,6 +104,7 @@ public class OrderPersistenceEntityAssembler {
                 .lastName(billing.fullName().lastName())
                 .document(billing.document().value())
                 .phone(billing.phone().value())
+                .email(billing.email().value())
                 .address(convertAddressToEmbeddable(billing.address()))
                 .build();
     }
