@@ -2,6 +2,8 @@ package com.fonseca.algashop.ordering.domain.model.entity;
 
 import com.fonseca.algashop.ordering.domain.model.valueObject.*;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -77,6 +79,32 @@ public class CustomerTestDataBuilder {
                         .state("South California")
                         .zipCode(new ZipCode("12345"))
                         .complement("Apt. 114")
+                        .build());
+    }
+
+    public static CustomerPersistenceEntity.CustomerPersistenceEntityBuilder existingCustomerPersistenceEntity() {
+        return CustomerPersistenceEntity.builder()
+                .id(new CustomerId().value())
+                .registeredAt(OffsetDateTime.now())
+                .promotionNotificationsAllowed(true)
+                .archived(false)
+                .archivedAt(null)
+                .firstName("John")
+                .lastName("Doe")
+                .birthDate(new BirthDate(LocalDate.of(1991, 7, 5)).value())
+                .email(String.valueOf(new Email("johndoe@email.com")))
+                .phone(String.valueOf(new Phone("478-256-2604")))
+                .document(String.valueOf(new Document("255-08-0578")))
+                .promotionNotificationsAllowed(true)
+                .loyaltyPoints(LoyaltyPoints.ZERO.value())
+                .address(AddressEmbeddable.builder()
+                        .street("Bourbon Street")
+                        .number("1134")
+                        .neighborhood("North Ville")
+                        .city("York")
+                        .state("South California")
+                        .zipCode("12345")
+                        .complement("APT. 102")
                         .build());
     }
 }

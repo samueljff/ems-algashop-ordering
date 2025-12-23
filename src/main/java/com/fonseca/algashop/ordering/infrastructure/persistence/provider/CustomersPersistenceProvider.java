@@ -1,0 +1,80 @@
+package com.fonseca.algashop.ordering.infrastructure.persistence.provider;
+
+import com.fonseca.algashop.ordering.domain.model.entity.Customer;
+import com.fonseca.algashop.ordering.domain.model.repository.Customers;
+import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
+import com.fonseca.algashop.ordering.infrastructure.persistence.disassembler.CustomerPersistenceEntityDisassembler;
+import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.persistence.repository.CustomerPersistenceEntityRepository;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
+import java.util.Optional;
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class CustomersPersistenceProvider implements Customers {
+
+    private final CustomerPersistenceEntityRepository persistenceRepository;
+    private final CustomerPersistenceEntityAssembler assembler;
+    private final CustomerPersistenceEntityDisassembler disassembler;
+
+    private final EntityManager entityManager;
+
+    @Override
+    public Optional<Customer> ofId(CustomerId customerId) {
+        return persistenceRepository.findById(customerId.value())
+                .map(disassembler::toDomainEntity);
+    }
+
+    @Override
+    public boolean exists(CustomerId customerId) {
+        return persistenceRepository.existsById(customerId.value());
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void add(Customer aggregateRoot) {
+        UUID customerId = aggregateRoot.id().value();
+
+        persistenceRepository.findById(customerId)
+                .ifPresentOrElse(
+                        (persistenceEntity) -> update(aggregateRoot, persistenceEntity),
+                        ()-> insert(aggregateRoot)
+                );
+    }
+
+    private void update(Customer aggregateRoot, CustomerPersistenceEntity persistenceEntity) {
+        persistenceEntity = assembler.merge(persistenceEntity, aggregateRoot);
+        entityManager.detach(persistenceEntity);
+        persistenceEntity = persistenceRepository.saveAndFlush(persistenceEntity);
+        updateVersion(aggregateRoot, persistenceEntity);
+    }
+
+    private void insert(Customer aggregateRoot) {
+        CustomerPersistenceEntity persistenceEntity = assembler.fromDomain(aggregateRoot);
+        persistenceRepository.saveAndFlush(persistenceEntity);
+        updateVersion(aggregateRoot, persistenceEntity);
+    }
+
+    @SneakyThrows
+    private void updateVersion(Customer aggregateRoot, CustomerPersistenceEntity persistenceEntity) {
+        Field version = aggregateRoot.getClass().getDeclaredField("version");
+        version.setAccessible(true);
+        ReflectionUtils.setField(version, aggregateRoot, persistenceEntity.getVersion());
+        version.setAccessible(false);
+    }
+
+    @Override
+    public long count() {
+        return persistenceRepository.count();
+    }
+}
