@@ -4,10 +4,9 @@ import com.fonseca.algashop.ordering.domain.model.utility.IdGenerator;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
-import static com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity.*;
+import static com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity.OrderPersistenceEntityBuilder;
 
 public class OrderPersistenceEntityTestDataBuilder {
 
@@ -17,7 +16,7 @@ public class OrderPersistenceEntityTestDataBuilder {
     public static OrderPersistenceEntityBuilder existingOrder() {
         return OrderPersistenceEntity.builder()
                 .id(IdGenerator.generateTSID().toLong())
-                .customerId(IdGenerator.generateTimeBasedUUID())
+                .customer(CustomerPersistenceEntityTestDataBuilder.aCustomer().build())
                 .totalItems(3)
                 .totalAmount(new BigDecimal(1250))
                 .status("DRAFT")

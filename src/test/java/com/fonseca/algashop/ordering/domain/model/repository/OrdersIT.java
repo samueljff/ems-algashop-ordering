@@ -1,13 +1,18 @@
 package com.fonseca.algashop.ordering.domain.model.repository;
 
+import com.fonseca.algashop.ordering.domain.model.entity.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.entity.Order;
 import com.fonseca.algashop.ordering.domain.model.entity.OrderStatus;
 import com.fonseca.algashop.ordering.domain.model.entity.OrderTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.OrderId;
+import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.OrderPersistenceEntityAssembler;
+import com.fonseca.algashop.ordering.infrastructure.persistence.disassembler.CustomerPersistenceEntityDisassembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassembler;
+import com.fonseca.algashop.ordering.infrastructure.persistence.provider.CustomersPersistenceProvider;
 import com.fonseca.algashop.ordering.infrastructure.persistence.provider.OrdersPersistenceProvider;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,16 +21,32 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({OrdersPersistenceProvider.class, OrderPersistenceEntityAssembler.class, OrderPersistenceEntityDisassembler.class})
+@Import({
+        OrdersPersistenceProvider.class,
+        OrderPersistenceEntityAssembler.class,
+        OrderPersistenceEntityDisassembler.class,
+        CustomersPersistenceProvider.class,
+        CustomerPersistenceEntityAssembler.class,
+        CustomerPersistenceEntityDisassembler.class
+})
 class OrdersIT {
     private Orders orders;
+    private Customers customers;
 
     @Autowired
-    public OrdersIT(Orders orders) {
+    public OrdersIT(Orders orders, Customers customers) {
         this.orders = orders;
+        this.customers = customers;
+    }
+
+    @BeforeEach
+    public void setup(){
+        if (!customers.exists(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID)){
+            customers.add(CustomerTestDataBuilder.existingCustomer().build());
+        }
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.fonseca.algashop.ordering.domain.model.entity.Customer;
 import com.fonseca.algashop.ordering.domain.model.entity.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntityTestDataBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -14,7 +15,7 @@ public class CustomerPersistenceEntityDisassemblerTest {
 
     @Test
     public void shouldConvertToDomain() {
-        CustomerPersistenceEntity persistenceEntity = CustomerTestDataBuilder.existingCustomerPersistenceEntity().build();
+        CustomerPersistenceEntity persistenceEntity = CustomerPersistenceEntityTestDataBuilder.aCustomer().build();
         Customer domainEntity = disassembler.toDomainEntity(persistenceEntity);
         assertThat(domainEntity).satisfies(
                 c -> assertThat(c.id()).isEqualTo(new CustomerId(persistenceEntity.getId())),

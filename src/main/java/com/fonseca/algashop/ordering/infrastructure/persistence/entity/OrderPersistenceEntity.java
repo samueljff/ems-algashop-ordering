@@ -28,7 +28,9 @@ public class OrderPersistenceEntity {
     @Id
     @EqualsAndHashCode.Include
     private Long id;
-    private UUID customerId;
+    @JoinColumn
+    @ManyToOne(optional = false)
+    private CustomerPersistenceEntity customer;
 
     private BigDecimal totalAmount;
     private Integer totalItems;
@@ -90,14 +92,14 @@ public class OrderPersistenceEntity {
     private Set<OrderItemPersistenceEntity> items = new HashSet<>();
 
     @Builder
-    public OrderPersistenceEntity(Long id, UUID customerId, BigDecimal totalAmount,
+    public OrderPersistenceEntity(Long id, CustomerPersistenceEntity customer, BigDecimal totalAmount,
                                   Integer totalItems, String status, String paymentMethod,
                                   OffsetDateTime placedAt, OffsetDateTime paidAt, OffsetDateTime canceledAt,
                                   OffsetDateTime readyAt, UUID createdByUserId, OffsetDateTime lastModifiedAt,
                                   UUID lastModifiedByUserId, Long version, BillingEmbeddable billing, ShippingEmbeddable shipping,
                                   Set<OrderItemPersistenceEntity> items) {
         this.id = id;
-        this.customerId = customerId;
+        this.customer = customer;
         this.totalAmount = totalAmount;
         this.totalItems = totalItems;
         this.status = status;
@@ -136,5 +138,12 @@ public class OrderPersistenceEntity {
 
         item.setOrder(this);
         this.getItems().add(item);
+    }
+
+    public UUID getCustomerId() {
+        if (this.customer == null){
+            return null;
+        }
+        return this.customer.getId();
     }
 }
