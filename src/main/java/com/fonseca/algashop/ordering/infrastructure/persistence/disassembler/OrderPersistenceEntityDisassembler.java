@@ -17,7 +17,6 @@ import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderItem
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 

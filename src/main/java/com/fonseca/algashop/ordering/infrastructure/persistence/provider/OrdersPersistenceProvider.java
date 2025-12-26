@@ -2,10 +2,12 @@ package com.fonseca.algashop.ordering.infrastructure.persistence.provider;
 
 import com.fonseca.algashop.ordering.domain.model.entity.Order;
 import com.fonseca.algashop.ordering.domain.model.repository.Orders;
+import com.fonseca.algashop.ordering.domain.model.valueObject.Money;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.OrderId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.OrderPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassembler;
+import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.repository.OrderPersistenceEntityRepository;
 import jakarta.persistence.EntityManager;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +73,17 @@ public class OrdersPersistenceProvider implements Orders {
                 year.getValue()
         );
         return entities.stream().map(disassembler::toDomainEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public long salesQuantityByCustomerInYear(CustomerId customerId, Year year) {
+        return this.persistenceRepository.salesQuantityByCustomerInYear(customerId.value(), year.getValue());
+    }
+
+    @Override
+    public Money totalSoldForCustomer(CustomerId customerId) {
+       BigDecimal sold = this.persistenceRepository.totalSoldForCustomer(customerId.value());
+        return new Money(sold);
     }
 
     private void update(Order aggregateRoot, OrderPersistenceEntity persistenceEntity) {
