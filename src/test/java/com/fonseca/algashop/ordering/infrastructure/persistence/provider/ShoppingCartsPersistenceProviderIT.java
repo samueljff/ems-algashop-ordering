@@ -49,16 +49,12 @@ class ShoppingCartsPersistenceProviderIT {
 
     @BeforeEach
     public void setup() {
+        entityRepository.deleteAll();
         if (!customersPersistenceProvider.exists(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID)) {
             customersPersistenceProvider.add(
                     CustomerTestDataBuilder.existingCustomer().build()
             );
         }
-    }
-
-    @BeforeEach
-    public void cleanup() {
-        entityRepository.deleteAll();
     }
 
     @Test
