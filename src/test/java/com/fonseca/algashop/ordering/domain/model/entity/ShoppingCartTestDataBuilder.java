@@ -6,7 +6,7 @@ import com.fonseca.algashop.ordering.domain.model.valueObject.id.ShoppingCartId;
 
 public class ShoppingCartTestDataBuilder {
 
-    public CustomerId customerId = new CustomerId();
+    public CustomerId customerId = CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID;
     public static final ShoppingCartId DEFAULT_SHOPPING_CART_ID = new ShoppingCartId();
     private boolean withItems = true;
 

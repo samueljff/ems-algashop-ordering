@@ -14,7 +14,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "\"customer\"")
-@Data
+@Getter
+@Setter
 @ToString(of = "id")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor

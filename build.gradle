@@ -51,6 +51,7 @@ tasks.named('test') {
 }
 
 test {
+    jvmArgs "-javaagent:${classpath.find { it.name.contains('mockito-core') }}"
     filter {
         excludeTestsMatching("*IT")
     }
