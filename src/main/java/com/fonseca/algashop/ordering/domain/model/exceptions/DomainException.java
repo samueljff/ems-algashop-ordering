@@ -2,6 +2,13 @@ package com.fonseca.algashop.ordering.domain.model.exceptions;
 
 public class DomainException extends RuntimeException {
 
+    public DomainException() {
+    }
+
+    public DomainException(Throwable cause) {
+        super(cause);
+    }
+
     public DomainException(String message, Throwable cause) {
         super(message, cause);
     }
