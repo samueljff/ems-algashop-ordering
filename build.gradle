@@ -19,6 +19,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    mockitoAgent
 }
 
 repositories {
@@ -44,17 +45,23 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.assertj:assertj-core:3.27.3'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    mockitoAgent('org.mockito:mockito-core:5.14.2') {transitive = false}
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
+def mockitoJvmArgs = [
+        "-javaagent:${configurations.mockitoAgent.asPath}",
+        "-Xshare:off" // Desabilita Class Data Sharing para evitar warning de bootstrap classpath
+]
+
 test {
-    jvmArgs "-javaagent:${classpath.find { it.name.contains('mockito-core') }}"
     filter {
         excludeTestsMatching("*IT")
     }
+    jvmArgs += mockitoJvmArgs
 }
 
 tasks.named('check') {
@@ -62,16 +69,13 @@ tasks.named('check') {
 }
 
 tasks.register('integrationTest', Test) {
-    description('Run integrationTest.')
-    group('verification')
+    description = 'Run integrationTest.'
+    group = 'verification'
+    jvmArgs += mockitoJvmArgs
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
     shouldRunAfter test
     useJUnitPlatform()
-    jvmArgs(
-            '-XX:+EnableDynamicAgentLoading', // Permite carregamento dinâmico de agentes Java (necessário para Mockito no JDK 21+)
-            '-Xshare:off' // Desabilita (Class Data Sharing) para evitar warning de bootstrap classpath
-    )
     testLogging {
         events('passed')
     }
