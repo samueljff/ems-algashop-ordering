@@ -3,10 +3,12 @@ package com.fonseca.algashop.ordering.domain.model.service;
 import com.fonseca.algashop.ordering.domain.model.entity.Customer;
 import com.fonseca.algashop.ordering.domain.model.exceptions.CustomerEmailIsInUseException;
 import com.fonseca.algashop.ordering.domain.model.repository.Customers;
+import com.fonseca.algashop.ordering.domain.model.utility.DomainService;
 import com.fonseca.algashop.ordering.domain.model.valueObject.*;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
 import lombok.AllArgsConstructor;
 
+@DomainService
 @AllArgsConstructor
 public class CustomerRegistrationService {
 
