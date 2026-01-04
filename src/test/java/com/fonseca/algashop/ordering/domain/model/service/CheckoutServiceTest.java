@@ -5,8 +5,7 @@ import com.fonseca.algashop.ordering.domain.model.exceptions.ShoppingCartCantPro
 import com.fonseca.algashop.ordering.domain.model.valueObject.*;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 
 class CheckoutServiceTest {
 
@@ -39,7 +38,7 @@ class CheckoutServiceTest {
         Money expectedTotalAmountWithShipping = shoppingCartTotalAmount.add(shippingInfo.cost());
         assertThat(order.totalAmount()).isEqualTo(expectedTotalAmountWithShipping);
         assertThat(order.totalItems()).isEqualTo(expectedOrderTotalItems);
-        assertThat(order.items().size()).isEqualTo(expectedOrderItemsCount);
+        assertThat(order.items()).hasSize(expectedOrderItemsCount);
 
         assertThat(shoppingCart.isEmpty()).isTrue();
         assertThat(shoppingCart.totalAmount()).isEqualTo(Money.ZERO);
@@ -72,7 +71,7 @@ class CheckoutServiceTest {
         assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)
                 .isThrownBy(() -> checkoutService.checkout(shoppingCart, billingInfo, shippingInfo, paymentMethod));
 
-        assertThat(shoppingCart.items().size()).isEqualTo(0);
+        assertThat(shoppingCart.items()).hasSize(0);
     }
 
     @Test
@@ -116,6 +115,6 @@ class CheckoutServiceTest {
                 .multiply(new Quantity(2)).add(productAlt.price());
         assertThat(shoppingCart.totalAmount()).isEqualTo(expectedTotalAmount);
         assertThat(shoppingCart.totalItems()).isEqualTo(new Quantity(3));
-        assertThat(shoppingCart.items().size()).isEqualTo(2);
+        assertThat(shoppingCart.items()).hasSize(2);
     }
 }
