@@ -8,15 +8,14 @@ import com.fonseca.algashop.ordering.domain.model.valueObject.*;
 import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 
 class BuyNowServiceTest {
 
     private final BuyNowService buyNowService = new BuyNowService();
 
     @Test
-    void givenValidProductAndDetails_whenBuyNow_shouldReturnPlacedOrder() {
+    void givenAvailableProduct_whenBuyNow_thenOrderIsPlaced() {
         Product product = ProductTestDataBuilder.aProduct().build();
         CustomerId customerId = new CustomerId();
         Billing billingInfo = OrderTestDataBuilder.aBilling();
@@ -34,7 +33,7 @@ class BuyNowServiceTest {
         assertThat(order.paymentMethod()).isEqualTo(paymentMethod);
         assertThat(order.isPlaced()).isTrue();
 
-        assertThat(order.items().size()).isEqualTo(1);
+        assertThat(order.items()).hasSize(1);
         assertThat(order.items().iterator().next().productId()).isEqualTo(product.id());
         assertThat(order.items().iterator().next().quantity()).isEqualTo(quantity);
         assertThat(order.items().iterator().next().price()).isEqualTo(product.price());
@@ -58,7 +57,7 @@ class BuyNowServiceTest {
     }
 
     @Test
-    void givenInvalidQuantity_whenBuyNow_shouldThrowIllegalArgumentException() {
+    void givenZeroQuantity_whenBuyNow_thenThrowsIllegalArgumentException() {
         Product product = ProductTestDataBuilder.aProduct().build();
         CustomerId customerId = new CustomerId();
         Billing billingInfo = OrderTestDataBuilder.aBilling();
