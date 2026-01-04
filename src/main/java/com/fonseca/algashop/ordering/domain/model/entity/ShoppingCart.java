@@ -38,8 +38,15 @@ public class ShoppingCart implements AggregateRoot<ShoppingCartId> {
     }
 
     public static ShoppingCart startShopping(CustomerId customerId) {
-        return new ShoppingCart(new ShoppingCartId(), null, customerId, Money.ZERO,
-                Quantity.ZERO, OffsetDateTime.now(), new HashSet<>());
+        return new ShoppingCart(
+                new ShoppingCartId(),
+                null,
+                customerId,
+                Money.ZERO,
+                Quantity.ZERO,
+                OffsetDateTime.now(),
+                new HashSet<>()
+        );
     }
 
     public void empty() {
