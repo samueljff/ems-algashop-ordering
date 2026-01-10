@@ -7,14 +7,20 @@ spring:
     password: '123'
   h2:
     console:
-      enabled: 'true'
-      settings.web-allow-others: 'true'
+      enabled: true
+      settings:
+        web-allow-others: true
   jpa:
     database-platform: 'org.hibernate.dialect.H2Dialect'
     hibernate:
       ddl-auto: update
-    show-sql: 'true'
+    show-sql: true
     open-in-view: false
     properties:
       hibernate:
         format_sql: true
+
+algashop:
+  integrations:
+    shipping.provider: "RAPIDEX"
+    rapidex.url: "http://localhost:8780"
