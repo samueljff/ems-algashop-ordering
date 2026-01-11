@@ -1,13 +1,12 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.provider;
 
-import com.fonseca.algashop.ordering.domain.model.entity.Order;
-import com.fonseca.algashop.ordering.domain.model.repository.Orders;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Money;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.OrderId;
+import com.fonseca.algashop.ordering.domain.model.order.Order;
+import com.fonseca.algashop.ordering.domain.model.order.Orders;
+import com.fonseca.algashop.ordering.domain.model.commons.Money;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.domain.model.order.OrderId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.OrderPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.disassembler.OrderPersistenceEntityDisassembler;
-import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.repository.OrderPersistenceEntityRepository;
 import jakarta.persistence.EntityManager;

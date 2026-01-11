@@ -1,14 +1,14 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.disassembler;
 
-import com.fonseca.algashop.ordering.domain.model.entity.ShoppingCart;
-import com.fonseca.algashop.ordering.domain.model.entity.ShoppingCartItem;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Money;
-import com.fonseca.algashop.ordering.domain.model.valueObject.ProductName;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Quantity;
-import com.fonseca.algashop.ordering.domain.model.valueObject.ShoppingCartItemId;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.ProductId;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.ShoppingCartId;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
+import com.fonseca.algashop.ordering.domain.model.commons.Money;
+import com.fonseca.algashop.ordering.domain.model.product.ProductName;
+import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartItemId;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.domain.model.product.ProductId;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.ShoppingCartItemPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntity;
 import org.springframework.stereotype.Component;

@@ -1,10 +1,10 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.provider;
 
-import com.fonseca.algashop.ordering.domain.model.entity.Customer;
-import com.fonseca.algashop.ordering.domain.model.entity.CustomerTestDataBuilder;
-import com.fonseca.algashop.ordering.domain.model.entity.ShoppingCart;
-import com.fonseca.algashop.ordering.domain.model.entity.ShoppingCartTestDataBuilder;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.fonseca.algashop.ordering.domain.model.customer.Customer;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.ShoppingCartPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
@@ -60,6 +60,19 @@ class ShoppingCartsPersistenceProviderIT {
     }
 
     @Test
+    public void shouldFindShoppingCartByCustomerId() {
+        ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart()
+                .build();
+        persistenceProvider.add(shoppingCart);
+
+        ShoppingCart foundCart = persistenceProvider.ofCustomer(shoppingCart.customerId()).orElseThrow();
+
+        assertThat(foundCart).isNotNull();
+        assertThat(foundCart.customerId()).isEqualTo(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID);
+        assertThat(foundCart.id()).isEqualTo(shoppingCart.id());
+    }
+
+    @Test
     public void shouldPersistAndRetrieveShoppingCartById() {
         ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart().build();
         assertThat(shoppingCart.version()).isNull();
@@ -72,19 +85,6 @@ class ShoppingCartsPersistenceProviderIT {
         assertThat(cartSearch).isNotNull();
         assertThat(cartSearch.id()).isEqualTo(shoppingCart.id());
         assertThat(cartSearch.totalItems().value()).isEqualTo(3);
-    }
-
-    @Test
-    public void shouldFindShoppingCartByCustomerId() {
-        ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart()
-                .build();
-        persistenceProvider.add(shoppingCart);
-
-        ShoppingCart foundCart = persistenceProvider.ofCustomer(shoppingCart.customerId()).orElseThrow();
-
-        assertThat(foundCart).isNotNull();
-        assertThat(foundCart.customerId()).isEqualTo(CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID);
-        assertThat(foundCart.id()).isEqualTo(shoppingCart.id());
     }
 
     @Test

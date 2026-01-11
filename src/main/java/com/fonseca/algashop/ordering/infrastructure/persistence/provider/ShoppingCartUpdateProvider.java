@@ -1,8 +1,8 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.provider;
 
-import com.fonseca.algashop.ordering.domain.model.service.ShoppingCartProductAdjustmentService;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Money;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.ProductId;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartProductAdjustmentService;
+import com.fonseca.algashop.ordering.domain.model.commons.Money;
+import com.fonseca.algashop.ordering.domain.model.product.ProductId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.repository.ShoppingCartPersistenceEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

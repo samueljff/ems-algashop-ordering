@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.disassembler;
 
-import com.fonseca.algashop.ordering.domain.model.entity.ShoppingCart;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.ShoppingCartPersistenceEntityTestDataBuilder;
 import org.junit.jupiter.api.Test;

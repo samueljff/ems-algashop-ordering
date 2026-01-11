@@ -1,14 +1,12 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.disassembler;
 
-import com.fonseca.algashop.ordering.domain.model.entity.Order;
-import com.fonseca.algashop.ordering.domain.model.entity.OrderItem;
-import com.fonseca.algashop.ordering.domain.model.entity.OrderStatus;
-import com.fonseca.algashop.ordering.domain.model.entity.PaymentMethod;
-import com.fonseca.algashop.ordering.domain.model.valueObject.*;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.OrderId;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.OrderItemId;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.ProductId;
+import com.fonseca.algashop.ordering.domain.model.commons.*;
+import com.fonseca.algashop.ordering.domain.model.order.*;
+import com.fonseca.algashop.ordering.domain.model.product.ProductName;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.domain.model.order.OrderId;
+import com.fonseca.algashop.ordering.domain.model.order.OrderItemId;
+import com.fonseca.algashop.ordering.domain.model.product.ProductId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
 import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
 import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;

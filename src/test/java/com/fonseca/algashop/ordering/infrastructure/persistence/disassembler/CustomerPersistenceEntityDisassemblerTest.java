@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.disassembler;
 
-import com.fonseca.algashop.ordering.domain.model.entity.Customer;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.fonseca.algashop.ordering.domain.model.customer.Customer;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntityTestDataBuilder;
 import org.junit.jupiter.api.Test;

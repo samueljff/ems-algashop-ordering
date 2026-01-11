@@ -1,14 +1,14 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.disassembler;
 
-import com.fonseca.algashop.ordering.domain.model.entity.Order;
-import com.fonseca.algashop.ordering.domain.model.entity.OrderStatus;
-import com.fonseca.algashop.ordering.domain.model.entity.PaymentMethod;
-import com.fonseca.algashop.ordering.domain.model.valueObject.BillingTestDataBuilder;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Money;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Quantity;
-import com.fonseca.algashop.ordering.domain.model.valueObject.ShippingTestDataBuilder;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.OrderId;
+import com.fonseca.algashop.ordering.domain.model.order.Order;
+import com.fonseca.algashop.ordering.domain.model.order.OrderStatus;
+import com.fonseca.algashop.ordering.domain.model.order.PaymentMethod;
+import com.fonseca.algashop.ordering.domain.model.order.BillingTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.commons.Money;
+import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
+import com.fonseca.algashop.ordering.domain.model.order.shipping.ShippingTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.domain.model.order.OrderId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntityTestDataBuilder;
 import org.junit.jupiter.api.Test;

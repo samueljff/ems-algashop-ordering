@@ -1,8 +1,8 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.assembler;
 
-import com.fonseca.algashop.ordering.domain.model.entity.Order;
-import com.fonseca.algashop.ordering.domain.model.entity.OrderItem;
-import com.fonseca.algashop.ordering.domain.model.entity.OrderTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.order.Order;
+import com.fonseca.algashop.ordering.domain.model.order.OrderItem;
+import com.fonseca.algashop.ordering.domain.model.order.OrderTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntityTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderItemPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.OrderPersistenceEntity;

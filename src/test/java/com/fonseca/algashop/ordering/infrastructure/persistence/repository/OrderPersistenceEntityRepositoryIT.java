@@ -1,7 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.repository;
 
-import com.fonseca.algashop.ordering.domain.model.entity.CustomerTestDataBuilder;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.CustomerId;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.entity.CustomerPersistenceEntityTestDataBuilder;
@@ -33,11 +32,15 @@ class OrderPersistenceEntityRepositoryIT {
     }
 
     @BeforeEach
-    public void setup(){
+    void setup() {
         UUID customerId = CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID.value();
-        if (!customerPersistenceEntityRepository.existsById(customerId)){
-            customerPersistenceEntity = customerPersistenceEntityRepository.saveAndFlush(CustomerPersistenceEntityTestDataBuilder.aCustomer().build());
-        }
+        customerPersistenceEntity = customerPersistenceEntityRepository
+                .findById(customerId)
+                .orElseGet(() ->
+                        customerPersistenceEntityRepository.saveAndFlush(
+                                CustomerPersistenceEntityTestDataBuilder.aCustomer().build()
+                        )
+                );
     }
 
     @Test

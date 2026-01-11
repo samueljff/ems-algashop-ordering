@@ -1,10 +1,14 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.provider;
 
-import com.fonseca.algashop.ordering.domain.model.entity.*;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Money;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Product;
-import com.fonseca.algashop.ordering.domain.model.valueObject.Quantity;
-import com.fonseca.algashop.ordering.domain.model.valueObject.id.ProductId;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.commons.Money;
+import com.fonseca.algashop.ordering.domain.model.product.Product;
+import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
+import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
+import com.fonseca.algashop.ordering.domain.model.product.ProductId;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.ShoppingCartPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;

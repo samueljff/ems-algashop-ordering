@@ -1,9 +1,9 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.provider;
 
-import com.fonseca.algashop.ordering.domain.model.entity.CustomerTestDataBuilder;
-import com.fonseca.algashop.ordering.domain.model.entity.Order;
-import com.fonseca.algashop.ordering.domain.model.entity.OrderStatus;
-import com.fonseca.algashop.ordering.domain.model.entity.OrderTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.order.Order;
+import com.fonseca.algashop.ordering.domain.model.order.OrderStatus;
+import com.fonseca.algashop.ordering.domain.model.order.OrderTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.assembler.OrderPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.config.SpringDataAuditingConfig;
