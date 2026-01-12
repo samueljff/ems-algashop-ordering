@@ -3,9 +3,9 @@ package com.fonseca.algashop.ordering.domain.model.order.shipping;
 import com.fonseca.algashop.ordering.domain.model.commons.*;
 import com.fonseca.algashop.ordering.domain.model.order.Recipient;
 import com.fonseca.algashop.ordering.domain.model.order.Shipping;
-import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
-import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.RecipientEmbeddable;
-import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.ShippingEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.commons.AddressEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.order.RecipientEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.order.ShippingEmbeddable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

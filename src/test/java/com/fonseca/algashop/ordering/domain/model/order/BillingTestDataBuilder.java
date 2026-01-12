@@ -1,8 +1,8 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
 import com.fonseca.algashop.ordering.domain.model.commons.*;
-import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.AddressEmbeddable;
-import com.fonseca.algashop.ordering.infrastructure.persistence.embeddable.BillingEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.commons.AddressEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.persistence.order.BillingEmbeddable;
 
 public class BillingTestDataBuilder {
 
