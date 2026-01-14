@@ -54,20 +54,14 @@ class CheckoutServiceTest {
     void givenShoppingCartWithUnavailableItems_whenCheckout_shouldThrowShoppingCartCantProceedToCheckoutException() {
         ShoppingCart shoppingCart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
 
-        Product product1 = ProductTestDataBuilder.aProduct().build();
-        shoppingCart.addItem(product1, new Quantity(2));
+        Product product = ProductTestDataBuilder.aProduct().build();
+        shoppingCart.addItem(product, new Quantity(1));
+
         Product product2 = ProductTestDataBuilder.aProductAltRamMemory().build();
         shoppingCart.addItem(product2, new Quantity(1));
 
-        assertThat(shoppingCart.items()).isNotNull();
-
-        ShoppingCartItem shoppingCartItem = shoppingCart.findItem(product1.id());
-        ShoppingCartItem shoppingCartItem2 = shoppingCart.findItem(product2.id());
-
-        assertThat(shoppingCart.items().isEmpty());
-
-        shoppingCart.removeItem(shoppingCartItem.id());
-        shoppingCart.removeItem(shoppingCartItem2.id());
+        Product productAltUnavailable = ProductTestDataBuilder.aProductAltRamMemory().id(product2.id()).inStock(false).build();
+        shoppingCart.refreshItem(productAltUnavailable);
 
         Billing billingInfo = OrderTestDataBuilder.aBilling();
         Shipping shippingInfo = OrderTestDataBuilder.aShipping();
@@ -76,7 +70,8 @@ class CheckoutServiceTest {
         assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)
                 .isThrownBy(() -> checkoutService.checkout(shoppingCart, billingInfo, shippingInfo, paymentMethod));
 
-        assertThat(shoppingCart.items()).hasSize(0);
+        assertThat(shoppingCart.isEmpty()).isFalse();
+        assertThat(shoppingCart.items()).hasSize(2);
     }
 
     @Test
