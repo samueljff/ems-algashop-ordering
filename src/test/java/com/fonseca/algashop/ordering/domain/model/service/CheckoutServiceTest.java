@@ -54,16 +54,10 @@ class CheckoutServiceTest {
         shoppingCart.addItem(product1, new Quantity(2));
         Product product2 = ProductTestDataBuilder.aProductAltRamMemory().build();
         shoppingCart.addItem(product2, new Quantity(1));
+        Product productAltUnavailable = ProductTestDataBuilder.aProductAltRamMemory().id(product2.id()).inStock(false).build();
+        shoppingCart.refreshItem(productAltUnavailable);
 
         assertThat(shoppingCart.items()).isNotNull();
-
-        ShoppingCartItem shoppingCartItem = shoppingCart.findItem(product1.id());
-        ShoppingCartItem shoppingCartItem2 = shoppingCart.findItem(product2.id());
-
-        assertThat(shoppingCart.items().isEmpty());
-
-        shoppingCart.removeItem(shoppingCartItem.id());
-        shoppingCart.removeItem(shoppingCartItem2.id());
 
         Billing billingInfo = OrderTestDataBuilder.aBilling();
         Shipping shippingInfo = OrderTestDataBuilder.aShipping();
@@ -71,8 +65,6 @@ class CheckoutServiceTest {
 
         assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)
                 .isThrownBy(() -> checkoutService.checkout(shoppingCart, billingInfo, shippingInfo, paymentMethod));
-
-        assertThat(shoppingCart.items().size()).isEqualTo(0);
     }
 
     @Test
