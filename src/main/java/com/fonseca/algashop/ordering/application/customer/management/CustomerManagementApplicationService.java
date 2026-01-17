@@ -53,4 +53,33 @@ public class CustomerManagementApplicationService {
 
         return mapper.convert(customer, CustomerOutput.class);
     }
+
+    @Transactional
+    public void update(UUID rawCustomerId, CustomerUpdateInput input){
+        Objects.requireNonNull(input);
+        Objects.requireNonNull(rawCustomerId);
+
+        Customer customer = customers.ofId(new CustomerId(rawCustomerId)).orElseThrow(() -> new CustomerNotFoundException());
+
+        customer.changeName(new FullName(input.getFirstName(), input.getLastName()));
+        customer.changePhone(new Phone(input.getPhone()));
+        if (Boolean.TRUE.equals(input.getPromotionNotificationsAllowed())){
+            customer.enablePromotionNotifications();
+        } else {
+            customer.disablePromotionNotifications();
+        }
+
+        AddressData address = input.getAddress();
+        customer.changeAddress(Address.builder()
+                .zipCode(new ZipCode(address.getZipCode()))
+                .state(address.getState())
+                .city(address.getCity())
+                .neighborhood(address.getNeighborhood())
+                .street(address.getStreet())
+                .number(address.getNumber())
+                .complement(address.getComplement())
+                .build());
+
+        customers.add(customer);
+    }
 }
