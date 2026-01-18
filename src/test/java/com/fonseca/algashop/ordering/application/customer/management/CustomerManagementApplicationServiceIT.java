@@ -1,5 +1,8 @@
 package com.fonseca.algashop.ordering.application.customer.management;
 
+import com.fonseca.algashop.ordering.application.commons.AddressData;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerArchivedException;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,4 +73,62 @@ class CustomerManagementApplicationServiceIT {
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
     }
 
+    @Test
+    public void shouldArchiveCustomerSuccessfully() {
+        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        UUID customerId = customerManagementApplicationService.create(input);
+
+        customerManagementApplicationService.archive(customerId);
+
+        CustomerOutput customerOutput = customerManagementApplicationService.findById(customerId);
+
+        Assertions.assertThat(customerOutput.getArchived()).isTrue();
+        Assertions.assertThat(customerOutput.getArchivedAt()).isNotNull();
+
+        AddressData address = customerOutput.getAddress();
+
+        Assertions.assertThat(customerOutput)
+                .extracting(
+                        CustomerOutput::getId,
+                        CustomerOutput::getFirstName,
+                        CustomerOutput::getLastName,
+                        CustomerOutput::getPhone,
+                        CustomerOutput::getDocument,
+                        CustomerOutput::getBirthDate,
+                        CustomerOutput::getPromotionNotificationsAllowed
+                ).containsExactly(
+                        customerId,
+                        "Anonymous",
+                        "Anonymous",
+                        "000-000-0000",
+                        "000-00-0000",
+                        null,
+                        false
+                );
+
+        Assertions.assertThat(customerOutput.getEmail()).matches(".+@anonymous.com");
+        Assertions.assertThat(address.getNumber()).isEqualTo("Anonymized");
+        Assertions.assertThat(address.getComplement()).isNull();
+    }
+
+    @Test
+    public void shouldThrowCustomerNotFoundExceptionWhenArchivingNonExistingCustomerId() {
+        UUID nonExistentId = UUID.randomUUID();
+
+        Assertions.assertThatThrownBy(() ->
+                        customerManagementApplicationService.archive(nonExistentId))
+                .isInstanceOf(CustomerNotFoundException.class);
+    }
+
+    @Test
+    public void shouldThrowCustomerArchivedExceptionWhenCustomerAlreadyArchived() {
+        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        UUID customerId = customerManagementApplicationService.create(input);
+
+        customerManagementApplicationService.archive(customerId);
+
+        Assertions.assertThatThrownBy(() ->
+                        customerManagementApplicationService.archive(customerId))
+                .isInstanceOf(CustomerArchivedException.class);
+    }
 }

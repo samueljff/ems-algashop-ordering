@@ -82,4 +82,19 @@ public class CustomerManagementApplicationService {
 
         customers.add(customer);
     }
+
+    @Transactional
+    public void archive(UUID rawCustomerId) {
+        Objects.requireNonNull(rawCustomerId);
+
+        Customer customer = customers.ofId(new CustomerId(rawCustomerId))
+                .orElseThrow(CustomerNotFoundException::new);
+
+        if (customer.isArchived()) {
+            throw new CustomerArchivedException();
+        }
+
+        customer.archive(); //metodo do domínio que anonimiza e marca arquivado
+        customers.add(customer); //persiste as mudancas
+    }
 }
