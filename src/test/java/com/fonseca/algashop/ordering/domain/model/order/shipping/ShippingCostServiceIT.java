@@ -1,15 +1,11 @@
 package com.fonseca.algashop.ordering.domain.model.order.shipping;
 
-import com.fonseca.algashop.ordering.application.commons.ProductCatalogServiceTestConfig;
 import com.fonseca.algashop.ordering.domain.model.commons.ZipCode;
 import com.fonseca.algashop.ordering.domain.model.order.shipping.ShippingCostService.CalculationRequest;
-import com.fonseca.algashop.ordering.domain.model.product.ProductCatalogService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest

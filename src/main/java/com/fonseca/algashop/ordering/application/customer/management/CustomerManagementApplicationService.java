@@ -90,11 +90,19 @@ public class CustomerManagementApplicationService {
         Customer customer = customers.ofId(new CustomerId(rawCustomerId))
                 .orElseThrow(CustomerNotFoundException::new);
 
-        if (customer.isArchived()) {
-            throw new CustomerArchivedException();
-        }
-
         customer.archive(); //metodo do domínio que anonimiza e marca arquivado
         customers.add(customer); //persiste as mudancas
+    }
+
+    @Transactional
+    public void changeEmail(UUID rawCustomerId, String newEmail){
+        Objects.requireNonNull(rawCustomerId);
+        Objects.requireNonNull(newEmail);
+
+        Customer customer = customers.ofId(new CustomerId(rawCustomerId)).orElseThrow(() -> new CustomerNotFoundException());
+
+        customerRegistrationService.changeEmail(customer, new Email(newEmail));
+
+        customers.add(customer);
     }
 }
