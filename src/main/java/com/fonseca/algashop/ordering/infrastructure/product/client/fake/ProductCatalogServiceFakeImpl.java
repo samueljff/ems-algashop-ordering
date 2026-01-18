@@ -5,9 +5,13 @@ import com.fonseca.algashop.ordering.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.domain.model.product.Product;
 import com.fonseca.algashop.ordering.domain.model.product.ProductName;
 import com.fonseca.algashop.ordering.domain.model.product.ProductId;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
+@Profile({"test", "it"})
 public class ProductCatalogServiceFakeImpl implements ProductCatalogService {
 
     @Override

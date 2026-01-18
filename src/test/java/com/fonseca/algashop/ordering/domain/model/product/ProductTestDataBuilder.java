@@ -11,7 +11,7 @@ public class ProductTestDataBuilder {
 
     public static Product.ProductBuilder aProduct() {
         return Product.builder()
-                .id(new ProductId())
+                .id(DEFAULT_PRODUCT_ID)
                 .inStock(true)
                 .name(new ProductName("Notebook X11"))
                 .price(new Money("3000"));

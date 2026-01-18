@@ -1,9 +1,5 @@
 package com.fonseca.algashop.ordering.application.customer.management;
 
-import com.fonseca.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
-import com.fonseca.algashop.ordering.application.commons.AddressData;
-import com.fonseca.algashop.ordering.application.customer.management.CustomerInput;
-import com.fonseca.algashop.ordering.application.customer.management.CustomerOutput;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,4 +69,5 @@ class CustomerManagementApplicationServiceIT {
                 );
         Assertions.assertThat(customerOutput.getRegisteredAt()).isNotNull();
     }
+
 }

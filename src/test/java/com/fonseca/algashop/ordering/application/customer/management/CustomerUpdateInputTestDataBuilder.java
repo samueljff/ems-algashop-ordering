@@ -2,8 +2,6 @@ package com.fonseca.algashop.ordering.application.customer.management;
 
 import com.fonseca.algashop.ordering.application.commons.AddressData;
 
-import java.time.LocalDate;
-
 public class CustomerUpdateInputTestDataBuilder {
 
     public static CustomerUpdateInput.CustomerUpdateInputBuilder aCustomerUpdate(){
