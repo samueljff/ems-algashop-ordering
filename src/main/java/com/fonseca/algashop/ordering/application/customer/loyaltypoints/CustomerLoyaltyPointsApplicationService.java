@@ -24,8 +24,8 @@ public class CustomerLoyaltyPointsApplicationService {
         CustomerId customerId = new CustomerId(rawCustomerId);
         OrderId orderId = new OrderId(rawOrderId);
 
-        Customer customer = customers.ofId(customerId).orElseThrow(CustomerNotFoundException::new);
         Order order = orders.ofId(orderId).orElseThrow(OrderNotFoundException::new);
+        Customer customer = customers.ofId(customerId).orElseThrow(CustomerNotFoundException::new);
 
         customerLoyaltyPointsService.addPoints(customer, order);
 
