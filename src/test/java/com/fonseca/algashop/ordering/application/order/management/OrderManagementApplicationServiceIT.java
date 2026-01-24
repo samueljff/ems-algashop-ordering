@@ -44,7 +44,6 @@ class OrderManagementApplicationServiceIT {
         orders.add(order);
 
         orderManagementApplicationService.cancel(order.id().value().toLong());
-
         Optional<Order> updatedOrder = orders.ofId(order.id());
         Assertions.assertThat(updatedOrder).isPresent();
         Assertions.assertThat(updatedOrder.get().status()).isEqualTo(OrderStatus.CANCELED);
