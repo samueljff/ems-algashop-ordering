@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.customer;
 
+import com.fonseca.algashop.ordering.domain.model.AbstractEventSourceEntity;
 import com.fonseca.algashop.ordering.domain.model.AggregateRoot;
 import com.fonseca.algashop.ordering.domain.model.commons.*;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 import static com.fonseca.algashop.ordering.domain.model.ErrorMessages.VALIDATION_ERROR_FULLNAME_IS_NULL;
 
-public class Customer implements AggregateRoot<CustomerId> {
+public class Customer extends AbstractEventSourceEntity implements AggregateRoot<CustomerId> {
 
     private CustomerId id;
     private FullName fullName;
@@ -30,7 +31,7 @@ public class Customer implements AggregateRoot<CustomerId> {
     private static Customer createBrandNew(FullName fullName, BirthDate birthDate, Email email,
                                            Phone phone, Document document, Boolean promotionNotificationsAllowed,
                                            Address address) {
-        return new Customer(
+        Customer customer = new Customer(
                 new CustomerId(),
                 null,
                 fullName,
@@ -45,6 +46,10 @@ public class Customer implements AggregateRoot<CustomerId> {
                 LoyaltyPoints.ZERO,
                 address
         );
+
+        customer.publishDomainEvent(new CustomerRegisteredEvent(customer.id(), customer.registeredAt()));
+
+        return customer;
     }
 
     @Builder(builderClassName = "ExistingCustomerBuild", builderMethodName = "existing")
