@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.application.customer.management;
 
 import com.fonseca.algashop.ordering.application.commons.AddressData;
-import com.fonseca.algashop.ordering.application.customer.notification.CustomerNotificationService;
+import com.fonseca.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService;
 import com.fonseca.algashop.ordering.domain.model.customer.*;
 import com.fonseca.algashop.ordering.infrastructure.listener.customer.CustomerEventListener;
 import org.assertj.core.api.Assertions;
@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static com.fonseca.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService.*;
+
 @SpringBootTest
 @Transactional
 class CustomerManagementApplicationServiceIT {
@@ -25,7 +27,7 @@ class CustomerManagementApplicationServiceIT {
     private CustomerEventListener customerEventListener;
 
     @MockitoSpyBean
-    private CustomerNotificationService customerNotificationService;
+    private CustomerNotificationApplicationService customerNotificationService;
 
     @Test
     public void shouldRegister() {
@@ -54,7 +56,7 @@ class CustomerManagementApplicationServiceIT {
 
         Mockito.verify(customerEventListener).listen(Mockito.any(CustomerRegisteredEvent.class));
         Mockito.verify(customerEventListener, Mockito.never()).listen(Mockito.any(CustomerArchivedEvent.class));
-        Mockito.verify(customerNotificationService).notifyNewRegistration(Mockito.any(UUID.class));
+        Mockito.verify(customerNotificationService).notifyNewRegistration(Mockito.any(NotifyNewRegistrationInput.class));
     }
 
     @Test
