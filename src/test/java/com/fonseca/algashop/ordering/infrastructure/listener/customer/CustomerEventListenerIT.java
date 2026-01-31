@@ -7,7 +7,7 @@ import com.fonseca.algashop.ordering.domain.model.commons.FullName;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerRegisteredEvent;
 import com.fonseca.algashop.ordering.domain.model.order.OrderId;
-import com.fonseca.algashop.ordering.domain.model.order.notification.OrderReadyEvent;
+import com.fonseca.algashop.ordering.domain.model.order.events.OrderReadyEvent;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
-package com.fonseca.algashop.ordering.domain.model.order.notification;
+package com.fonseca.algashop.ordering.domain.model.order.events;
 
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.domain.model.order.OrderId;
 
 import java.time.OffsetDateTime;
 
-public record OrderPaidEvent(OrderId orderId, CustomerId customerId, OffsetDateTime paidAt) {
+public record OrderPlacedEvent(OrderId orderId, CustomerId customerId, OffsetDateTime placedAt) {
 }

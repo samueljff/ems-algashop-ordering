@@ -4,10 +4,10 @@ import com.fonseca.algashop.ordering.application.customer.loyaltypoints.Customer
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.customer.Customers;
 import com.fonseca.algashop.ordering.domain.model.order.*;
-import com.fonseca.algashop.ordering.domain.model.order.notification.OrderCanceledEvent;
-import com.fonseca.algashop.ordering.domain.model.order.notification.OrderPaidEvent;
-import com.fonseca.algashop.ordering.domain.model.order.notification.OrderPlacedEvent;
-import com.fonseca.algashop.ordering.domain.model.order.notification.OrderReadyEvent;
+import com.fonseca.algashop.ordering.domain.model.order.events.OrderCanceledEvent;
+import com.fonseca.algashop.ordering.domain.model.order.events.OrderPaidEvent;
+import com.fonseca.algashop.ordering.domain.model.order.events.OrderPlacedEvent;
+import com.fonseca.algashop.ordering.domain.model.order.events.OrderReadyEvent;
 import com.fonseca.algashop.ordering.infrastructure.listener.order.OrderEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -4,7 +4,7 @@ import com.fonseca.algashop.ordering.application.customer.loyaltypoints.Customer
 import com.fonseca.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerArchivedEvent;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerRegisteredEvent;
-import com.fonseca.algashop.ordering.domain.model.order.notification.OrderReadyEvent;
+import com.fonseca.algashop.ordering.domain.model.order.events.OrderReadyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.context.event.EventListener;

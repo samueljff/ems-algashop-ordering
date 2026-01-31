@@ -5,7 +5,7 @@ import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.customer.Customers;
 import com.fonseca.algashop.ordering.domain.model.order.*;
-import com.fonseca.algashop.ordering.domain.model.order.notification.OrderPlacedEvent;
+import com.fonseca.algashop.ordering.domain.model.order.events.OrderPlacedEvent;
 import com.fonseca.algashop.ordering.domain.model.order.shipping.OriginAddressService;
 import com.fonseca.algashop.ordering.domain.model.order.shipping.ShippingCostService;
 import com.fonseca.algashop.ordering.domain.model.product.Product;

@@ -4,12 +4,18 @@ import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.domain.model.customer.*;
 import com.fonseca.algashop.ordering.domain.model.product.*;
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.*;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.events.ShoppingCartCreatedEvent;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.events.ShoppingCartEmptiedEvent;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.events.ShoppingCartItemAddedEvent;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.events.ShoppingCartItemRemovedEvent;
+import com.fonseca.algashop.ordering.infrastructure.listener.shoppingcart.ShoppingCartEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -30,6 +36,9 @@ class ShoppingCartManagementApplicationServiceIT {
 
     @MockitoBean
     private ProductCatalogService productCatalogService;
+
+    @MockitoSpyBean
+    private ShoppingCartEventListener shoppingCartEventListener;
 
     @Test
     void shouldAddItemToShoppingCart() {
@@ -52,6 +61,8 @@ class ShoppingCartManagementApplicationServiceIT {
                 .build();
 
         service.addItem(input);
+
+        Mockito.verify(shoppingCartEventListener).listen(Mockito.any(ShoppingCartItemAddedEvent.class));
 
         ShoppingCart updatedShoppingCart = shoppingCarts.ofId(shoppingCart.id()).orElseThrow();
 
@@ -124,6 +135,8 @@ class ShoppingCartManagementApplicationServiceIT {
 
         UUID cartId = service.createNew(customer.id().value());
 
+        Mockito.verify(shoppingCartEventListener).listen(Mockito.any(ShoppingCartCreatedEvent.class));
+
         Assertions.assertThat(shoppingCarts.ofId(new ShoppingCartId(cartId)))
                 .isPresent();
     }
@@ -164,6 +177,8 @@ class ShoppingCartManagementApplicationServiceIT {
 
         service.removeItem(shoppingCart.id().value(), item.id().value());
 
+        Mockito.verify(shoppingCartEventListener).listen(Mockito.any(ShoppingCartItemRemovedEvent.class));
+
         ShoppingCart updatedCart = shoppingCarts.ofId(shoppingCart.id()).orElseThrow();
         Assertions.assertThat(updatedCart.items()).isEmpty();
     }
@@ -201,6 +216,8 @@ class ShoppingCartManagementApplicationServiceIT {
         shoppingCarts.add(shoppingCart);
 
         service.empty(shoppingCart.id().value());
+
+        Mockito.verify(shoppingCartEventListener).listen(Mockito.any(ShoppingCartEmptiedEvent.class));
 
         ShoppingCart updatedCart = shoppingCarts.ofId(shoppingCart.id()).orElseThrow();
         Assertions.assertThat(updatedCart.isEmpty()).isTrue();

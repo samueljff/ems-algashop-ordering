@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.domain.model.order.notification;
+package com.fonseca.algashop.ordering.domain.model.order.events;
 
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.domain.model.order.OrderId;
