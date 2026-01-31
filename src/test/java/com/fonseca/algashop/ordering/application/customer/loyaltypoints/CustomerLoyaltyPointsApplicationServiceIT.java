@@ -6,11 +6,13 @@ import com.fonseca.algashop.ordering.domain.model.customer.*;
 import com.fonseca.algashop.ordering.domain.model.order.*;
 import com.fonseca.algashop.ordering.domain.model.product.Product;
 import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
+import com.fonseca.algashop.ordering.infrastructure.listener.customer.CustomerEventListener;
 import io.hypersistence.tsid.TSID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -27,6 +29,9 @@ class CustomerLoyaltyPointsApplicationServiceIT {
 
     @Autowired
     private Orders orders;
+
+    @MockitoBean
+    CustomerEventListener customerEventListener;
 
     @Test
     void givenReadyOrderWithValueAboveLimit_whenAddLoyaltyPoints_thenPointsAreAdded() {

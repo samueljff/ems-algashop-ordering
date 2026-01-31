@@ -148,6 +148,7 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         }
 
         this.setShipping(newShipping);
+        this.recalculateTotals();
     }
 
     public void changeItemQuantity(OrderItemId orderItemId, Quantity quantity) {
