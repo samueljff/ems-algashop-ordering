@@ -6,9 +6,17 @@ import com.fonseca.algashop.ordering.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.domain.model.product.Product;
 import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.events.ShoppingCartCreatedEvent;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.events.ShoppingCartEmptiedEvent;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.events.ShoppingCartItemAddedEvent;
+import com.fonseca.algashop.ordering.domain.model.shoppingcart.events.ShoppingCartItemRemovedEvent;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
+
+import java.time.OffsetDateTime;
+
+import static org.assertj.core.api.Assertions.*;
 
 public class ShoppingCartTest {
 
@@ -21,15 +29,19 @@ public class ShoppingCartTest {
         ShoppingCart cart = ShoppingCart.startShopping(customerId);
 
         // Then
-        Assertions.assertWith(cart,
-                c -> Assertions.assertThat(c.id()).isNotNull(),
-                c -> Assertions.assertThat(c.customerId()).isEqualTo(customerId),
-                c -> Assertions.assertThat(c.totalAmount()).isEqualTo(Money.ZERO),
-                c -> Assertions.assertThat(c.totalItems()).isEqualTo(Quantity.ZERO),
-                c -> Assertions.assertThat(c.isEmpty()).isTrue(),
-                c -> Assertions.assertThat(c.items()).isEmpty(),
-                c -> Assertions.assertThat(c.createdAt()).isNotNull()
+        assertWith(cart,
+                c -> assertThat(c.id()).isNotNull(),
+                c -> assertThat(c.customerId()).isEqualTo(customerId),
+                c -> assertThat(c.totalAmount()).isEqualTo(Money.ZERO),
+                c -> assertThat(c.totalItems()).isEqualTo(Quantity.ZERO),
+                c -> assertThat(c.isEmpty()).isTrue(),
+                c -> assertThat(c.items()).isEmpty(),
+                c -> assertThat(c.createdAt()).isNotNull()
         );
+
+        ShoppingCartCreatedEvent shoppingCartCreatedEvent = new ShoppingCartCreatedEvent(cart.id(), cart.customerId(), cart.createdAt());
+
+        assertThat(cart.domainEvents()).contains(shoppingCartCreatedEvent);
     }
 
     @Test
@@ -42,14 +54,14 @@ public class ShoppingCartTest {
         ThrowableAssert.ThrowingCallable addTask = () -> cart.addItem(outOfStockProduct, new Quantity(1));
 
         // Then
-        Assertions.assertThatExceptionOfType(ProductOutOfStockException.class)
+        assertThatExceptionOfType(ProductOutOfStockException.class)
                 .isThrownBy(addTask);
     }
 
     @Test
     public void givenCart_whenAddSameProductTwice_shouldIncrementQuantityAndUpdateProductData() {
         // Given
-        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().build();
+        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
         Product product = ProductTestDataBuilder.aProduct().build();
 
         // When
@@ -57,44 +69,48 @@ public class ShoppingCartTest {
         cart.addItem(product, new Quantity(3));
 
         // Then
-        Assertions.assertWith(cart,
-                c -> Assertions.assertThat(c.items()).hasSize(3),
-                c -> Assertions.assertThat(c.totalItems()).isEqualTo(new Quantity(8)),
-                c -> Assertions.assertThat(c.totalAmount()).isEqualTo(new Money("21200"))
+        assertWith(cart,
+                c -> assertThat(c.items()).hasSize(1),
+                c -> assertThat(c.totalItems()).isEqualTo(new Quantity(5)),
+                c -> assertThat(c.totalAmount()).isEqualTo(new Money("15000"))
         );
 
         ShoppingCartItem item = cart.findItem(product.id());
-        Assertions.assertWith(item,
-                i -> Assertions.assertThat(i.quantity()).isEqualTo(new Quantity(5)),
-                i -> Assertions.assertThat(i.totalAmount()).isEqualTo(new Money("15000"))
+        assertWith(item,
+                i -> assertThat(i.quantity()).isEqualTo(new Quantity(5)),
+                i -> assertThat(i.totalAmount()).isEqualTo(new Money("15000"))
         );
+
+        assertThat(cart.domainEvents()).isNotEmpty();
     }
 
     @Test
     public void givenEmptyCart_whenAddNewItem_shouldContainItemAndRecalculateTotals() {
         // Given
-        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().build();
+        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
         Product product = ProductTestDataBuilder.aProduct().build();
 
         // When
         cart.addItem(product, new Quantity(2));
 
         // Then
-        Assertions.assertThat(cart.items()).hasSize(3);
+        assertThat(cart.items()).hasSize(1);
         ShoppingCartItem item = cart.findItem(product.id());
-        Assertions.assertWith(item,
-                i -> Assertions.assertThat(i.productId()).isEqualTo(product.id()),
-                i -> Assertions.assertThat(i.quantity()).isEqualTo(new Quantity(2))
+        assertWith(item,
+                i -> assertThat(i.productId()).isEqualTo(product.id()),
+                i -> assertThat(i.quantity()).isEqualTo(new Quantity(2))
         );
-        Assertions.assertThat(cart.totalItems()).isEqualTo(new Quantity(5));
-        Assertions.assertThat(cart.totalAmount()).isEqualTo(
-                new Money("12200"));
+        assertThat(cart.totalItems()).isEqualTo(new Quantity(2));
+        assertThat(cart.totalAmount()).isEqualTo(
+                new Money("6000"));
+
+        assertThat(cart.domainEvents()).isNotEmpty();
     }
 
     @Test
     public void givenCart_whenAddTwoDifferentProducts_shouldAddBothItemsAndCalculateTotals() {
         // Given
-        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().build();
+        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
         Product product1 = ProductTestDataBuilder.aProduct().build();
         Product product2 = ProductTestDataBuilder.aProductAltMousePad().build();
 
@@ -103,11 +119,13 @@ public class ShoppingCartTest {
         cart.addItem(product2, new Quantity(3));
 
         // Then
-        Assertions.assertWith(cart,
-                c -> Assertions.assertThat(c.items()).hasSize(4),
-                c -> Assertions.assertThat(c.totalItems()).isEqualTo(new Quantity(8)),
-                c -> Assertions.assertThat(c.totalAmount()).isEqualTo(new Money("12500"))
+        assertWith(cart,
+                c -> assertThat(c.items()).hasSize(2),
+                c -> assertThat(c.totalItems()).isEqualTo(new Quantity(5)),
+                c -> assertThat(c.totalAmount()).isEqualTo(new Money("6300"))
         );
+
+        assertThat(cart.domainEvents()).isNotEmpty();
     }
 
     @Test
@@ -120,25 +138,34 @@ public class ShoppingCartTest {
         ThrowableAssert.ThrowingCallable removeTask = () -> cart.removeItem(nonExistentId);
 
         // Then
-        Assertions.assertThatExceptionOfType(ShoppingCartDoesNotContainItemException.class)
+        assertThatExceptionOfType(ShoppingCartDoesNotContainItemException.class)
                 .isThrownBy(removeTask);
     }
 
     @Test
     public void givenCartWithItems_whenRemoveExistingItem_shouldRemoveAndRecalculateTotals() {
         // Given
-        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().build();
+        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
         Product product = ProductTestDataBuilder.aProduct().build();
         cart.addItem(product, new Quantity(2));
 
         ShoppingCartItem item = cart.findItem(product.id());
-        Assertions.assertThat(cart.totalItems()).isEqualTo(new Quantity(5));
-        Assertions.assertThat(cart.totalAmount()).isEqualTo(new Money("12200"));
+        assertThat(cart.totalItems()).isEqualTo(new Quantity(2));
+        assertThat(cart.totalAmount()).isEqualTo(new Money("6000"));
         // When
         cart.removeItem(item.id());
         // Then
-        Assertions.assertThat(cart.totalItems()).isEqualTo(new Quantity(3));
-        Assertions.assertThat(cart.totalAmount()).isEqualTo(new Money("6200"));
+        assertThat(cart.totalItems()).isEqualTo(new Quantity(0));
+        assertThat(cart.totalAmount()).isEqualTo(new Money("0"));
+
+        ShoppingCartItemRemovedEvent shoppingCartItemRemovedEvent = new ShoppingCartItemRemovedEvent(
+                cart.id(),
+                cart.customerId(),
+                product.id(),
+                OffsetDateTime.now()
+        );
+
+        assertThat(cart.domainEvents()).contains(shoppingCartItemRemovedEvent);
     }
 
     @Test
@@ -155,12 +182,14 @@ public class ShoppingCartTest {
         cart.empty();
 
         // Then
-        Assertions.assertWith(cart,
-                c -> Assertions.assertThat(c.isEmpty()).isTrue(),
-                c -> Assertions.assertThat(c.items()).isEmpty(),
-                c -> Assertions.assertThat(c.totalItems()).isEqualTo(Quantity.ZERO),
-                c -> Assertions.assertThat(c.totalAmount()).isEqualTo(Money.ZERO)
+        assertWith(cart,
+                c -> assertThat(c.isEmpty()).isTrue(),
+                c -> assertThat(c.items()).isEmpty(),
+                c -> assertThat(c.totalItems()).isEqualTo(Quantity.ZERO),
+                c -> assertThat(c.totalAmount()).isEqualTo(Money.ZERO)
         );
+
+        assertThat(cart.domainEvents()).isNotEmpty();
     }
 
     @Test
@@ -176,7 +205,7 @@ public class ShoppingCartTest {
         ThrowableAssert.ThrowingCallable refreshTask = () -> cart.refreshItem(differentProduct);
 
         // Then
-        Assertions.assertThatExceptionOfType(ShoppingCartDoesNotContainProductException.class)
+        assertThatExceptionOfType(ShoppingCartDoesNotContainProductException.class)
                 .isThrownBy(refreshTask);
     }
 
@@ -184,7 +213,7 @@ public class ShoppingCartTest {
     public void givenCartWithItem_whenRefreshItem_shouldUpdatePriceAndRecalculateTotals() {
         // Given
         Product originalProduct = ProductTestDataBuilder.aProduct().build();
-        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().build();
+        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
         cart.addItem(originalProduct, new Quantity(2));
 
         Product updatedProduct = Product.builder()
@@ -198,39 +227,39 @@ public class ShoppingCartTest {
         cart.refreshItem(updatedProduct);
 
         // Then
-        Assertions.assertWith(cart,
-                c -> Assertions.assertThat(c.totalAmount()).isEqualTo(new Money("13200"))
+        assertWith(cart,
+                c -> assertThat(c.totalAmount()).isEqualTo(new Money("7000"))
         );
 
         ShoppingCartItem item = cart.findItem(originalProduct.id());
-        Assertions.assertWith(item,
-                i -> Assertions.assertThat(i.price()).isEqualTo(new Money("3500")),
-                i -> Assertions.assertThat(i.totalAmount()).isEqualTo(new Money("7000"))
+        assertWith(item,
+                i -> assertThat(i.price()).isEqualTo(new Money("3500")),
+                i -> assertThat(i.totalAmount()).isEqualTo(new Money("7000"))
         );
     }
 
     @Test
     public void givenCartWithItem_whenChangeItemQuantity_shouldRecalculateTotals() {
         // Given
-        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().build();
+        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
         Product product = ProductTestDataBuilder.aProduct().build();
         cart.addItem(product, new Quantity(2));
 
         ShoppingCartItem item = cart.findItem(product.id());
 
         // When
-        cart.changeItemQuantity(item.id(), new Quantity(5));
+        cart.changeItemQuantity(item.id(), new Quantity(4));
 
         // Then
-        Assertions.assertWith(cart,
-                c -> Assertions.assertThat(c.totalItems()).isEqualTo(new Quantity(8)),
-                c -> Assertions.assertThat(c.totalAmount()).isEqualTo(new Money("21200"))
+        assertWith(cart,
+                c -> assertThat(c.totalItems()).isEqualTo(new Quantity(4)),
+                c -> assertThat(c.totalAmount()).isEqualTo(new Money("12000"))
         );
 
         ShoppingCartItem updatedItem = cart.findItem(product.id());
-        Assertions.assertWith(updatedItem,
-                i -> Assertions.assertThat(i.quantity()).isEqualTo(new Quantity(5)),
-                i -> Assertions.assertThat(i.totalAmount()).isEqualTo(new Money("15000"))
+        assertWith(updatedItem,
+                i -> assertThat(i.quantity()).isEqualTo(new Quantity(4)),
+                i -> assertThat(i.totalAmount()).isEqualTo(new Money("12000"))
         );
     }
 
@@ -244,7 +273,7 @@ public class ShoppingCartTest {
         ShoppingCartItem item = cart.findItem(product.id());
 
         // When & Then
-        Assertions.assertThatIllegalArgumentException()
+        assertThatIllegalArgumentException()
                 .isThrownBy(() -> cart.changeItemQuantity(item.id(), Quantity.ZERO));
     }
 
@@ -268,7 +297,7 @@ public class ShoppingCartTest {
         boolean hasUnavailable = cart.containsUnavailableItems();
 
         // Then
-        Assertions.assertThat(hasUnavailable).isTrue();
+        assertThat(hasUnavailable).isTrue();
     }
 
     @Test
@@ -285,7 +314,7 @@ public class ShoppingCartTest {
         boolean hasUnavailable = cart.containsUnavailableItems();
 
         // Then
-        Assertions.assertThat(hasUnavailable).isFalse();
+        assertThat(hasUnavailable).isFalse();
     }
 
     @Test
@@ -304,8 +333,8 @@ public class ShoppingCartTest {
         }
 
         // When & Then
-        Assertions.assertThat(cart1).isEqualTo(cart2);
-        Assertions.assertThat(cart1.hashCode()).isEqualTo(cart2.hashCode());
+        assertThat(cart1).isEqualTo(cart2);
+        assertThat(cart1.hashCode()).isEqualTo(cart2.hashCode());
     }
 
     @Test
@@ -315,13 +344,13 @@ public class ShoppingCartTest {
         ShoppingCart shoppingCart2 = ShoppingCartTestDataBuilder.aShoppingCart().build();
 
         // When & Then
-        Assertions.assertThat(shoppingCart1).isNotEqualTo(shoppingCart2);
+        assertThat(shoppingCart1).isNotEqualTo(shoppingCart2);
     }
 
     @Test
     public void givenCartWithMultipleItems_whenRemoveOneItem_shouldRecalculateTotalsCorrectly() {
         // Given
-        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().build();
+        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
         Product product1 = ProductTestDataBuilder.aProduct().build();
         Product product2 = ProductTestDataBuilder.aProductAltMousePad().build();
         Product product3 = ProductTestDataBuilder.aProductAltRamMemory().build();
@@ -336,10 +365,10 @@ public class ShoppingCartTest {
         cart.removeItem(itemToRemove.id());
 
         // Then
-        Assertions.assertWith(cart,
-                c -> Assertions.assertThat(c.items()).hasSize(4),
-                c -> Assertions.assertThat(c.totalItems()).isEqualTo(new Quantity(6)),
-                c -> Assertions.assertThat(c.totalAmount()).isEqualTo(new Money("12400"))
+        assertWith(cart,
+                c -> assertThat(c.items()).hasSize(2),
+                c -> assertThat(c.totalItems()).isEqualTo(new Quantity(3)),
+                c -> assertThat(c.totalAmount()).isEqualTo(new Money("6200"))
         );
     }
 
@@ -353,7 +382,7 @@ public class ShoppingCartTest {
         boolean isEmpty = cart.isEmpty();
 
         // Then
-        Assertions.assertThat(isEmpty).isTrue();
+        assertThat(isEmpty).isTrue();
     }
 
     @Test
@@ -367,13 +396,13 @@ public class ShoppingCartTest {
         boolean isEmpty = cart.isEmpty();
 
         // Then
-        Assertions.assertThat(isEmpty).isFalse();
+        assertThat(isEmpty).isFalse();
     }
 
     @Test
     public void givenCart_whenFindItemByProductId_shouldReturnCorrectItem() {
         // Given
-        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().build();
+        ShoppingCart cart = ShoppingCartTestDataBuilder.aShoppingCart().withItems(false).build();
         Product product = ProductTestDataBuilder.aProduct().build();
         cart.addItem(product, new Quantity(2));
 
@@ -381,9 +410,9 @@ public class ShoppingCartTest {
         ShoppingCartItem foundItem = cart.findItem(product.id());
 
         // Then
-        Assertions.assertWith(foundItem,
-                i -> Assertions.assertThat(i.productId()).isEqualTo(product.id()),
-                i -> Assertions.assertThat(i.quantity()).isEqualTo(new Quantity(2))
+        assertWith(foundItem,
+                i -> assertThat(i.productId()).isEqualTo(product.id()),
+                i -> assertThat(i.quantity()).isEqualTo(new Quantity(2))
         );
     }
 
@@ -400,7 +429,7 @@ public class ShoppingCartTest {
         ShoppingCartItem foundItem = cart.findItem(originalItem.id());
 
         // Then
-        Assertions.assertThat(foundItem).isEqualTo(originalItem);
+        assertThat(foundItem).isEqualTo(originalItem);
     }
 
     @Test
@@ -412,7 +441,7 @@ public class ShoppingCartTest {
         ThrowableAssert.ThrowingCallable addTask = () -> cart.addItem(null, new Quantity(1));
 
         // Then
-        Assertions.assertThatExceptionOfType(NullPointerException.class)
+        assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(addTask);
     }
 
@@ -426,7 +455,7 @@ public class ShoppingCartTest {
         ThrowableAssert.ThrowingCallable addTask = () -> cart.addItem(product, null);
 
         // Then
-        Assertions.assertThatExceptionOfType(NullPointerException.class)
+        assertThatExceptionOfType(NullPointerException.class)
                 .isThrownBy(addTask);
     }
 
@@ -442,7 +471,7 @@ public class ShoppingCartTest {
                 cart.items().add(ShoppingCartItemTestDataBuilder.aShoppingCartItem().build());
 
         // Then
-        Assertions.assertThatExceptionOfType(UnsupportedOperationException.class)
+        assertThatExceptionOfType(UnsupportedOperationException.class)
                 .isThrownBy(modifyTask);
     }
 }
