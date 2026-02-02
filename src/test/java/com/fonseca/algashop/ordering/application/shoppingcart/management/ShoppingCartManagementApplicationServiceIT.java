@@ -44,8 +44,6 @@ class ShoppingCartManagementApplicationServiceIT {
     void shouldAddItemToShoppingCart() {
         Customer customer = CustomerTestDataBuilder.brandNewCustomer().build();
         customers.add(customer);
-
-        customers.add(customer);
         ShoppingCart shoppingCart = ShoppingCart.startShopping(customer.id());
         shoppingCarts.add(shoppingCart);
 
