@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.utility.modelmapper;
 
-import com.fonseca.algashop.ordering.application.customer.management.CustomerOutput;
+import com.fonseca.algashop.ordering.application.customer.query.CustomerOutput;
 import com.fonseca.algashop.ordering.application.utility.Mapper;
 import com.fonseca.algashop.ordering.domain.model.commons.FullName;
 import com.fonseca.algashop.ordering.domain.model.customer.BirthDate;
