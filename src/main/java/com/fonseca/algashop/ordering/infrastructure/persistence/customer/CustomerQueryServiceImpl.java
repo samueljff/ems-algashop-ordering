@@ -15,13 +15,10 @@ import java.util.UUID;
 public class CustomerQueryServiceImpl implements CustomerQueryService {
 
     private final CustomerPersistenceEntityRepository repository;
-    private final Mapper mapper;
 
     @Override
     public CustomerOutput findById(UUID customerId) {
         Objects.requireNonNull(customerId);
-        CustomerPersistenceEntity customer = repository.findById(customerId).orElseThrow(() -> new CustomerNotFoundException());
-
-        return mapper.convert(customer, CustomerOutput.class);
+        return repository.findByIdAsOutput(customerId).orElseThrow(() -> new CustomerNotFoundException());
     }
 }
