@@ -1,6 +1,8 @@
 package com.fonseca.algashop.ordering.application.checkout;
 
 import com.fonseca.algashop.ordering.application.commons.AddressData;
+import com.fonseca.algashop.ordering.application.order.query.BillingData;
+import com.fonseca.algashop.ordering.application.order.query.RecipientData;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
 
