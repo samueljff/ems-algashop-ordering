@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -46,13 +47,18 @@ public class OrderQueryServiceImpl implements OrderQueryService {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
         Root<OrderPersistenceEntity> root = criteriaQuery.from(OrderPersistenceEntity.class);
+
         Expression<Long> count = builder.count(root);
+        Predicate[] predicates = toPredicate(builder, root, filter);
+
         criteriaQuery.select(count);
+        criteriaQuery.where(predicates);
+
         TypedQuery<Long> query = entityManager.createQuery(criteriaQuery);
         return query.getSingleResult();
     }
 
-    private Page<OrderSummaryOutput> filterQuery(PageFilter filter, Long totalQueryResult) {
+    private Page<OrderSummaryOutput> filterQuery(OrderFilter filter, Long totalQueryResult) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<OrderSummaryOutput> criteriaQuery = builder.createQuery(OrderSummaryOutput.class);
         Root<OrderPersistenceEntity> root = criteriaQuery.from(OrderPersistenceEntity.class);
@@ -79,11 +85,26 @@ public class OrderQueryServiceImpl implements OrderQueryService {
                         root.get("paymentMethod")
                 )
         );
+
+        Predicate[] predicates = toPredicate(builder, root, filter);
+
+        criteriaQuery.where(predicates);
+
         TypedQuery<OrderSummaryOutput> typedQuery = entityManager.createQuery(criteriaQuery);
         typedQuery.setFirstResult(filter.getSize() * filter.getPage());
         typedQuery.setMaxResults(filter.getSize());
         PageRequest pageRequest = PageRequest.of(filter.getPage(), filter.getSize());
 
         return new PageImpl<>(typedQuery.getResultList(), pageRequest, totalQueryResult);
+    }
+
+    private Predicate[] toPredicate(CriteriaBuilder builder, Root<OrderPersistenceEntity> root, OrderFilter filter){
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (filter.getCustomerId() != null) {
+            predicates.add(builder.equal(root.get("customer").get("id"), filter.getCustomerId()));
+        }
+
+        return predicates.toArray(new Predicate[]{});
     }
 }
