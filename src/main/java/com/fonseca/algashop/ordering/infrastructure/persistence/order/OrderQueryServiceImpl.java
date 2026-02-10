@@ -1,9 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.order;
 
-import com.fonseca.algashop.ordering.application.order.query.CustomerMinimalOutput;
-import com.fonseca.algashop.ordering.application.order.query.OrderDetailOutput;
-import com.fonseca.algashop.ordering.application.order.query.OrderQueryService;
-import com.fonseca.algashop.ordering.application.order.query.OrderSummaryOutput;
+import com.fonseca.algashop.ordering.application.order.query.*;
 import com.fonseca.algashop.ordering.application.utility.Mapper;
 import com.fonseca.algashop.ordering.application.utility.PageFilter;
 import com.fonseca.algashop.ordering.domain.model.order.OrderId;
@@ -36,7 +33,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
     }
 
     @Override
-    public Page<OrderSummaryOutput> filter(PageFilter filter) {
+    public Page<OrderSummaryOutput> filter(OrderFilter filter) {
         Long totalQueryResult = countTotalQueryResults(filter);
         if (totalQueryResult.equals(0L)) {
             PageRequest pageRequest = PageRequest.of(filter.getPage(), filter.getSize());
@@ -45,7 +42,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
         return filterQuery(filter, totalQueryResult);
     }
 
-    private Long countTotalQueryResults(PageFilter filter) {
+    private Long countTotalQueryResults(OrderFilter filter) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
         Root<OrderPersistenceEntity> root = criteriaQuery.from(OrderPersistenceEntity.class);
