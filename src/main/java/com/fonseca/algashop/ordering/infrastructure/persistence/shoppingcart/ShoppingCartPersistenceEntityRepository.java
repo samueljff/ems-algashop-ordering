@@ -1,5 +1,7 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
 
+import com.fonseca.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +13,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ShoppingCartPersistenceEntityRepository extends JpaRepository<ShoppingCartPersistenceEntity, UUID> {
+
+    @EntityGraph(attributePaths = {"customer", "items"})
     Optional<ShoppingCartPersistenceEntity> findByCustomer_Id(UUID value);
+
+    @Override
+    @EntityGraph(attributePaths = {"customer", "items"})
+    Optional<ShoppingCartPersistenceEntity> findById(UUID id);
 
     @Modifying
     @Transactional
