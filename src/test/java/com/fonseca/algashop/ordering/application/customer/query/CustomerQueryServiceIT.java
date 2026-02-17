@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -266,6 +268,70 @@ class CustomerQueryServiceIT {
 
         CustomerFilter filter = new CustomerFilter();
         filter.setSortByProperty(CustomerFilter.SortType.FIRST_NAME);
+        filter.setSortDirection(Sort.Direction.DESC);
+
+        Page<CustomerSummaryOutput> result = queryService.filter(filter);
+
+        assertThat(result.getContent())
+                .hasSize(3)
+                .extracting(CustomerSummaryOutput::getFirstName)
+                .containsExactly("Roberto", "Beatriz", "Ana");
+    }
+
+    @Test
+    void shouldOrderByRegisteredAtAsc() {
+        customers.add(CustomerTestDataBuilder.existingCustomer()
+                .id(new CustomerId())
+                .fullName(new FullName("Roberto", "Santos"))
+                .registeredAt(OffsetDateTime.parse("2024-01-10T10:00:00Z"))
+                .build());
+
+        customers.add(CustomerTestDataBuilder.existingCustomer()
+                .id(new CustomerId())
+                .fullName(new FullName("Beatriz", "Oliveira"))
+                .registeredAt(OffsetDateTime.parse("2024-01-05T10:00:00Z"))
+                .build());
+
+        customers.add(CustomerTestDataBuilder.existingCustomer()
+                .id(new CustomerId())
+                .fullName(new FullName("Ana", "Costa"))
+                .registeredAt(OffsetDateTime.parse("2024-01-01T10:00:00Z"))
+                .build());
+
+        CustomerFilter filter = new CustomerFilter();
+        filter.setSortByProperty(CustomerFilter.SortType.REGISTERED_AT);
+        filter.setSortDirection(Sort.Direction.ASC);
+
+        Page<CustomerSummaryOutput> result = queryService.filter(filter);
+
+        assertThat(result.getContent())
+                .hasSize(3)
+                .extracting(CustomerSummaryOutput::getFirstName)
+                .containsExactly("Ana", "Beatriz", "Roberto");
+    }
+
+    @Test
+    public void shouldOrderByRegisteredAtDesc() {
+        customers.add(CustomerTestDataBuilder.existingCustomer()
+                .id(new CustomerId())
+                .fullName(new FullName("Roberto", "Santos"))
+                .registeredAt(OffsetDateTime.parse("2024-01-10T10:00:00Z"))
+                .build());
+
+        customers.add(CustomerTestDataBuilder.existingCustomer()
+                .id(new CustomerId())
+                .fullName(new FullName("Beatriz", "Oliveira"))
+                .registeredAt(OffsetDateTime.parse("2024-01-05T10:00:00Z"))
+                .build());
+
+        customers.add(CustomerTestDataBuilder.existingCustomer()
+                .id(new CustomerId())
+                .fullName(new FullName("Ana", "Costa"))
+                .registeredAt(OffsetDateTime.parse("2024-01-01T10:00:00Z"))
+                .build());
+
+        CustomerFilter filter = new CustomerFilter();
+        filter.setSortByProperty(CustomerFilter.SortType.REGISTERED_AT);
         filter.setSortDirection(Sort.Direction.DESC);
 
         Page<CustomerSummaryOutput> result = queryService.filter(filter);

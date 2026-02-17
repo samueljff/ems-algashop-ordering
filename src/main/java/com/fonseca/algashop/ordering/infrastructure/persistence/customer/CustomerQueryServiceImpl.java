@@ -67,7 +67,7 @@ public class CustomerQueryServiceImpl implements CustomerQueryService {
     }
 
     @Override
-    public Page filter(CustomerFilter filter) {
+    public Page<CustomerSummaryOutput> filter(CustomerFilter filter) {
         Long totalQueryResults = countTotalQueryResults(filter);
 
         if (totalQueryResults.equals(0L)) {
