@@ -278,10 +278,8 @@ class CustomerQueryServiceIT {
                 .containsExactly("Roberto", "Beatriz", "Ana");
     }
 
-
-
     @Test
-    void shouldOrderByFirstRegisteredAtAsc() {
+    void shouldOrderByRegisteredAtAsc() {
         customers.add(CustomerTestDataBuilder.existingCustomer()
                 .id(new CustomerId())
                 .fullName(new FullName("Roberto", "Santos"))
@@ -313,7 +311,7 @@ class CustomerQueryServiceIT {
     }
 
     @Test
-    public void shouldOrderRegisteredAtDesc() {
+    public void shouldOrderByRegisteredAtDesc() {
         customers.add(CustomerTestDataBuilder.existingCustomer()
                 .id(new CustomerId())
                 .fullName(new FullName("Roberto", "Santos"))
@@ -343,8 +341,6 @@ class CustomerQueryServiceIT {
                 .extracting(CustomerSummaryOutput::getFirstName)
                 .containsExactly("Roberto", "Beatriz", "Ana");
     }
-
-
 
     @Test
     public void shouldReturnEmptyPageWhenNoMatchFound() {
