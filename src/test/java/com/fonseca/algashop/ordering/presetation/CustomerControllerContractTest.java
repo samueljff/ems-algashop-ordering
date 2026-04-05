@@ -1,24 +1,38 @@
 package com.fonseca.algashop.ordering.presetation;
 
+import com.fonseca.algashop.ordering.application.customer.management.CustomerInput;
+import com.fonseca.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
+import com.fonseca.algashop.ordering.application.customer.query.CustomerOutput;
+import com.fonseca.algashop.ordering.application.customer.query.CustomerOutputTestDataBuilder;
+import com.fonseca.algashop.ordering.application.customer.query.CustomerQueryService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @WebMvcTest(controllers = CustomerController.class)
 class CustomerControllerContractTest {
 
     @Autowired
     private WebApplicationContext context;
+
+    @MockitoBean
+    private CustomerManagementApplicationService customerManagementApplicationService;
+
+    @MockitoBean
+    private CustomerQueryService customerQueryService;
 
     @BeforeEach
     public void setupAll() {
@@ -30,6 +44,14 @@ class CustomerControllerContractTest {
 
     @Test
     public void createCustomerContract() {
+
+        CustomerOutput customerOutput = CustomerOutputTestDataBuilder.existing().build();
+
+        Mockito.when(customerManagementApplicationService.create(Mockito.any(CustomerInput.class)))
+                .thenReturn(UUID.randomUUID());
+
+        Mockito.when(customerQueryService.findById(Mockito.any(UUID.class)))
+                .thenReturn(customerOutput);
         String jsonInput = """
                 {
                   "firstName": "John",
