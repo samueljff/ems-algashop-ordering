@@ -4,6 +4,7 @@ import com.fonseca.algashop.ordering.application.customer.management.CustomerInp
 import com.fonseca.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerOutput;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerQueryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerOutput create(@RequestBody CustomerInput input){
+    public CustomerOutput create(@RequestBody @Valid CustomerInput input){
         UUID customerId = customerManagementApplicationService.create(input);
         return customerQueryService.findById(customerId);
     }
