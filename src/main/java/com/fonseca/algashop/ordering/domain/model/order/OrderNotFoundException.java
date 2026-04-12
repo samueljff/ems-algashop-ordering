@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
-import com.fonseca.algashop.ordering.domain.model.DomainException;
+import com.fonseca.algashop.ordering.domain.model.DomainEntityNotFoundException;
 
-public class OrderNotFoundException extends DomainException {
+public class OrderNotFoundException extends DomainEntityNotFoundException {
 }
