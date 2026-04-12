@@ -2,6 +2,7 @@ package com.fonseca.algashop.ordering.presetation;
 
 import com.fonseca.algashop.ordering.application.customer.management.CustomerInput;
 import com.fonseca.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
+import com.fonseca.algashop.ordering.application.customer.management.CustomerUpdateInput;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerFilter;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerOutput;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerQueryService;
@@ -11,12 +12,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
-import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.*;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.fromMethodCall;
+import static org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.on;
 
 @RestController
 @RequestMapping("api/v1/customers")
@@ -34,6 +35,20 @@ public class CustomerController {
         UriComponentsBuilder builder = fromMethodCall(on(CustomerController.class).findById(customerId));
         httpServletResponse.addHeader("Location", builder.toUriString());
         return customerQueryService.findById(customerId);
+    }
+
+    @PutMapping("/{customerId}")
+    public CustomerOutput update(@PathVariable UUID customerId,
+                                 @RequestBody @Valid CustomerUpdateInput input) {
+
+        customerManagementApplicationService.update(customerId, input);
+        return customerQueryService.findById(customerId);
+    }
+
+    @DeleteMapping("/{customerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable UUID customerId) {
+        customerManagementApplicationService.archive(customerId);
     }
 
     @GetMapping
