@@ -47,8 +47,9 @@ class CustomerControllerContractTest {
 
         CustomerOutput customerOutput = CustomerOutputTestDataBuilder.existing().build();
 
+        UUID customerId = UUID.randomUUID();
         Mockito.when(customerManagementApplicationService.create(Mockito.any(CustomerInput.class)))
-                .thenReturn(UUID.randomUUID());
+                .thenReturn(customerId);
 
         Mockito.when(customerQueryService.findById(Mockito.any(UUID.class)))
                 .thenReturn(customerOutput);
@@ -74,34 +75,35 @@ class CustomerControllerContractTest {
                 """;
         RestAssuredMockMvc
             .given()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .body(jsonInput)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .body(jsonInput)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
             .when()
-            .post("/api/v1/customers")
+                .post("/api/v1/customers")
             .then()
-            .assertThat()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .statusCode(HttpStatus.CREATED.value())
-            .body(
-                    "id", Matchers.notNullValue(),
-                    "registeredAt", Matchers.notNullValue(),
-                    "firstName", Matchers.is("John"),
-                    "lastName", Matchers.is("Doe"),
-                    "email", Matchers.is("johndoe@email.com"),
-                    "document", Matchers.is("12345"),
-                    "phone", Matchers.is("1191234564"),
-                    "birthDate", Matchers.is("1991-07-05"),
-                    "promotionNotificationsAllowed", Matchers.is(false),
-                    "loyaltyPoints", Matchers.is(0),
-                    "address.street", Matchers.is("Bourbon Street"),
-                    "address.number", Matchers.is("2000"),
-                    "address.complement", Matchers.is("apt 122"),
-                    "address.neighborhood", Matchers.is("North Ville"),
-                    "address.city", Matchers.is("Yostfort"),
-                    "address.state", Matchers.is("South Carolina"),
-                    "address.zipCode", Matchers.is("12321")
-            );
+                .assertThat()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .statusCode(HttpStatus.CREATED.value())
+                .header("Location", Matchers.containsString("api/v1/customers/" + customerId))
+                .body(
+                        "id", Matchers.notNullValue(),
+                        "registeredAt", Matchers.notNullValue(),
+                        "firstName", Matchers.is("John"),
+                        "lastName", Matchers.is("Doe"),
+                        "email", Matchers.is("johndoe@email.com"),
+                        "document", Matchers.is("12345"),
+                        "phone", Matchers.is("1191234564"),
+                        "birthDate", Matchers.is("1991-07-05"),
+                        "promotionNotificationsAllowed", Matchers.is(false),
+                        "loyaltyPoints", Matchers.is(0),
+                        "address.street", Matchers.is("Bourbon Street"),
+                        "address.number", Matchers.is("2000"),
+                        "address.complement", Matchers.is("apt 122"),
+                        "address.neighborhood", Matchers.is("North Ville"),
+                        "address.city", Matchers.is("Yostfort"),
+                        "address.state", Matchers.is("South Carolina"),
+                        "address.zipCode", Matchers.is("12321")
+                );
     }
 
     @Test
