@@ -4,7 +4,6 @@ import com.fonseca.algashop.ordering.application.commons.AddressData;
 import com.fonseca.algashop.ordering.application.customer.management.CustomerInput;
 import com.fonseca.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
 import com.fonseca.algashop.ordering.application.customer.management.CustomerUpdateInput;
-import com.fonseca.algashop.ordering.application.customer.management.CustomerUpdateInputTestDataBuilder;
 import com.fonseca.algashop.ordering.application.customer.query.*;
 import com.fonseca.algashop.ordering.domain.model.DomainException;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerEmailIsInUseException;
