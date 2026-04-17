@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.presetation;
+package com.fonseca.algashop.ordering.presentation;
 
 import com.fonseca.algashop.ordering.domain.model.DomainEntityNotFoundException;
 import com.fonseca.algashop.ordering.domain.model.DomainException;

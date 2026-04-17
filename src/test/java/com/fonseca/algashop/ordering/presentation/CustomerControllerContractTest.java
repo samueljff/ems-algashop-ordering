@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.presetation;
+package com.fonseca.algashop.ordering.presentation;
 
 import com.fonseca.algashop.ordering.application.commons.AddressData;
 import com.fonseca.algashop.ordering.application.customer.management.CustomerInput;
