@@ -3,6 +3,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.6'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.cloud.contract' version '5.0.2'
 }
 
 group = 'com.fonseca.algashop'
@@ -33,6 +34,16 @@ idea {
     }
 }
 
+ext {
+    set('springCloudVersion', "2025.1.1")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.uuid:java-uuid-generator:5.1.0'
@@ -48,8 +59,17 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'io.rest-assured:spring-mock-mvc'
     testImplementation 'org.assertj:assertj-core:3.27.3'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    mockitoAgent('org.mockito:mockito-core:5.14.2') {transitive = false}
+    mockitoAgent('org.mockito:mockito-core:5.14.2') { transitive = false }
+}
+
+contracts {
+
+}
+
+tasks.named('contractTest') {
+    useJUnitPlatform()
 }
 
 tasks.named('test') {
@@ -57,8 +77,8 @@ tasks.named('test') {
 }
 
 def mockitoJvmArgs = [
-        "-javaagent:${configurations.mockitoAgent.asPath}",
-        "-Xshare:off" // Desabilita Class Data Sharing para evitar warning de bootstrap classpath
+    "-javaagent:${configurations.mockitoAgent.asPath}",
+    "-Xshare:off" // Desabilita Class Data Sharing para evitar warning de bootstrap classpath
 ]
 
 test {
@@ -69,7 +89,7 @@ test {
 }
 
 tasks.named('check') {
-    dependsOn(test, integrationTest)
+    dependsOn(test, contractTest, integrationTest)
 }
 
 tasks.register('integrationTest', Test) {
