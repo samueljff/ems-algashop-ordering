@@ -65,7 +65,7 @@ dependencies {
 }
 
 contracts {
-
+    packageWithBaseClasses = "com.fonseca.algashop.ordering.contract.base"
 }
 
 tasks.named('contractTest') {
