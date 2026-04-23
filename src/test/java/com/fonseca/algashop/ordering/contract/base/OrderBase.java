@@ -2,6 +2,7 @@ package com.fonseca.algashop.ordering.contract.base;
 
 import com.fonseca.algashop.ordering.application.order.query.OrderDetailOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.application.order.query.OrderQueryService;
+import com.fonseca.algashop.ordering.domain.model.order.OrderNotFoundException;
 import com.fonseca.algashop.ordering.presentation.OrderController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,9 @@ public class OrderBase {
     @MockitoBean
     private OrderQueryService orderQueryService;
 
+    public static final String validOrderId = "01226N0640J7Q";
+    public static final String notFoundOrderId = "01226N0693HDH";
+
     @BeforeEach
     void setUp() {
         RestAssuredMockMvc.mockMvc(
@@ -33,8 +37,10 @@ public class OrderBase {
 
         RestAssuredMockMvc.enableLoggingOfRequestAndResponseIfValidationFails();
 
-        String id = "01226N0640J7Q";
-        Mockito.when(orderQueryService.findById(id))
-            .thenReturn(OrderDetailOutputTestDataBuilder.placedOrder(id).build());
+        Mockito.when(orderQueryService.findById(validOrderId))
+            .thenReturn(OrderDetailOutputTestDataBuilder.placedOrder(validOrderId).build());
+
+        Mockito.when(orderQueryService.findById(notFoundOrderId))
+            .thenThrow(new OrderNotFoundException());
     }
 }
