@@ -18,7 +18,6 @@ public class AddressData {
     @NotBlank
     private String number;
 
-    @NotBlank
     private String complement;
 
     @NotBlank
