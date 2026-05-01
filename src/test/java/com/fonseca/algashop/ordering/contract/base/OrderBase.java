@@ -9,7 +9,7 @@ import com.fonseca.algashop.ordering.application.order.query.OrderFilter;
 import com.fonseca.algashop.ordering.application.order.query.OrderQueryService;
 import com.fonseca.algashop.ordering.application.order.query.OrderSummaryOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.order.OrderNotFoundException;
-import com.fonseca.algashop.ordering.presentation.OrderController;
+import com.fonseca.algashop.ordering.presentation.order.OrderController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;

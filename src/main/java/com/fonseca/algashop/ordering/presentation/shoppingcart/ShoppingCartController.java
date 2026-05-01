@@ -1,8 +1,7 @@
-package com.fonseca.algashop.ordering.presentation;
+package com.fonseca.algashop.ordering.presentation.shoppingcart;
 
 import com.fonseca.algashop.ordering.application.shoppingcart.management.ShoppingCartItemInput;
 import com.fonseca.algashop.ordering.application.shoppingcart.management.ShoppingCartManagementApplicationService;
-import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartItemOutput;
 import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartOutput;
 import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartQueryService;
 import jakarta.validation.Valid;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController

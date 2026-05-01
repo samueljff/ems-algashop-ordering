@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.presentation;
+package com.fonseca.algashop.ordering.presentation.shoppingcart;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

@@ -17,10 +17,11 @@ public class ProductCatalogServiceFakeImpl implements ProductCatalogService {
     @Override
     public Optional<Product> ofId(ProductId productId) {
         Product product = Product.builder()
-                .id(productId)
-                .name(new ProductName("NoteBook"))
-                .price(new Money("3000"))
-                .build();
+            .id(productId)
+            .name(new ProductName("NoteBook"))
+            .price(new Money("3000"))
+            .inStock(true)
+            .build();
         return Optional.of(product);
     }
 }

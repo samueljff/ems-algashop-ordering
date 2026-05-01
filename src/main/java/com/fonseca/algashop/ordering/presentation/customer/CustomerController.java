@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.presentation;
+package com.fonseca.algashop.ordering.presentation.customer;
 
 import com.fonseca.algashop.ordering.application.customer.management.CustomerInput;
 import com.fonseca.algashop.ordering.application.customer.management.CustomerManagementApplicationService;
@@ -7,6 +7,7 @@ import com.fonseca.algashop.ordering.application.customer.query.CustomerFilter;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerOutput;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerQueryService;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerSummaryOutput;
+import com.fonseca.algashop.ordering.presentation.PageModel;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

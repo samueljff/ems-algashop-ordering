@@ -4,7 +4,7 @@ import com.fonseca.algashop.ordering.application.shoppingcart.management.Shoppin
 import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartQueryService;
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
-import com.fonseca.algashop.ordering.presentation.ShoppingCartController;
+import com.fonseca.algashop.ordering.presentation.shoppingcart.ShoppingCartController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
