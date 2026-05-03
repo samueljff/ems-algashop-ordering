@@ -68,4 +68,36 @@ public class OrderControllerIT {
             .statusCode(HttpStatus.CREATED.value());
     }
 
+    @Test
+    public void shouldNotCreateOrderUsingProductWhenCustomerWasNotFound() {
+        String json = AlgaShopResourceUtils.readContent("json/create-order-with-product-and-invalid-customer.json");
+        RestAssured
+            .given()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .contentType("application/vnd.order-with-product.v1+json")
+            .body(json)
+            .when()
+            .post("/api/v1/orders")
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+            .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+    }
+
+    @Test
+    public void shouldNotCreateOrderUsingProductWhenProductWasNotFound() {
+        String json = AlgaShopResourceUtils.readContent("json/create-order-with-product-and-invalid-customer.json");
+        RestAssured
+            .given()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .contentType("application/vnd.order-with-product.v1+json")
+            .body(json)
+            .when()
+            .post("/api/v1/orders")
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+            .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+    }
+
 }
