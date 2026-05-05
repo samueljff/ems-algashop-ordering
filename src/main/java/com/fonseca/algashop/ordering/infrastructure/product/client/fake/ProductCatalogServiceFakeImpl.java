@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component
-@Profile({"test", "it"})
+//@Component
+//@Profile({"test", "it"})
 public class ProductCatalogServiceFakeImpl implements ProductCatalogService {
 
     @Override

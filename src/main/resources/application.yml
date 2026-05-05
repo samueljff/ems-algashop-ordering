@@ -20,3 +20,4 @@ algashop:
   integrations:
     shipping.provider: "RAPIDEX"
     rapidex.url: "http://localhost:8780"
+    product-catalog.url: "http://localhost:8780"
