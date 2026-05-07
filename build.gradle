@@ -60,6 +60,7 @@ dependencies {
     testImplementation 'io.rest-assured:spring-mock-mvc'
     testImplementation 'org.assertj:assertj-core:3.27.3'
     testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     mockitoAgent('org.mockito:mockito-core:5.14.2') { transitive = false }
 }
