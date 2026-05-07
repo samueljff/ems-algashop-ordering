@@ -92,16 +92,16 @@ public class OrderControllerIT {
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-product.json");
         String createOrderId = RestAssured
             .given()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .contentType("application/vnd.order-with-product.v1+json")
-            .body(json)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType("application/vnd.order-with-product.v1+json")
+                .body(json)
             .when()
-            .post("/api/v1/orders")
+                .post("/api/v1/orders")
             .then()
-            .assertThat()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .statusCode(HttpStatus.CREATED.value())
-            .body(
+                .assertThat()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .statusCode(HttpStatus.CREATED.value())
+                .body(
                 "id", Matchers.not(Matchers.emptyString()),
                 "customer.id", Matchers.is(validCustomerId.toString()))
             .extract().jsonPath().getString("id");
@@ -112,35 +112,57 @@ public class OrderControllerIT {
     }
 
     @Test
+    public void shouldNotCreateOrderUsingProductWhenProductAPIIsUnavailable() {
+        String json = AlgaShopResourceUtils.readContent("json/create-order-with-product.json");
+
+        wireMockProductCatalog.stop();
+
+        RestAssured
+            .given()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType("application/vnd.order-with-product.v1+json")
+                .body(json)
+            .when()
+                .post("/api/v1/orders")
+            .then()
+                .assertThat()
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+                .statusCode(HttpStatus.GATEWAY_TIMEOUT.value());
+
+    }
+
+    @Test
+    public void shouldNotCreateOrderUsingProductWhenProductNotExists() {
+        String json = AlgaShopResourceUtils.readContent("json/create-order-with-invalid-product.json");
+
+        RestAssured
+            .given()
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType("application/vnd.order-with-product.v1+json")
+                .body(json)
+            .when()
+                .post("/api/v1/orders")
+            .then()
+                .assertThat()
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+                .statusCode(HttpStatus.BAD_GATEWAY.value());
+
+    }
+
+    @Test
     public void shouldNotCreateOrderUsingProductWhenCustomerWasNotFound() {
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-product-and-invalid-customer.json");
         RestAssured
             .given()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .contentType("application/vnd.order-with-product.v1+json")
-            .body(json)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType("application/vnd.order-with-product.v1+json")
+                .body(json)
             .when()
-            .post("/api/v1/orders")
+                .post("/api/v1/orders")
             .then()
-            .assertThat()
-            .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-            .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
-    }
-
-    @Test
-    public void shouldNotCreateOrderUsingProductWhenProductWasNotFound() {
-        String json = AlgaShopResourceUtils.readContent("json/create-order-with-product-and-invalid-customer.json");
-        RestAssured
-            .given()
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .contentType("application/vnd.order-with-product.v1+json")
-            .body(json)
-            .when()
-            .post("/api/v1/orders")
-            .then()
-            .assertThat()
-            .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-            .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+                .assertThat()
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
 
 }
