@@ -16,11 +16,11 @@ public class ShoppingService {
 
     public ShoppingCart startShopping(CustomerId customerId) {
         if (!customers.exists(customerId)) {
-            throw new CustomerNotFoundException();
+            throw new CustomerNotFoundException(customerId);
         }
 
         if (shoppingCarts.ofCustomer(customerId).isPresent()) {
-            throw new CustomerAlreadyHaveShoppingCartException();
+            throw new CustomerAlreadyHaveShoppingCartException(customerId);
         }
 
         return ShoppingCart.startShopping(customerId);
