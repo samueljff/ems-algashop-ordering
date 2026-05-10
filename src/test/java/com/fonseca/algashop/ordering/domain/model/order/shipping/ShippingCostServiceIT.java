@@ -2,7 +2,12 @@ package com.fonseca.algashop.ordering.domain.model.order.shipping;
 
 import com.fonseca.algashop.ordering.domain.model.commons.ZipCode;
 import com.fonseca.algashop.ordering.domain.model.order.shipping.ShippingCostService.CalculationRequest;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +22,24 @@ class ShippingCostServiceIT {
 
     @Autowired
     private OriginAddressService originAddressService;
+
+    private WireMockServer wireMockRapidex;
+
+    @BeforeEach
+    void setup() {
+        wireMockRapidex = new WireMockServer(WireMockConfiguration.options()
+            .port(8780)
+            .usingFilesUnderDirectory("src/test/resources/wiremock/rapidex")
+            .extensions(new ResponseTemplateTransformer(true))
+        );
+
+        wireMockRapidex.start();
+    }
+
+    @AfterEach
+    void tearDown() {
+        wireMockRapidex.stop();
+    }
 
     @Test
     void shouldCalculate() {
