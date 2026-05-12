@@ -1,0 +1,18 @@
+{
+  "firstName": "Marina",
+  "lastName": "Costa",
+  "email": "marina.costa@email.com",
+  "document": "98765",
+  "phone": "2198765432",
+  "birthDate": "1988-03-12",
+  "promotionNotificationsAllowed": true,
+  "address": {
+    "street": "Sunset Avenue",
+    "number": "450",
+    "complement": "house 5",
+    "neighborhood": "Green Park",
+    "city": "Brookfield",
+    "state": "California",
+    "zipCode": "54321"
+  }
+}

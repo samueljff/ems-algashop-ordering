@@ -4,7 +4,7 @@ import com.fonseca.algashop.ordering.application.commons.AddressData;
 
 import java.time.LocalDate;
 
-public class CustomerInputTesDataBuilder {
+public class CustomerInputTestDataBuilder {
 
     public static CustomerInput.CustomerInputBuilder aCustomer(){
 

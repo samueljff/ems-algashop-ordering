@@ -36,7 +36,7 @@ class CustomerManagementApplicationServiceIT {
 
     @Test
     public void shouldRegister() {
-        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
 
         UUID customerId = customerManagementApplicationService.create(input);
         Assertions.assertThat(customerId).isNotNull();
@@ -66,7 +66,7 @@ class CustomerManagementApplicationServiceIT {
 
     @Test
     public void shouldUpdate() {
-        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         CustomerUpdateInput updateInput = CustomerUpdateInputTestDataBuilder.aCustomerUpdate().build();
 
         UUID customerId = customerManagementApplicationService.create(input);
@@ -95,7 +95,7 @@ class CustomerManagementApplicationServiceIT {
 
     @Test
     public void shouldArchiveCustomerSuccessfully() {
-        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         UUID customerId = customerManagementApplicationService.create(input);
 
         customerManagementApplicationService.archive(customerId);
@@ -142,7 +142,7 @@ class CustomerManagementApplicationServiceIT {
 
     @Test
     public void shouldThrowCustomerArchivedExceptionWhenCustomerAlreadyArchived() {
-        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         UUID customerId = customerManagementApplicationService.create(input);
 
         customerManagementApplicationService.archive(customerId);
@@ -154,7 +154,7 @@ class CustomerManagementApplicationServiceIT {
 
     @Test
     void shouldChangeEmailSuccessfully() {
-        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         UUID customerId = customerManagementApplicationService.create(input);
 
         customerManagementApplicationService.changeEmail(customerId, "new.email@email.com");
@@ -177,8 +177,8 @@ class CustomerManagementApplicationServiceIT {
 
     @Test
     void shouldThrowCustomerEmailIsInUseExceptionWhenChangingEmailToExistingOne() {
-        CustomerInput customer1 = CustomerInputTesDataBuilder.aCustomer().build();
-        CustomerInput customer2 = CustomerInputTesDataBuilder.aCustomer()
+        CustomerInput customer1 = CustomerInputTestDataBuilder.aCustomer().build();
+        CustomerInput customer2 = CustomerInputTestDataBuilder.aCustomer()
                 .email("other@email.com")
                 .build();
 
@@ -193,7 +193,7 @@ class CustomerManagementApplicationServiceIT {
 
     @Test
     void givenArchivedCustomer_whenChangeEmail_thenThrowCustomerArchivedException() {
-        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         UUID customerId = customerManagementApplicationService.create(input);
         customerManagementApplicationService.archive(customerId);
 
@@ -205,7 +205,7 @@ class CustomerManagementApplicationServiceIT {
 
     @Test
     void givenValidCustomer_whenChangeEmailWithInvalidFormat_thenThrowIllegalArgumentException() {
-        CustomerInput input = CustomerInputTesDataBuilder.aCustomer().build();
+        CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         UUID customerId = customerManagementApplicationService.create(input);
 
         Assertions.assertThatThrownBy(() ->
