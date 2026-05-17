@@ -61,6 +61,7 @@ public class OrderPersistenceEntity extends AbstractAggregateRoot <OrderPersiste
             @AttributeOverride(name = "lastName", column = @Column(name = "billing_last_name")),
             @AttributeOverride(name = "document", column = @Column(name = "billing_document")),
             @AttributeOverride(name = "phone", column = @Column(name = "billing_phone")),
+            @AttributeOverride(name = "email", column = @Column(name = "billing_email")),
             @AttributeOverride(name = "address.street", column = @Column(name = "billing_address_street")),
             @AttributeOverride(name = "address.number", column = @Column(name = "billing_address_number")),
             @AttributeOverride(name = "address.complement", column = @Column(name = "billing_address_complement")),
@@ -89,7 +90,7 @@ public class OrderPersistenceEntity extends AbstractAggregateRoot <OrderPersiste
     })
     private ShippingEmbeddable shipping;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItemPersistenceEntity> items = new HashSet<>();
 
     @Builder
