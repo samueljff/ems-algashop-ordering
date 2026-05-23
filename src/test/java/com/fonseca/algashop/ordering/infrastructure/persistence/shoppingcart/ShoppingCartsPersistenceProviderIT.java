@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({
         ShoppingCartsPersistenceProvider.class,
         ShoppingCartPersistenceEntityAssembler.class,
@@ -32,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
         CustomerPersistenceEntityDisassembler.class,
         SpringDataAuditingConfig.class
 })
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ShoppingCartsPersistenceProviderIT {
 
     private ShoppingCartsPersistenceProvider persistenceProvider;
