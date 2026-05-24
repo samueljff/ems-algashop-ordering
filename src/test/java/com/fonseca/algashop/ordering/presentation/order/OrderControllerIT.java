@@ -5,7 +5,6 @@ import com.fonseca.algashop.ordering.application.checkout.BuyNowInputTestDataBui
 import com.fonseca.algashop.ordering.application.order.query.OrderDetailOutput;
 import com.fonseca.algashop.ordering.domain.model.order.OrderId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
@@ -21,11 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
-import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.UUID;
@@ -36,8 +32,8 @@ import static io.restassured.config.JsonConfig.jsonConfig;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@AutoConfigureStubRunner(stubsMode = StubRunnerProperties.StubsMode.LOCAL, ids = "com.fonseca.algashop:product-catalog:0.0.1-SNAPSHOT:8781")
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 public class OrderControllerIT {
 
     @LocalServerPort
@@ -67,8 +63,6 @@ public class OrderControllerIT {
 
         RestAssured.config().jsonConfig(jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL));
 
-        initDatabase();
-
         wireMockRapidex = new WireMockServer(options()
             .port(8780)
             .usingFilesUnderDirectory("src/test/resources/wiremock/rapidex")
@@ -89,12 +83,6 @@ public class OrderControllerIT {
     public void after() {
         wireMockRapidex.stop();
         wireMockProductCatalog.stop();
-    }
-
-    private void initDatabase() {
-        customerRepository.saveAndFlush(
-            CustomerPersistenceEntityTestDataBuilder.aCustomer().id(validCustomerId).build()
-        );
     }
 
     /**
@@ -245,7 +233,7 @@ public class OrderControllerIT {
         Assertions.assertThat(orderDetailOutput.getCustomer()).isNotNull();
         Assertions.assertThat(orderDetailOutput.getCustomer().getFirstName()).isEqualTo("John");
         Assertions.assertThat(orderDetailOutput.getCustomer().getLastName()).isEqualTo("Doe");
-        Assertions.assertThat(orderDetailOutput.getCustomer().getDocument()).isEqualTo("255-08-0578");
+        Assertions.assertThat(orderDetailOutput.getCustomer().getDocument()).isEqualTo("25508578");
         Assertions.assertThat(orderDetailOutput.getCustomer().getId()).isEqualTo(validCustomerId);
 
         boolean existOrderId = orderRepository.existsById(new OrderId(orderDetailOutput.getId()).value().toLong());

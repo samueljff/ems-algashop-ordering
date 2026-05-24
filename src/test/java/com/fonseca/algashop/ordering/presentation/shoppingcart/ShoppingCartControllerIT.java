@@ -1,7 +1,5 @@
 package com.fonseca.algashop.ordering.presentation.shoppingcart;
 
-import com.fonseca.algashop.ordering.application.shoppingcart.management.ShoppingCartItemInput;
-import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartOutput;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntity;
@@ -22,7 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.HashSet;
@@ -33,8 +30,8 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import static io.restassured.config.JsonConfig.jsonConfig;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 public class ShoppingCartControllerIT {
 
     @LocalServerPort
@@ -46,7 +43,7 @@ public class ShoppingCartControllerIT {
     @Autowired
     private ShoppingCartPersistenceEntityRepository shoppingCartRepository;
 
-    private static final UUID validCustomerId = UUID.fromString("6e148bd5-47f6-4022-b9da-07cfaa294f7a");
+    private static final UUID validCustomerId = UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d");
 
     private static final UUID validProductId = UUID.fromString("fffe6ec2-7103-48b3-8e4f-3b58e43fb75a");
 
@@ -62,8 +59,6 @@ public class ShoppingCartControllerIT {
             jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL)
         );
 
-        initDatabase();
-
         wireMockProductCatalog = new WireMockServer(options()
             .port(8781)
             .usingFilesUnderDirectory("src/test/resources/wiremock/product-catalog")
@@ -76,16 +71,6 @@ public class ShoppingCartControllerIT {
     @AfterEach
     public void after() {
         wireMockProductCatalog.stop();
-    }
-
-    private void initDatabase() {
-
-        customerRepository.saveAndFlush(
-            CustomerPersistenceEntityTestDataBuilder
-                .aCustomer()
-                .id(validCustomerId)
-                .build()
-        );
     }
 
     @Test
