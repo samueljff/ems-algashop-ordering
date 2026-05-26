@@ -1,10 +1,8 @@
 package com.fonseca.algashop.ordering.presentation.shoppingcart;
 
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityTestDataBuilder;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
@@ -22,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,8 +41,7 @@ public class ShoppingCartControllerIT {
     private ShoppingCartPersistenceEntityRepository shoppingCartRepository;
 
     private static final UUID validCustomerId = UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d");
-
-    private static final UUID validProductId = UUID.fromString("fffe6ec2-7103-48b3-8e4f-3b58e43fb75a");
+    private static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");
 
     private WireMockServer wireMockProductCatalog;
 
@@ -120,16 +116,6 @@ public class ShoppingCartControllerIT {
 
     @Test
     public void shouldAddItemToExistingShoppingCart() {
-
-        var shoppingCart = ShoppingCartPersistenceEntityTestDataBuilder.existingShoppingCart()
-            .items(new HashSet<>())
-            .customer(customerRepository.getReferenceById(validCustomerId))
-            .build();
-
-        shoppingCartRepository.saveAndFlush(shoppingCart);
-
-        UUID shoppingCartId = shoppingCart.getId();
-
         String json = AlgaShopResourceUtils.readContent("json/add-item-to-shopping-cart.json");
         RestAssured
             .given()
@@ -137,16 +123,16 @@ public class ShoppingCartControllerIT {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
             .when()
-                .post("/api/v1/shopping-carts/{shoppingCartId}/items", shoppingCartId)
+                .post("/api/v1/shopping-carts/{shoppingCartId}/items", validShoppingCartId)
             .then()
                 .assertThat()
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
-        var updatedShoppingCart = shoppingCartRepository.findById(shoppingCartId).orElseThrow();
+        var updatedShoppingCart = shoppingCartRepository.findById(validShoppingCartId).orElseThrow();
 
         Assertions.assertThat(updatedShoppingCart.getItems()).hasSize(1);
 
-        Assertions.assertThat(updatedShoppingCart.getTotalItems()).isEqualTo(3);
+        Assertions.assertThat(updatedShoppingCart.getTotalItems()).isEqualTo(5);
     }
 
     @Test
