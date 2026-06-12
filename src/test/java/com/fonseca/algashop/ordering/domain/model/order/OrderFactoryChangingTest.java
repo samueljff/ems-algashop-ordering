@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.ErrorMessages;
 import com.fonseca.algashop.ordering.domain.model.product.Product;
@@ -23,7 +24,7 @@ public class OrderFactoryChangingTest {
         CustomerId customerId = new CustomerId();
 
         Order order = OrderFactory.filled(
-                customerId, shipping, billing, paymentMethod, product, quantity
+                customerId, shipping, billing, paymentMethod, product, quantity, new CreditCardId()
         );
 
         order.place();
@@ -46,7 +47,7 @@ public class OrderFactoryChangingTest {
                 .isThrownBy(() -> order.changeShipping(newShipping));
 
         // Assert - Tentar alterar payment method e verificar que lança exceção
-        ThrowableAssert.ThrowingCallable changePaymentTask = () -> order.changePaymentMethod(PaymentMethod.CREDIT_CARD);
+        ThrowableAssert.ThrowingCallable changePaymentTask = () -> order.changePaymentMethod(PaymentMethod.CREDIT_CARD, new CreditCardId());
         Assertions.assertThatExceptionOfType(OrderCannotBeEditedException.class)
                 .isThrownBy(changePaymentTask);
 

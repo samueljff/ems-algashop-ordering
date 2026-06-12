@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.product.Product;
 import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
@@ -22,7 +23,7 @@ class OrderFactoryTest {
         CustomerId customerId = new CustomerId();
 
         Order order = OrderFactory.filled(
-                customerId, shipping, billing, paymentMethod, product, quantity
+                customerId, shipping, billing, paymentMethod, product, quantity, new CreditCardId()
         );
 
         Assertions.assertWith(order,

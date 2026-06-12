@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.commons.*;
 import com.fonseca.algashop.ordering.domain.model.order.*;
 import com.fonseca.algashop.ordering.domain.model.product.ProductName;
@@ -17,6 +18,12 @@ import java.util.stream.Collectors;
 public class OrderPersistenceEntityDisassembler {
 
     public Order toDomainEntity(OrderPersistenceEntity persistenceEntity) {
+
+        CreditCardId creditCardId = null;
+        if (persistenceEntity.getCreditCardId() != null) {
+            creditCardId = new CreditCardId(persistenceEntity.getCreditCardId());
+        }
+
         return Order.existing()
                 .id(new OrderId(persistenceEntity.getId()))
                 .customerId(new CustomerId(persistenceEntity.getCustomerId()))
@@ -32,6 +39,7 @@ public class OrderPersistenceEntityDisassembler {
                 .shipping(convertShippingEmbeddableToValueObject(persistenceEntity.getShipping()))
                 .items(toDomainEntityItems(persistenceEntity.getItems()))
                 .version(persistenceEntity.getVersion())
+                .creditCardId(creditCardId)
                 .build();
     }
 

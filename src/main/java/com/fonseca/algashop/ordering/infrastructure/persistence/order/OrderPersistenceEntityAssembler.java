@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.order.Order;
 import com.fonseca.algashop.ordering.domain.model.order.OrderItem;
 import com.fonseca.algashop.ordering.domain.model.commons.Address;
@@ -40,6 +41,10 @@ public class OrderPersistenceEntityAssembler {
         orderPersistenceEntity.setBilling(convertBillingToEmbeddable(order.billing()));
         orderPersistenceEntity.setShipping(convertShippingToEmbeddable(order.shipping()));
 
+        if (order.creditCardId() != null) {
+            orderPersistenceEntity.setCreditCardId(order.creditCardId().id());
+        }
+
         Set<OrderItemPersistenceEntity> mergedItems = mergeItems(order, orderPersistenceEntity);
         orderPersistenceEntity.replaceItems(mergedItems);
 
@@ -64,14 +69,14 @@ public class OrderPersistenceEntityAssembler {
         }
 
         Map<Long, OrderItemPersistenceEntity> existingItemMap = existingItems.stream()
-                .collect(Collectors.toMap(OrderItemPersistenceEntity::getId, item -> item));
+            .collect(Collectors.toMap(OrderItemPersistenceEntity::getId, item -> item));
         return newOrUpdatedItems.stream()
-                .map(orderItem -> {
-                    OrderItemPersistenceEntity itemPersistence = existingItemMap.getOrDefault(
-                            orderItem.id().value().toLong(), new OrderItemPersistenceEntity()
-                    );
-                    return merge(itemPersistence, orderItem);
-                }).collect(Collectors.toSet());
+            .map(orderItem -> {
+                OrderItemPersistenceEntity itemPersistence = existingItemMap.getOrDefault(
+                    orderItem.id().value().toLong(), new OrderItemPersistenceEntity()
+                );
+                return merge(itemPersistence, orderItem);
+            }).collect(Collectors.toSet());
     }
 
     public OrderItemPersistenceEntity fromDomain(OrderItem orderItem) {
@@ -93,11 +98,11 @@ public class OrderPersistenceEntityAssembler {
             return null;
         }
         var builder = ShippingEmbeddable.builder()
-                .expectedDate(shipping.expectedDate())
-                .cost(shipping.cost().value())
-                .address(convertAddressToEmbeddable(shipping.address()))
-                .recipient(convertRecipientToEmbeddable(shipping.recipient()))
-                .build();
+            .expectedDate(shipping.expectedDate())
+            .cost(shipping.cost().value())
+            .address(convertAddressToEmbeddable(shipping.address()))
+            .recipient(convertRecipientToEmbeddable(shipping.recipient()))
+            .build();
         return builder;
     }
 
@@ -106,13 +111,13 @@ public class OrderPersistenceEntityAssembler {
             return null;
         }
         return BillingEmbeddable.builder()
-                .firstName(billing.fullName().firstName())
-                .lastName(billing.fullName().lastName())
-                .document(billing.document().value())
-                .phone(billing.phone().value())
-                .email(billing.email().value())
-                .address(convertAddressToEmbeddable(billing.address()))
-                .build();
+            .firstName(billing.fullName().firstName())
+            .lastName(billing.fullName().lastName())
+            .document(billing.document().value())
+            .phone(billing.phone().value())
+            .email(billing.email().value())
+            .address(convertAddressToEmbeddable(billing.address()))
+            .build();
     }
 
     private AddressEmbeddable convertAddressToEmbeddable(Address address) {
@@ -120,14 +125,14 @@ public class OrderPersistenceEntityAssembler {
             return null;
         }
         return AddressEmbeddable.builder()
-                .city(address.city())
-                .state(address.state())
-                .number(address.number())
-                .street(address.street())
-                .complement(address.complement())
-                .neighborhood(address.neighborhood())
-                .zipCode(address.zipCode().value())
-                .build();
+            .city(address.city())
+            .state(address.state())
+            .number(address.number())
+            .street(address.street())
+            .complement(address.complement())
+            .neighborhood(address.neighborhood())
+            .zipCode(address.zipCode().value())
+            .build();
     }
 
     private RecipientEmbeddable convertRecipientToEmbeddable(Recipient recipient) {
@@ -136,10 +141,10 @@ public class OrderPersistenceEntityAssembler {
         }
 
         return RecipientEmbeddable.builder()
-                .firstName(recipient.fullName().firstName())
-                .lastName(recipient.fullName().lastName())
-                .document(recipient.document().value())
-                .phone(recipient.phone().value())
-                .build();
+            .firstName(recipient.fullName().firstName())
+            .lastName(recipient.fullName().lastName())
+            .document(recipient.document().value())
+            .phone(recipient.phone().value())
+            .build();
     }
 }

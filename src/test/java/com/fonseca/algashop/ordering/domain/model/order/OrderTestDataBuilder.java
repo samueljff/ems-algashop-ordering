@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.commons.*;
 import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
@@ -21,6 +22,8 @@ public class OrderTestDataBuilder {
 
     private OrderStatus status = OrderStatus.DRAFT;
 
+    private CreditCardId creditCardId;
+
     private OrderTestDataBuilder() {
 
     }
@@ -33,7 +36,7 @@ public class OrderTestDataBuilder {
         Order order = Order.draft(customerId);
         order.changeShipping(shipping);
         order.changeBilling(billing);
-        order.changePaymentMethod(paymentMethod);
+        order.changePaymentMethod(paymentMethod, creditCardId);
 
         if (withItems) {
             order.addItem(ProductTestDataBuilder.aProduct().build(),
@@ -153,6 +156,11 @@ public class OrderTestDataBuilder {
 
     public OrderTestDataBuilder status(OrderStatus status) {
         this.status = status;
+        return this;
+    }
+
+    public OrderTestDataBuilder creditCrdId(CreditCardId creditCardId) {
+        this.creditCardId = creditCardId;
         return this;
     }
 }

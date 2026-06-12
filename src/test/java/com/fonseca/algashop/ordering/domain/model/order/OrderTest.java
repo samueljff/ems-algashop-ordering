@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
@@ -118,7 +119,7 @@ class OrderTest {
     @Test
     public void givenDraftOrder_whenChangePaymentMethod_shouldAllowChange() {
         Order order = Order.draft(new CustomerId());
-        order.changePaymentMethod(PaymentMethod.CREDIT_CARD);
+        order.changePaymentMethod(PaymentMethod.CREDIT_CARD, new CreditCardId());
         Assertions.assertWith(order.paymentMethod()).isEqualTo(PaymentMethod.CREDIT_CARD);
     }
 

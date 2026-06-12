@@ -2,6 +2,7 @@ package com.fonseca.algashop.ordering.domain.model.order;
 
 import com.fonseca.algashop.ordering.domain.model.AbstractEventSourceEntity;
 import com.fonseca.algashop.ordering.domain.model.AggregateRoot;
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.domain.model.order.events.OrderCanceledEvent;
@@ -43,14 +44,16 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
 
     private Long version;
 
+    private CreditCardId creditCardId;
+
     @Builder(builderClassName = "ExistingOrderBuilder", builderMethodName = "existing")
-    public Order(OrderId id,Long version, CustomerId customerId,
+    public Order(OrderId id, Long version, CustomerId customerId,
                  Money totalAmount, Quantity totalItems,
                  OffsetDateTime placedAt, OffsetDateTime paidAt,
                  OffsetDateTime canceledAt, OffsetDateTime readyAt,
                  Billing billing, Shipping shipping,
                  OrderStatus status, PaymentMethod paymentMethod,
-                 Set<OrderItem> items) {
+                 Set<OrderItem> items, CreditCardId creditCardId) {
         this.setId(id);
         this.setVersion(version);
         this.setCustomerId(customerId);
@@ -65,24 +68,26 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         this.setStatus(status);
         this.setPaymentMethod(paymentMethod);
         this.setItems(items);
+        this.setCreditCardId(creditCardId);
     }
 
     public static Order draft(CustomerId customerId) {
         return new Order(
-                new OrderId(),
-                null,
-                customerId,
-                Money.ZERO,
-                Quantity.ZERO,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                OrderStatus.DRAFT,
-                null,
-                new HashSet<>()
+            new OrderId(),
+            null,
+            customerId,
+            Money.ZERO,
+            Quantity.ZERO,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            OrderStatus.DRAFT,
+            null,
+            new HashSet<>(),
+            null
         );
     }
 
@@ -94,10 +99,10 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         product.checkOutOfStock();
 
         OrderItem orderItem = OrderItem.brandNew()
-                .orderId(this.id())
-                .quantity(quantity)
-                .product(product)
-                .build();
+            .orderId(this.id())
+            .quantity(quantity)
+            .product(product)
+            .build();
 
         if (this.items == null) {
             this.items = new HashSet<>();
@@ -127,8 +132,12 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         publishDomainEvent(new OrderReadyEvent(this.id(), this.customerId(), this.readyAt()));
     }
 
-    public void changePaymentMethod(PaymentMethod paymentMethod) {
+    public void changePaymentMethod(PaymentMethod paymentMethod, CreditCardId creditCardId) {
         Objects.requireNonNull(paymentMethod);
+        if (paymentMethod.equals(PaymentMethod.CREDIT_CARD)){
+            Objects.requireNonNull(creditCardId);
+            this.setCreditCardId(creditCardId);
+        }
         verifyIfChangeable();
         this.setPaymentMethod(paymentMethod);
     }
@@ -249,15 +258,19 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
         return Collections.unmodifiableSet(this.items);
     }
 
+    public CreditCardId creditCardId() {
+        return creditCardId;
+    }
+
     private void recalculateTotals() {
         BigDecimal totalItemsAmount = this.items().stream().map(i -> i.totalAmount().value())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         Integer totalItemsQuantity = this.items().stream().map(i -> i.quantity().value())
-                .reduce(0, Integer::sum);
+            .reduce(0, Integer::sum);
 
         BigDecimal shippingCost;
-        if(this.shipping() == null) {
+        if (this.shipping() == null) {
             shippingCost = BigDecimal.ZERO;
         } else {
             shippingCost = this.shipping().cost().value();
@@ -295,9 +308,9 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
     private OrderItem findOrderItem(OrderItemId orderItemId) {
         Objects.requireNonNull(orderItemId);
         return this.items().stream()
-                .filter(i -> i.id().equals(orderItemId))
-                .findFirst()
-                .orElseThrow(()-> new OrderDoesNotContainOrderItemException(this.id(), orderItemId));
+            .filter(i -> i.id().equals(orderItemId))
+            .findFirst()
+            .orElseThrow(() -> new OrderDoesNotContainOrderItemException(this.id(), orderItemId));
     }
 
     private void verifyIfChangeable() {
@@ -370,6 +383,10 @@ public class Order extends AbstractEventSourceEntity implements AggregateRoot<Or
     private void setItems(Set<OrderItem> items) {
         Objects.requireNonNull(items);
         this.items = items;
+    }
+
+    private void setCreditCardId(CreditCardId creditCardId) {
+        this.creditCardId = creditCardId;
     }
 
     @Override

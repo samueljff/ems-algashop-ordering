@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.DomainService;
 import com.fonseca.algashop.ordering.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.domain.model.customer.Customer;
@@ -22,13 +23,13 @@ public class BuyNowService {
                         Billing billing,
                         Shipping shipping,
                         Quantity quantity,
-                        PaymentMethod paymentMethod
-    ) {
+                        PaymentMethod paymentMethod,
+                        CreditCardId creditCardId) {
         product.checkOutOfStock();
 
         Order order = Order.draft(customer.id());
         order.changeBilling(billing);
-        order.changePaymentMethod(paymentMethod);
+        order.changePaymentMethod(paymentMethod, creditCardId);
         order.addItem(product, quantity);
 
         if (haveFreeShipping(customer)){

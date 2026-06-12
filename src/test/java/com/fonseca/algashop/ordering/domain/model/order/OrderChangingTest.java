@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.product.Product;
 import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
@@ -7,7 +8,29 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+
 public class OrderChangingTest {
+
+    @Test
+    void givenDraftOrder_whenChangeIsPerformed_shouldNotThrowException() {
+        Order draftOrder = OrderTestDataBuilder.anOrder().build();
+
+        Product product = ProductTestDataBuilder.aProductAltMousePad().build();
+        Quantity quantity = new Quantity(2);
+        Billing billing = OrderTestDataBuilder.aBilling();
+        Shipping shipping = OrderTestDataBuilder.aShipping();
+        PaymentMethod method = PaymentMethod.CREDIT_CARD;
+        CreditCardId creditCardId = new CreditCardId();
+
+        OrderItem orderItem = draftOrder.items().iterator().next();
+
+        assertThatCode(() -> draftOrder.addItem(product, quantity)).doesNotThrowAnyException();
+        assertThatCode(() -> draftOrder.changeBilling(billing)).doesNotThrowAnyException();
+        assertThatCode(() -> draftOrder.changeShipping(shipping)).doesNotThrowAnyException();
+        assertThatCode(() -> draftOrder.changeItemQuantity(orderItem.id(), quantity)).doesNotThrowAnyException();
+        assertThatCode(() -> draftOrder.changePaymentMethod(method, creditCardId)).doesNotThrowAnyException();
+    }
 
     @Test
     public void givenPlacedOrder_whenTryToAddItem_shouldNotAllow() {
@@ -46,7 +69,7 @@ public class OrderChangingTest {
     public void givenPlacedOrder_whenTryToChangePaymentMethod_shouldNotAllow() {
         Order order = OrderTestDataBuilder.anOrder().status(OrderStatus.PLACED).build();
 
-        ThrowableAssert.ThrowingCallable changePaymentTask = () -> order.changePaymentMethod(PaymentMethod.CREDIT_CARD);
+        ThrowableAssert.ThrowingCallable changePaymentTask = () -> order.changePaymentMethod(PaymentMethod.CREDIT_CARD, new CreditCardId());
 
         Assertions.assertThatExceptionOfType(OrderCannotBeEditedException.class)
                 .isThrownBy(changePaymentTask);
@@ -129,7 +152,7 @@ public class OrderChangingTest {
                 .items(new java.util.HashSet<>(order.items()))
                 .build();
 
-        ThrowableAssert.ThrowingCallable changePaymentTask = () -> readyOrder.changePaymentMethod(PaymentMethod.CREDIT_CARD);
+        ThrowableAssert.ThrowingCallable changePaymentTask = () -> readyOrder.changePaymentMethod(PaymentMethod.CREDIT_CARD, new CreditCardId());
 
         Assertions.assertThatExceptionOfType(OrderCannotBeEditedException.class)
                 .isThrownBy(changePaymentTask);

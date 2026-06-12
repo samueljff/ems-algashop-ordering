@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.order;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.domain.model.customer.Customer;
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
@@ -22,7 +23,8 @@ public class CheckoutService {
             ShoppingCart shoppingCart,
             Billing billing,
             Shipping shipping,
-            PaymentMethod paymentMethod
+            PaymentMethod paymentMethod,
+            CreditCardId creditCardId
     ) {
 
         if (shoppingCart.isEmpty() || shoppingCart.containsUnavailableItems()) {
@@ -37,7 +39,7 @@ public class CheckoutService {
         } else {
             order.changeShipping(shipping);
         }
-        order.changePaymentMethod(paymentMethod);
+        order.changePaymentMethod(paymentMethod, creditCardId);
 
         Set<ShoppingCartItem> items = shoppingCart.items();
 

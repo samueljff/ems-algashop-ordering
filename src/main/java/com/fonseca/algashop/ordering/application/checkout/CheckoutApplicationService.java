@@ -1,5 +1,7 @@
 package com.fonseca.algashop.ordering.application.checkout;
 
+import com.fonseca.algashop.ordering.domain.model.CreditCardId;
+import com.fonseca.algashop.ordering.domain.model.DomainException;
 import com.fonseca.algashop.ordering.domain.model.commons.ZipCode;
 import com.fonseca.algashop.ordering.domain.model.customer.Customer;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerNotFoundException;
@@ -42,6 +44,16 @@ public class CheckoutApplicationService {
         Objects.requireNonNull(input);
 
         PaymentMethod paymentMethod = PaymentMethod.valueOf(input.getPaymentMethod());
+
+        CreditCardId creditCardId = null;
+
+        if (paymentMethod.equals(PaymentMethod.CREDIT_CARD)){
+            if (input.getCreditCardId() == null){
+                throw new DomainException("Credit card id is required");
+            }
+            creditCardId = new CreditCardId(input.getCreditCardId());
+        }
+
         ShoppingCartId shoppingCartId = new ShoppingCartId(input.getShoppingCartId());
 
         ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId).orElseThrow(() -> new ShoppingCartNotFoundException());
@@ -53,7 +65,7 @@ public class CheckoutApplicationService {
         Billing billing = billingInputDisassembler.toDomainModel(input.getBilling());
         Shipping shipping = shippingInputDisassembler.toDomainModel(input.getShipping(), calculationResult);
 
-        Order order = checkoutService.checkout(customer, shoppingCart, billing, shipping, paymentMethod);
+        Order order = checkoutService.checkout(customer, shoppingCart, billing, shipping, paymentMethod, creditCardId);
 
         orders.add(order);
         shoppingCarts.add(shoppingCart);
