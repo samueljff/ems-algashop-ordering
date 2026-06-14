@@ -11,6 +11,7 @@ spring:
     user: ${FLYWAY_USERNAME}
     password: ${FLYWAY_PASSWORD}
     url: ${DATASOURCE_JDBC_URL}
+
 algashop:
   integrations:
     shipping.provider: RAPIDEX

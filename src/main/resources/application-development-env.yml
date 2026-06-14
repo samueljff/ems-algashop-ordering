@@ -11,6 +11,7 @@ spring:
     user: postgres
     password: postgres
     url: jdbc:postgresql://localhost:5432/ordering
+
 algashop:
   integrations:
     shipping.provider: RAPIDEX
