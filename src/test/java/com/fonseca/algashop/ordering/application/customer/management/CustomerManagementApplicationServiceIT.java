@@ -13,11 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -26,32 +29,18 @@ import static com.fonseca.algashop.ordering.application.customer.notification.Cu
 
 @SpringBootTest
 @Transactional
+@Testcontainers
 class CustomerManagementApplicationServiceIT {
 
+    static {
+        System.setProperty("api.version", "1.44");
+    }
+
+    @Container
+    @ServiceConnection
     private static PostgreSQLContainer postgreSQLContainer
         = new PostgreSQLContainer<>("postgres:17-alpine")
         .withDatabaseName("ordering_test");
-
-    @BeforeAll
-    public static void beforeAll() {
-        System.setProperty("api.version", "1.44");
-        postgreSQLContainer.start();
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        postgreSQLContainer.stop();
-    }
-
-    @DynamicPropertySource
-    public static void configurePropertySource(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
-        registry.add("spring.flyway.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.flyway.user", postgreSQLContainer::getUsername);
-        registry.add("spring.flyway.password", postgreSQLContainer::getPassword);
-    }
 
     @Autowired
     private CustomerManagementApplicationService customerManagementApplicationService;
