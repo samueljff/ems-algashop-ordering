@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.application.customer.management;
 
+import com.fonseca.algashop.ordering.application.AbstractApplicationIT;
 import com.fonseca.algashop.ordering.application.commons.AddressData;
 import com.fonseca.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService;
 import com.fonseca.algashop.ordering.application.customer.query.CustomerOutput;
@@ -7,40 +8,17 @@ import com.fonseca.algashop.ordering.application.customer.query.CustomerQuerySer
 import com.fonseca.algashop.ordering.domain.model.customer.*;
 import com.fonseca.algashop.ordering.infrastructure.listener.customer.CustomerEventListener;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static com.fonseca.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService.*;
+import static com.fonseca.algashop.ordering.application.customer.notification.CustomerNotificationApplicationService.NotifyNewRegistrationInput;
 
-@SpringBootTest
-@Transactional
-@Testcontainers
-class CustomerManagementApplicationServiceIT {
-
-    static {
-        System.setProperty("api.version", "1.44");
-    }
-
-    @Container
-    @ServiceConnection
-    private static PostgreSQLContainer postgreSQLContainer
-        = new PostgreSQLContainer<>("postgres:17-alpine")
-        .withDatabaseName("ordering_test");
+class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private CustomerManagementApplicationService customerManagementApplicationService;
