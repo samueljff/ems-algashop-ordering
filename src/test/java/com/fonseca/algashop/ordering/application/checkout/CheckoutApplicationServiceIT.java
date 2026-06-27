@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.application.checkout;
 
+import com.fonseca.algashop.ordering.application.AbstractApplicationIT;
 import com.fonseca.algashop.ordering.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
@@ -29,9 +30,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-@SpringBootTest
-@Transactional
-class CheckoutApplicationServiceIT {
+class CheckoutApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private CheckoutApplicationService checkoutApplicationService;

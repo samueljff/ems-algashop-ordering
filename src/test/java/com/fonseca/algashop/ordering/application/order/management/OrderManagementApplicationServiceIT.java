@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.application.order.management;
 
+import com.fonseca.algashop.ordering.application.AbstractApplicationIT;
 import com.fonseca.algashop.ordering.application.customer.loyaltypoints.CustomerLoyaltyPointsApplicationService;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.customer.Customers;
@@ -14,16 +15,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@SpringBootTest
-@Transactional
-class OrderManagementApplicationServiceIT {
+@Import(OrderEventListener.class)
+class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private Orders orders;

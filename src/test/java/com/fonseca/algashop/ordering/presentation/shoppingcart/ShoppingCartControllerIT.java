@@ -29,7 +29,7 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
 
     @BeforeEach
     public void setup() {
-        beforeEach();
+        super.beforeEach();
     }
 
     @BeforeAll

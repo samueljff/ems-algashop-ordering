@@ -1,16 +1,14 @@
 package com.fonseca.algashop.ordering.presentation;
 
+import com.fonseca.algashop.ordering.utils.TestcontainerPostgreSQLConfig;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import io.restassured.RestAssured;
 import io.restassured.path.json.config.JsonPathConfig;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
@@ -20,17 +18,8 @@ import static io.restassured.config.JsonConfig.jsonConfig;
 @Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
 @Testcontainers
+@Import({TestcontainerPostgreSQLConfig.class})
 public abstract class AbstractPresentationIT {
-
-    static {
-        System.setProperty("api.version", "1.44");
-    }
-
-    @Container
-    @ServiceConnection
-    protected static PostgreSQLContainer postgreSQLContainer
-            = new PostgreSQLContainer<>("postgres:17-alpine")
-            .withDatabaseName("ordering_test");
 
     @LocalServerPort
     protected int port;

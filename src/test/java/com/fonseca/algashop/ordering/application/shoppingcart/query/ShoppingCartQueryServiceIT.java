@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.application.shoppingcart.query;
 
+import com.fonseca.algashop.ordering.application.AbstractApplicationIT;
 import com.fonseca.algashop.ordering.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.domain.model.customer.Customer;
@@ -14,16 +15,12 @@ import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCarts;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-class ShoppingCartQueryServiceIT {
+class ShoppingCartQueryServiceIT extends AbstractApplicationIT {
     @Autowired
     private ShoppingCartQueryService queryService;
 

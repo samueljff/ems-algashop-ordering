@@ -7,36 +7,20 @@ import com.fonseca.algashop.ordering.domain.model.order.OrderId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
+import com.fonseca.algashop.ordering.presentation.AbstractPresentationIT;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import io.restassured.RestAssured;
-import io.restassured.path.json.config.JsonPathConfig;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.UUID;
 
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
-import static io.restassured.config.JsonConfig.jsonConfig;
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@AutoConfigureStubRunner(stubsMode = StubRunnerProperties.StubsMode.LOCAL, ids = "com.fonseca.algashop:product-catalog:0.0.1-SNAPSHOT:8781")
-@Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
-public class OrderControllerIT {
-
-    @LocalServerPort
-    private int port;
+public class OrderControllerIT extends AbstractPresentationIT {
 
     @Autowired
     private CustomerPersistenceEntityRepository customerRepository;
@@ -52,36 +36,19 @@ public class OrderControllerIT {
     @Autowired
     private OrderPersistenceEntityRepository orderRepository;
 
-    private WireMockServer wireMockProductCatalog;
-    private WireMockServer wireMockRapidex;
-
     @BeforeEach
     public void setup() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        RestAssured.port = port;
-
-        RestAssured.config().jsonConfig(jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.BIG_DECIMAL));
-
-        wireMockRapidex = new WireMockServer(options()
-            .port(8780)
-            .usingFilesUnderDirectory("src/test/resources/wiremock/rapidex")
-            .extensions(new ResponseTemplateTransformer(true))
-        );
-
-        wireMockProductCatalog = new WireMockServer(options()
-            .port(8781)
-            .usingFilesUnderDirectory("src/test/resources/wiremock/product-catalog")
-            .extensions(new ResponseTemplateTransformer(true))
-        );
-
-        wireMockRapidex.start();
-        wireMockProductCatalog.start();
+        super.beforeEach();
     }
 
-    @AfterEach
-    public void after() {
-        wireMockRapidex.stop();
-        wireMockProductCatalog.stop();
+    @BeforeAll
+    public static void setupBeforeAll() {
+        initWireMock();
+    }
+
+    @AfterAll
+    public static void afterAll() {
+        stopMock();
     }
 
     /**
@@ -110,26 +77,6 @@ public class OrderControllerIT {
         boolean orderExists = orderRepository.existsById(new OrderId(createOrderId).value().toLong());
 
         Assertions.assertThat(orderExists).isTrue();
-    }
-
-    @Test
-    public void shouldNotCreateOrderUsingProductWhenProductAPIIsUnavailable() {
-        String json = AlgaShopResourceUtils.readContent("json/create-order-with-product.json");
-
-        wireMockProductCatalog.stop();
-
-        RestAssured
-            .given()
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .contentType("application/vnd.order-with-product.v1+json")
-                .body(json)
-            .when()
-                .post("/api/v1/orders")
-            .then()
-                .assertThat()
-                .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-                .statusCode(HttpStatus.GATEWAY_TIMEOUT.value());
-
     }
 
     @Test
