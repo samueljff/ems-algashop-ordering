@@ -1,30 +1,20 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
 
-import com.fonseca.algashop.ordering.domain.model.customer.Customer;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerNotFoundException;
-import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
-import com.fonseca.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
+import com.fonseca.algashop.ordering.presentation.AbstractPresentationIT;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.UUID;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(SpringDataAuditingConfig.class)
-@Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-@Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_CLASS)
-class ShoppingCartPersistenceEntityRepositoryIT {
+@TestPropertySource(properties = "spring.flyway.locations=classpath:db/migration,classpath:db/testdata")
+class ShoppingCartPersistenceEntityRepositoryIT extends AbstractPresentationIT {
 
     private static final UUID validCustomerId = UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d");
     private static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");
@@ -40,6 +30,8 @@ class ShoppingCartPersistenceEntityRepositoryIT {
     }
 
     @Test
+    @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void shouldPersistShoppingCartWithItems() {
         CustomerPersistenceEntity customerPersistenceEntity = customerPersistenceEntityRepository
             .findById(validCustomerId).orElseThrow(() -> new CustomerNotFoundException());
@@ -76,6 +68,8 @@ class ShoppingCartPersistenceEntityRepositoryIT {
     }
 
     @Test
+    @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void shouldAutomaticallySetAuditingFieldsOnPersist() {
         CustomerPersistenceEntity customerPersistenceEntity = customerPersistenceEntityRepository
             .findById(validCustomerId).orElseThrow(() -> new CustomerNotFoundException());

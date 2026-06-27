@@ -5,6 +5,7 @@ import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuild
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.infrastructure.persistence.AbstractPersistenceIT;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityDisassembler;
@@ -24,7 +25,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
-@DataJpaTest
 @Import({
         ShoppingCartsPersistenceProvider.class,
         ShoppingCartPersistenceEntityAssembler.class,
@@ -34,9 +34,8 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
         CustomerPersistenceEntityDisassembler.class,
         SpringDataAuditingConfig.class
 })
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = "spring.flyway.locations=db/migration,classpath:db/testdata")
-class ShoppingCartsPersistenceProviderIT {
+class ShoppingCartsPersistenceProviderIT extends AbstractPersistenceIT {
 
     private static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");
 

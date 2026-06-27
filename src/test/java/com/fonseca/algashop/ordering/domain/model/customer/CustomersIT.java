@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.domain.model.customer;
 
+import com.fonseca.algashop.ordering.domain.model.AbstractDomainIT;
 import com.fonseca.algashop.ordering.domain.model.commons.Email;
 import com.fonseca.algashop.ordering.domain.model.commons.FullName;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
@@ -18,12 +19,10 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
 @Import({CustomersPersistenceProvider.class,
         CustomerPersistenceEntityAssembler.class,
         CustomerPersistenceEntityDisassembler.class})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class CustomersIT {
+class CustomersIT extends AbstractDomainIT {
 
     private Customers customers;
 

@@ -1,31 +1,29 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
 
-import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.commons.Money;
-import com.fonseca.algashop.ordering.domain.model.product.Product;
 import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
+import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
+import com.fonseca.algashop.ordering.domain.model.product.Product;
+import com.fonseca.algashop.ordering.domain.model.product.ProductId;
 import com.fonseca.algashop.ordering.domain.model.product.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
-import com.fonseca.algashop.ordering.domain.model.product.ProductId;
 import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
+import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityDisassembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomersPersistenceProvider;
+import com.fonseca.algashop.ordering.presentation.AbstractPresentationIT;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@DataJpaTest
 @Import({
         ShoppingCartUpdateProvider.class,
         ShoppingCartsPersistenceProvider.class,
@@ -36,9 +34,9 @@ import org.springframework.transaction.annotation.Transactional;
         CustomerPersistenceEntityDisassembler.class,
         SpringDataAuditingConfig.class
 })
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Sql(scripts = {"classpath:db/clean/afterMigrate.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class ShoppingCartUpdateProviderIT {
+class ShoppingCartUpdateProviderIT extends AbstractPresentationIT {
 
     private ShoppingCartsPersistenceProvider persistenceProvider;
     private CustomersPersistenceProvider customersPersistenceProvider;
