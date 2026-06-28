@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.presentation.shoppingcart;
 
-import com.fonseca.algashop.ordering.core.application.shoppingcart.management.ShoppingCartItemInput;
+import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartItemInput;
 import com.fonseca.algashop.ordering.core.application.shoppingcart.management.ShoppingCartManagementApplicationService;
 import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartOutput;
 import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartQueryService;

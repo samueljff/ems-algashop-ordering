@@ -7,6 +7,8 @@ import com.fonseca.algashop.ordering.core.domain.model.product.ProductCatalogSer
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductId;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductNotFoundException;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.*;
+import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ForManagingShoppingCarts;
+import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartItemInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +18,14 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ShoppingCartManagementApplicationService {
+public class ShoppingCartManagementApplicationService implements ForManagingShoppingCarts {
 
     private final ShoppingCarts shoppingCarts;
     private final ProductCatalogService productCatalogService;
     private final ShoppingService shoppingService;
 
     @Transactional
+    @Override
     public void addItem(ShoppingCartItemInput input) {
         Objects.requireNonNull(input);
         ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(input.getShoppingCartId()))
@@ -37,6 +40,7 @@ public class ShoppingCartManagementApplicationService {
     }
 
     @Transactional
+    @Override
     public UUID createNew(UUID rawCustomerId) {
         Objects.requireNonNull(rawCustomerId);
 
@@ -47,6 +51,7 @@ public class ShoppingCartManagementApplicationService {
     }
 
     @Transactional
+    @Override
     public void removeItem(UUID rawShoppingCartId, UUID rawShoppingCartItemId) {
         ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawShoppingCartId))
             .orElseThrow(ShoppingCartNotFoundException::new);
@@ -56,6 +61,7 @@ public class ShoppingCartManagementApplicationService {
     }
 
     @Transactional
+    @Override
     public void empty(UUID rawShoppingCartId) {
         ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawShoppingCartId))
             .orElseThrow(ShoppingCartNotFoundException::new);
@@ -65,6 +71,7 @@ public class ShoppingCartManagementApplicationService {
     }
 
     @Transactional
+    @Override
     public void delete(UUID rawShoppingCartId) {
         ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawShoppingCartId))
             .orElseThrow(ShoppingCartNotFoundException::new);
