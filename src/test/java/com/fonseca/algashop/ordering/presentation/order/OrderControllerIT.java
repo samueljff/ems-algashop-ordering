@@ -1,9 +1,9 @@
 package com.fonseca.algashop.ordering.presentation.order;
 
-import com.fonseca.algashop.ordering.application.checkout.BuyNowInput;
-import com.fonseca.algashop.ordering.application.checkout.BuyNowInputTestDataBuilder;
-import com.fonseca.algashop.ordering.application.order.query.OrderDetailOutput;
-import com.fonseca.algashop.ordering.domain.model.order.OrderId;
+import com.fonseca.algashop.ordering.core.application.checkout.BuyNowInput;
+import com.fonseca.algashop.ordering.core.application.checkout.BuyNowInputTestDataBuilder;
+import com.fonseca.algashop.ordering.core.application.order.query.OrderDetailOutput;
+import com.fonseca.algashop.ordering.core.domain.model.order.OrderId;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;

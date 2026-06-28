@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
 
-import com.fonseca.algashop.ordering.domain.model.IdGenerator;
+import com.fonseca.algashop.ordering.core.domain.model.IdGenerator;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntity.ShoppingCartPersistenceEntityBuilder;
 

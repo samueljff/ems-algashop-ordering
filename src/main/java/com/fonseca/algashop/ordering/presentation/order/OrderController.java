@@ -1,21 +1,20 @@
 package com.fonseca.algashop.ordering.presentation.order;
 
-import com.fonseca.algashop.ordering.application.checkout.BuyNowApplicationService;
-import com.fonseca.algashop.ordering.application.checkout.BuyNowInput;
-import com.fonseca.algashop.ordering.application.checkout.CheckoutApplicationService;
-import com.fonseca.algashop.ordering.application.checkout.CheckoutInput;
-import com.fonseca.algashop.ordering.application.order.query.OrderDetailOutput;
-import com.fonseca.algashop.ordering.application.order.query.OrderFilter;
-import com.fonseca.algashop.ordering.application.order.query.OrderQueryService;
-import com.fonseca.algashop.ordering.application.order.query.OrderSummaryOutput;
-import com.fonseca.algashop.ordering.domain.model.customer.CustomerNotFoundException;
-import com.fonseca.algashop.ordering.domain.model.product.ProductNotFoundException;
-import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
+import com.fonseca.algashop.ordering.core.application.checkout.BuyNowApplicationService;
+import com.fonseca.algashop.ordering.core.application.checkout.BuyNowInput;
+import com.fonseca.algashop.ordering.core.application.checkout.CheckoutApplicationService;
+import com.fonseca.algashop.ordering.core.application.checkout.CheckoutInput;
+import com.fonseca.algashop.ordering.core.application.order.query.OrderDetailOutput;
+import com.fonseca.algashop.ordering.core.application.order.query.OrderFilter;
+import com.fonseca.algashop.ordering.core.application.order.query.OrderQueryService;
+import com.fonseca.algashop.ordering.core.application.order.query.OrderSummaryOutput;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
+import com.fonseca.algashop.ordering.core.domain.model.product.ProductNotFoundException;
+import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.fonseca.algashop.ordering.presentation.PageModel;
 import com.fonseca.algashop.ordering.presentation.UnprocessableEntityException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.internal.bytebuddy.asm.Advice;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

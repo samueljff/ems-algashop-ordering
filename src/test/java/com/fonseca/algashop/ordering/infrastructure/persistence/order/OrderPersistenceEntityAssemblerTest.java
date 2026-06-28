@@ -1,8 +1,8 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.order;
 
-import com.fonseca.algashop.ordering.domain.model.order.Order;
-import com.fonseca.algashop.ordering.domain.model.order.OrderItem;
-import com.fonseca.algashop.ordering.domain.model.order.OrderTestDataBuilder;
+import com.fonseca.algashop.ordering.core.domain.model.order.Order;
+import com.fonseca.algashop.ordering.core.domain.model.order.OrderItem;
+import com.fonseca.algashop.ordering.core.domain.model.order.OrderTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import org.assertj.core.api.Assertions;

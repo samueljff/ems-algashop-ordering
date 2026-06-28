@@ -1,8 +1,8 @@
 package com.fonseca.algashop.ordering.presentation.customer;
 
-import com.fonseca.algashop.ordering.application.customer.management.CustomerInput;
-import com.fonseca.algashop.ordering.application.customer.management.CustomerInputTestDataBuilder;
-import com.fonseca.algashop.ordering.application.customer.query.CustomerOutput;
+import com.fonseca.algashop.ordering.core.application.customer.management.CustomerInput;
+import com.fonseca.algashop.ordering.core.application.customer.management.CustomerInputTestDataBuilder;
+import com.fonseca.algashop.ordering.core.application.customer.query.CustomerOutput;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.presentation.AbstractPresentationIT;

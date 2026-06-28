@@ -1,10 +1,10 @@
 package com.fonseca.algashop.ordering.infrastructure.product.client.http;
 
-import com.fonseca.algashop.ordering.domain.model.commons.Money;
-import com.fonseca.algashop.ordering.domain.model.product.Product;
-import com.fonseca.algashop.ordering.domain.model.product.ProductCatalogService;
-import com.fonseca.algashop.ordering.domain.model.product.ProductId;
-import com.fonseca.algashop.ordering.domain.model.product.ProductName;
+import com.fonseca.algashop.ordering.core.domain.model.commons.Money;
+import com.fonseca.algashop.ordering.core.domain.model.product.Product;
+import com.fonseca.algashop.ordering.core.domain.model.product.ProductCatalogService;
+import com.fonseca.algashop.ordering.core.domain.model.product.ProductId;
+import com.fonseca.algashop.ordering.core.domain.model.product.ProductName;
 import com.fonseca.algashop.ordering.presentation.BadGatewayException;
 import com.fonseca.algashop.ordering.presentation.GatewayTimeoutException;
 import lombok.RequiredArgsConstructor;

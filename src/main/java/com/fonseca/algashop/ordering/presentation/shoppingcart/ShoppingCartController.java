@@ -1,11 +1,11 @@
 package com.fonseca.algashop.ordering.presentation.shoppingcart;
 
-import com.fonseca.algashop.ordering.application.shoppingcart.management.ShoppingCartItemInput;
-import com.fonseca.algashop.ordering.application.shoppingcart.management.ShoppingCartManagementApplicationService;
-import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartOutput;
-import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartQueryService;
-import com.fonseca.algashop.ordering.domain.model.customer.CustomerNotFoundException;
-import com.fonseca.algashop.ordering.domain.model.product.ProductNotFoundException;
+import com.fonseca.algashop.ordering.core.application.shoppingcart.management.ShoppingCartItemInput;
+import com.fonseca.algashop.ordering.core.application.shoppingcart.management.ShoppingCartManagementApplicationService;
+import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartOutput;
+import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartQueryService;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
+import com.fonseca.algashop.ordering.core.domain.model.product.ProductNotFoundException;
 import com.fonseca.algashop.ordering.presentation.UnprocessableEntityException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

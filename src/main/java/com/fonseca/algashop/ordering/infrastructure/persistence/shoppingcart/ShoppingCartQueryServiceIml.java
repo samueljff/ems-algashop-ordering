@@ -1,9 +1,9 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
 
-import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartOutput;
-import com.fonseca.algashop.ordering.application.shoppingcart.query.ShoppingCartQueryService;
-import com.fonseca.algashop.ordering.application.utility.Mapper;
-import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
+import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartOutput;
+import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartQueryService;
+import com.fonseca.algashop.ordering.core.application.utility.Mapper;
+import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,10 +1,10 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.order;
 
-import com.fonseca.algashop.ordering.domain.model.order.Order;
-import com.fonseca.algashop.ordering.domain.model.order.Orders;
-import com.fonseca.algashop.ordering.domain.model.commons.Money;
-import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
-import com.fonseca.algashop.ordering.domain.model.order.OrderId;
+import com.fonseca.algashop.ordering.core.domain.model.order.Order;
+import com.fonseca.algashop.ordering.core.domain.model.order.Orders;
+import com.fonseca.algashop.ordering.core.domain.model.commons.Money;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.core.domain.model.order.OrderId;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

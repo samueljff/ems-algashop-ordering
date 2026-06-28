@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.customer;
 
-import com.fonseca.algashop.ordering.domain.model.customer.Customer;
-import com.fonseca.algashop.ordering.domain.model.customer.CustomerTestDataBuilder;
+import com.fonseca.algashop.ordering.core.domain.model.customer.Customer;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

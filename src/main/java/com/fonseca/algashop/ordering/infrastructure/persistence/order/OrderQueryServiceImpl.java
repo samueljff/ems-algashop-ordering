@@ -1,9 +1,9 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.order;
 
-import com.fonseca.algashop.ordering.application.order.query.*;
-import com.fonseca.algashop.ordering.application.utility.Mapper;
-import com.fonseca.algashop.ordering.domain.model.order.OrderId;
-import com.fonseca.algashop.ordering.domain.model.order.OrderNotFoundException;
+import com.fonseca.algashop.ordering.core.application.order.query.*;
+import com.fonseca.algashop.ordering.core.application.utility.Mapper;
+import com.fonseca.algashop.ordering.core.domain.model.order.OrderId;
+import com.fonseca.algashop.ordering.core.domain.model.order.OrderNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
@@ -65,25 +65,25 @@ public class OrderQueryServiceImpl implements OrderQueryService {
 
         Path<Object> customer = root.get("customer");
         criteriaQuery.select(
-                builder.construct(OrderSummaryOutput.class,
-                        root.get("id"),
-                        root.get("totalItems"),
-                        root.get("totalAmount"),
-                        root.get("placedAt"),
-                        root.get("paidAt"),
-                        root.get("canceledAt"),
-                        root.get("readyAt"),
-                        root.get("status"),
-                        root.get("paymentMethod"),
-                        builder.construct(CustomerMinimalOutput.class,
-                                customer.get("id"),
-                                customer.get("firstName"),
-                                customer.get("lastName"),
-                                customer.get("email"),
-                                customer.get("document"),
-                                customer.get("phone")
-                        )
+            builder.construct(OrderSummaryOutput.class,
+                root.get("id"),
+                root.get("totalItems"),
+                root.get("totalAmount"),
+                root.get("placedAt"),
+                root.get("paidAt"),
+                root.get("canceledAt"),
+                root.get("readyAt"),
+                root.get("status"),
+                root.get("paymentMethod"),
+                builder.construct(CustomerMinimalOutput.class,
+                    customer.get("id"),
+                    customer.get("firstName"),
+                    customer.get("lastName"),
+                    customer.get("email"),
+                    customer.get("document"),
+                    customer.get("phone")
                 )
+            )
         );
 
         Predicate[] predicates = toPredicate(builder, root, filter);

@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.order;
 
-import com.fonseca.algashop.ordering.domain.model.IdGenerator;
+import com.fonseca.algashop.ordering.core.domain.model.IdGenerator;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
 
 import java.math.BigDecimal;

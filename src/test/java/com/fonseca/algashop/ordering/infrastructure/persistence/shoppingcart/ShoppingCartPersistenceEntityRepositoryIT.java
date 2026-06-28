@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
 
-import com.fonseca.algashop.ordering.domain.model.customer.CustomerNotFoundException;
-import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartNotFoundException;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
+import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.presentation.AbstractPresentationIT;

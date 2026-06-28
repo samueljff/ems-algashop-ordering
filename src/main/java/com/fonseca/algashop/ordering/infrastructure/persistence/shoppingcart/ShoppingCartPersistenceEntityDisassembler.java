@@ -1,14 +1,14 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
 
-import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCart;
-import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartItem;
-import com.fonseca.algashop.ordering.domain.model.commons.Money;
-import com.fonseca.algashop.ordering.domain.model.product.ProductName;
-import com.fonseca.algashop.ordering.domain.model.commons.Quantity;
-import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartItemId;
-import com.fonseca.algashop.ordering.domain.model.customer.CustomerId;
-import com.fonseca.algashop.ordering.domain.model.product.ProductId;
-import com.fonseca.algashop.ordering.domain.model.shoppingcart.ShoppingCartId;
+import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
+import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartItem;
+import com.fonseca.algashop.ordering.core.domain.model.commons.Money;
+import com.fonseca.algashop.ordering.core.domain.model.product.ProductName;
+import com.fonseca.algashop.ordering.core.domain.model.commons.Quantity;
+import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartItemId;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.core.domain.model.product.ProductId;
+import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartId;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
