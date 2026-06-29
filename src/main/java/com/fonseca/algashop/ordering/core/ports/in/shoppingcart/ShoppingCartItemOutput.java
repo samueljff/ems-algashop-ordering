@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.core.application.shoppingcart.query;
+package com.fonseca.algashop.ordering.core.ports.in.shoppingcart;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

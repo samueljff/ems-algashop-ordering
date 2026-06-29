@@ -5,7 +5,7 @@ import com.fonseca.algashop.ordering.core.application.customer.management.Custom
 import com.fonseca.algashop.ordering.core.application.customer.management.CustomerManagementApplicationService;
 import com.fonseca.algashop.ordering.core.application.customer.management.CustomerUpdateInput;
 import com.fonseca.algashop.ordering.core.application.customer.query.*;
-import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartQueryService;
+import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.fonseca.algashop.ordering.core.domain.model.DomainException;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerEmailIsInUseException;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
@@ -41,7 +41,7 @@ class CustomerControllerContractTest {
     private CustomerQueryService customerQueryService;
 
     @MockitoBean
-    private ShoppingCartQueryService shoppingCartQueryService;
+    private ForQueryingShoppingCarts shoppingCartQueryService;
 
     @BeforeEach
     public void setupAll() {

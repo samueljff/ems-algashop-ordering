@@ -2,7 +2,7 @@ package com.fonseca.algashop.ordering.contract.base;
 
 import com.fonseca.algashop.ordering.core.application.shoppingcart.management.ShoppingCartManagementApplicationService;
 import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartOutputTestDataBuilder;
-import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartQueryService;
+import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.fonseca.algashop.ordering.presentation.shoppingcart.ShoppingCartController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -29,7 +29,7 @@ public class ShoppingCartBase {
     private ShoppingCartManagementApplicationService managementApplicationService;
 
     @MockitoBean
-    private ShoppingCartQueryService queryService;
+    private ForQueryingShoppingCarts queryService;
 
     public static final UUID validShoppingCartId = UUID.fromString("b9e23c1d-48fa-4d7b-a365-8c1f05e92b47");
     private static final UUID validItemId = UUID.fromString("f5ab7a1e-37da-41e1-892b-a1d38275c2f2");
