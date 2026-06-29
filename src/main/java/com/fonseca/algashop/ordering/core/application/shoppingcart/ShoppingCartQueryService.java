@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.core.application.shoppingcart.query;
+package com.fonseca.algashop.ordering.core.application.shoppingcart;
 
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartOutput;

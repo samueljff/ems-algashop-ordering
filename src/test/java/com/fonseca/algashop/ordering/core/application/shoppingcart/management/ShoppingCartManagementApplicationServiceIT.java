@@ -1,6 +1,7 @@
 package com.fonseca.algashop.ordering.core.application.shoppingcart.management;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
+import com.fonseca.algashop.ordering.core.application.shoppingcart.ShoppingCartManagementApplicationService;
 import com.fonseca.algashop.ordering.core.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.core.domain.model.customer.*;
 import com.fonseca.algashop.ordering.core.domain.model.product.*;

@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.core.application.shoppingcart.management;
+package com.fonseca.algashop.ordering.core.application.shoppingcart;
 
 import com.fonseca.algashop.ordering.core.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;

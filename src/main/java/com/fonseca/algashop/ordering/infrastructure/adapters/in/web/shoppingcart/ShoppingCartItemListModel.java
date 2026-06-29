@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.presentation.shoppingcart;
+package com.fonseca.algashop.ordering.infrastructure.adapters.in.web.shoppingcart;
 
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartItemOutput;
 import lombok.AllArgsConstructor;
