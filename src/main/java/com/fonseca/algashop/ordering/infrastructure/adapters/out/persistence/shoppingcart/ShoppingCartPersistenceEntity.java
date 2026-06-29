@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
+package com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart;
 
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
 import jakarta.persistence.*;

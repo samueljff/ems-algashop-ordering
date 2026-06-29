@@ -1,8 +1,8 @@
 package com.fonseca.algashop.ordering.presentation.shoppingcart;
 
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntity;
-import com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.presentation.AbstractPresentationIT;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
 import io.restassured.RestAssured;

@@ -5,6 +5,10 @@ import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestData
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityAssembler;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityDisassembler;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartsPersistenceProvider;
 import com.fonseca.algashop.ordering.infrastructure.persistence.AbstractPersistenceIT;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;

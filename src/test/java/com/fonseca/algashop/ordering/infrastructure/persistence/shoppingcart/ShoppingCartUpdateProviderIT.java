@@ -9,6 +9,7 @@ import com.fonseca.algashop.ordering.core.domain.model.product.ProductTestDataBu
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartItem;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.*;
 import com.fonseca.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityDisassembler;

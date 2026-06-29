@@ -1,6 +1,8 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
 
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityDisassembler;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

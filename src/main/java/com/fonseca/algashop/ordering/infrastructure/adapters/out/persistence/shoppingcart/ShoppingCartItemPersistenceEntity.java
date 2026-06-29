@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.infrastructure.persistence.shoppingcart;
+package com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart;
 
 import jakarta.persistence.*;
 import lombok.*;
