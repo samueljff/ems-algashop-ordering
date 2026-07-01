@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.core.application.order.query;
 
-import com.fonseca.algashop.ordering.core.application.commons.AddressData;
+import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

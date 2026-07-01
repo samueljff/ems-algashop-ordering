@@ -1,14 +1,14 @@
 package com.fonseca.algashop.ordering.presentation.customer;
 
-import com.fonseca.algashop.ordering.core.application.commons.AddressData;
-import com.fonseca.algashop.ordering.core.application.customer.management.CustomerInput;
-import com.fonseca.algashop.ordering.core.application.customer.management.CustomerManagementApplicationService;
-import com.fonseca.algashop.ordering.core.application.customer.management.CustomerUpdateInput;
+import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
+import com.fonseca.algashop.ordering.core.ports.in.customer.*;
+import com.fonseca.algashop.ordering.core.application.customer.CustomerManagementApplicationService;
 import com.fonseca.algashop.ordering.core.application.customer.query.*;
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.fonseca.algashop.ordering.core.domain.model.DomainException;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerEmailIsInUseException;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.customer.CustomerController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ class CustomerControllerContractTest {
     private CustomerManagementApplicationService customerManagementApplicationService;
 
     @MockitoBean
-    private CustomerQueryService customerQueryService;
+    private ForQueryingCustomers customerQueryService;
 
     @MockitoBean
     private ForQueryingShoppingCarts shoppingCartQueryService;

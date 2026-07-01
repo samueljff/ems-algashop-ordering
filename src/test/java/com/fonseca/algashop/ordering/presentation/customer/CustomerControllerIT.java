@@ -1,10 +1,10 @@
 package com.fonseca.algashop.ordering.presentation.customer;
 
-import com.fonseca.algashop.ordering.core.application.customer.management.CustomerInput;
+import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerInput;
 import com.fonseca.algashop.ordering.core.application.customer.management.CustomerInputTestDataBuilder;
-import com.fonseca.algashop.ordering.core.application.customer.query.CustomerOutput;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
+import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerOutput;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.presentation.AbstractPresentationIT;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
 import io.restassured.RestAssured;

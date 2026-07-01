@@ -11,9 +11,9 @@ import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.*;
 import com.fonseca.algashop.ordering.infrastructure.persistence.SpringDataAuditingConfig;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityAssembler;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityDisassembler;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomersPersistenceProvider;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityAssembler;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityDisassembler;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomersPersistenceProvider;
 import com.fonseca.algashop.ordering.presentation.AbstractPresentationIT;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

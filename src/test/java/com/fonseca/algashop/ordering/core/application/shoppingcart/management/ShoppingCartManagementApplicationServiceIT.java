@@ -11,7 +11,7 @@ import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.events.Shopp
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.events.ShoppingCartItemAddedEvent;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.events.ShoppingCartItemRemovedEvent;
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartItemInput;
-import com.fonseca.algashop.ordering.infrastructure.listener.shoppingcart.ShoppingCartEventListener;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.listener.shoppingcart.ShoppingCartEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

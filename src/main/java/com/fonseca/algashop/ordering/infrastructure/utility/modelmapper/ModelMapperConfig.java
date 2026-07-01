@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.utility.modelmapper;
 
-import com.fonseca.algashop.ordering.core.application.customer.query.CustomerOutput;
+import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerOutput;
 import com.fonseca.algashop.ordering.core.application.order.query.OrderDetailOutput;
 import com.fonseca.algashop.ordering.core.application.order.query.OrderItemDetailOutput;
 import com.fonseca.algashop.ordering.core.application.utility.Mapper;

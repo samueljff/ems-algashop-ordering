@@ -12,7 +12,7 @@ import com.fonseca.algashop.ordering.core.domain.model.order.shipping.ShippingCo
 import com.fonseca.algashop.ordering.core.domain.model.product.Product;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.*;
-import com.fonseca.algashop.ordering.infrastructure.listener.order.OrderEventListener;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.listener.order.OrderEventListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

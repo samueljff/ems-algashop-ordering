@@ -1,7 +1,6 @@
 package com.fonseca.algashop.ordering.core.application.order.query;
 
-import com.fonseca.algashop.ordering.core.application.commons.AddressData;
-import com.fonseca.algashop.ordering.core.application.order.query.*;
+import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderId;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderItemId;

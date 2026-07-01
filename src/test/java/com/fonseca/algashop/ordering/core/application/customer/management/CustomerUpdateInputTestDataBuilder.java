@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.core.application.customer.management;
 
-import com.fonseca.algashop.ordering.core.application.commons.AddressData;
-import com.fonseca.algashop.ordering.core.application.customer.management.CustomerUpdateInput;
+import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
+import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerUpdateInput;
 
 public class CustomerUpdateInputTestDataBuilder {
 

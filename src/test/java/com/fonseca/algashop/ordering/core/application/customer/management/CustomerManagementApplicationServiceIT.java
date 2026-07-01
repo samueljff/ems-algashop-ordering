@@ -1,12 +1,15 @@
 package com.fonseca.algashop.ordering.core.application.customer.management;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
-import com.fonseca.algashop.ordering.core.application.commons.AddressData;
-import com.fonseca.algashop.ordering.core.application.customer.notification.CustomerNotificationApplicationService;
-import com.fonseca.algashop.ordering.core.application.customer.query.CustomerOutput;
-import com.fonseca.algashop.ordering.core.application.customer.query.CustomerQueryService;
+import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
+import com.fonseca.algashop.ordering.core.application.customer.CustomerManagementApplicationService;
+import com.fonseca.algashop.ordering.core.ports.out.customer.ForNotifyingCustomers;
+import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerOutput;
+import com.fonseca.algashop.ordering.core.ports.in.customer.ForQueryingCustomers;
 import com.fonseca.algashop.ordering.core.domain.model.customer.*;
-import com.fonseca.algashop.ordering.infrastructure.listener.customer.CustomerEventListener;
+import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerInput;
+import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerUpdateInput;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.listener.customer.CustomerEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,7 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static com.fonseca.algashop.ordering.core.application.customer.notification.CustomerNotificationApplicationService.NotifyNewRegistrationInput;
+import static com.fonseca.algashop.ordering.core.ports.out.customer.ForNotifyingCustomers.NotifyNewRegistrationInput;
 
 class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
 
@@ -27,10 +30,10 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     private CustomerEventListener customerEventListener;
 
     @MockitoSpyBean
-    private CustomerNotificationApplicationService customerNotificationService;
+    private ForNotifyingCustomers customerNotificationService;
 
     @Autowired
-    private CustomerQueryService customerQueryService;
+    private ForQueryingCustomers customerQueryService;
 
     @Test
     public void shouldRegister() {

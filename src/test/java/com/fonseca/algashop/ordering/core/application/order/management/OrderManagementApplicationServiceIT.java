@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.core.application.order.management;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
-import com.fonseca.algashop.ordering.core.application.customer.loyaltypoints.CustomerLoyaltyPointsApplicationService;
+import com.fonseca.algashop.ordering.core.application.customer.CustomerLoyaltyPointsApplicationService;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customers;
 import com.fonseca.algashop.ordering.core.domain.model.order.*;
@@ -9,7 +9,7 @@ import com.fonseca.algashop.ordering.core.domain.model.order.events.OrderCancele
 import com.fonseca.algashop.ordering.core.domain.model.order.events.OrderPaidEvent;
 import com.fonseca.algashop.ordering.core.domain.model.order.events.OrderPlacedEvent;
 import com.fonseca.algashop.ordering.core.domain.model.order.events.OrderReadyEvent;
-import com.fonseca.algashop.ordering.infrastructure.listener.order.OrderEventListener;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.listener.order.OrderEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

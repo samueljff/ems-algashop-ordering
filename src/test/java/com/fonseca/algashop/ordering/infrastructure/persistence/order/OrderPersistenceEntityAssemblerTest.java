@@ -4,7 +4,7 @@ import com.fonseca.algashop.ordering.core.domain.model.order.Order;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderItem;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderTestDataBuilder;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

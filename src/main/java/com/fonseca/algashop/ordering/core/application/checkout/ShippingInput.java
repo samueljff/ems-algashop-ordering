@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.core.application.checkout;
 
-import com.fonseca.algashop.ordering.core.application.commons.AddressData;
+import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
 import com.fonseca.algashop.ordering.core.application.order.query.RecipientData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

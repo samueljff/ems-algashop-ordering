@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.core.application.customer.query;
 
-import com.fonseca.algashop.ordering.core.application.customer.query.CustomerSummaryOutput;
+import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerSummaryOutput;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;

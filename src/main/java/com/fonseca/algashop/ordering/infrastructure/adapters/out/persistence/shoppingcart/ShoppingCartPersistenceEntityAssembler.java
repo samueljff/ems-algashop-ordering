@@ -2,8 +2,8 @@ package com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.sh
 
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartItem;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntity;
-import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityRepository;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
