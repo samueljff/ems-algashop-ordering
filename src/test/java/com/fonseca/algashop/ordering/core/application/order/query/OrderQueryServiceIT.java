@@ -1,6 +1,7 @@
 package com.fonseca.algashop.ordering.core.application.order.query;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
+import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customer;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
@@ -9,6 +10,9 @@ import com.fonseca.algashop.ordering.core.domain.model.order.Order;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderStatus;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.order.Orders;
+import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
+import com.fonseca.algashop.ordering.core.ports.out.order.OrderDetailOutput;
+import com.fonseca.algashop.ordering.core.ports.out.order.OrderSummaryOutput;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,7 @@ import org.springframework.data.domain.Sort;
 class OrderQueryServiceIT extends AbstractApplicationIT {
 
     @Autowired
-    private OrderQueryService orderQueryService;
+    private ForQueryingOrders orderQueryService;
 
     @Autowired
     private Orders orders;

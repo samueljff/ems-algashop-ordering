@@ -15,6 +15,9 @@ import com.fonseca.algashop.ordering.core.domain.model.product.Product;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductCatalogService;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductId;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductNotFoundException;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingProduct;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.ShippingInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +26,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class BuyNowApplicationService {
+public class BuyNowApplicationService implements ForBuyingProduct {
 
     private final BuyNowService buyNowService;
     private final ProductCatalogService productCatalogService;
@@ -38,6 +41,7 @@ public class BuyNowApplicationService {
     private final BillingInputDisassembler billingInputDisassembler;
 
     @Transactional
+    @Override
     public String buyNow(BuyNowInput input) {
         Objects.requireNonNull(input);
 
@@ -79,10 +83,5 @@ public class BuyNowApplicationService {
         ZipCode origin = originAddressService.originAddress().zipCode();
         ZipCode destination = new ZipCode(shipping.getAddress().getZipCode());
         return shippingCostService.calculate(new ShippingCostService.CalculationRequest(origin, destination));
-    }
-
-    private Product findProduct(ProductId productId) {
-        return productCatalogService.ofId(productId)
-                .orElseThrow(()-> new ProductNotFoundException(productId));
     }
 }

@@ -4,6 +4,12 @@ import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderId;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderItemId;
+import com.fonseca.algashop.ordering.core.ports.commons.BillingData;
+import com.fonseca.algashop.ordering.core.ports.commons.RecipientData;
+import com.fonseca.algashop.ordering.core.ports.in.order.ShippingData;
+import com.fonseca.algashop.ordering.core.ports.out.order.CustomerMinimalOutput;
+import com.fonseca.algashop.ordering.core.ports.out.order.OrderDetailOutput;
+import com.fonseca.algashop.ordering.core.ports.out.order.OrderItemDetailOutput;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

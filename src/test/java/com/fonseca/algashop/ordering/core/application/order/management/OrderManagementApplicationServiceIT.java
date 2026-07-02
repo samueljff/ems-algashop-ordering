@@ -2,6 +2,7 @@ package com.fonseca.algashop.ordering.core.application.order.management;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
 import com.fonseca.algashop.ordering.core.application.customer.CustomerLoyaltyPointsApplicationService;
+import com.fonseca.algashop.ordering.core.application.order.OrderManagementApplicationService;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customers;
 import com.fonseca.algashop.ordering.core.domain.model.order.*;

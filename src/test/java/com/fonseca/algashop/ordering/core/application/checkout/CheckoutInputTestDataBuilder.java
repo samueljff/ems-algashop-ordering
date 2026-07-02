@@ -1,8 +1,10 @@
 package com.fonseca.algashop.ordering.core.application.checkout;
 
 import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
-import com.fonseca.algashop.ordering.core.application.order.query.BillingData;
-import com.fonseca.algashop.ordering.core.application.order.query.RecipientData;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.ShippingInput;
+import com.fonseca.algashop.ordering.core.ports.commons.BillingData;
+import com.fonseca.algashop.ordering.core.ports.commons.RecipientData;
 
 import java.util.UUID;
 

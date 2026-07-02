@@ -1,15 +1,15 @@
 package com.fonseca.algashop.ordering.contract.base;
 
 import com.fonseca.algashop.ordering.core.application.checkout.BuyNowApplicationService;
-import com.fonseca.algashop.ordering.core.application.checkout.BuyNowInput;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.application.checkout.CheckoutApplicationService;
-import com.fonseca.algashop.ordering.core.application.checkout.CheckoutInput;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
 import com.fonseca.algashop.ordering.core.application.order.query.OrderDetailOutputTestDataBuilder;
-import com.fonseca.algashop.ordering.core.application.order.query.OrderFilter;
-import com.fonseca.algashop.ordering.core.application.order.query.OrderQueryService;
+import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
+import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
 import com.fonseca.algashop.ordering.core.application.order.query.OrderSummaryOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderNotFoundException;
-import com.fonseca.algashop.ordering.presentation.order.OrderController;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order.OrderController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
@@ -30,7 +30,7 @@ public class OrderBase {
     private WebApplicationContext context;
 
     @MockitoBean
-    private OrderQueryService orderQueryService;
+    private ForQueryingOrders orderQueryService;
 
     @MockitoBean
     private BuyNowApplicationService buyNowApplicationService;

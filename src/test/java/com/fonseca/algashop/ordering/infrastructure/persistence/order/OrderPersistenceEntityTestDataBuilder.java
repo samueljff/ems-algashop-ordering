@@ -1,13 +1,15 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence.order;
 
 import com.fonseca.algashop.ordering.core.domain.model.IdGenerator;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrderItemPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrderPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.persistence.customer.CustomerPersistenceEntityTestDataBuilder;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Set;
 
-import static com.fonseca.algashop.ordering.infrastructure.persistence.order.OrderPersistenceEntity.OrderPersistenceEntityBuilder;
+import static com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrderPersistenceEntity.OrderPersistenceEntityBuilder;
 
 public class OrderPersistenceEntityTestDataBuilder {
 

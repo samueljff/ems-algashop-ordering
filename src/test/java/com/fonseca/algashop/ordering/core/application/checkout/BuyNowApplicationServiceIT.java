@@ -10,6 +10,7 @@ import com.fonseca.algashop.ordering.core.domain.model.order.shipping.ShippingCo
 import com.fonseca.algashop.ordering.core.domain.model.product.Product;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductCatalogService;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

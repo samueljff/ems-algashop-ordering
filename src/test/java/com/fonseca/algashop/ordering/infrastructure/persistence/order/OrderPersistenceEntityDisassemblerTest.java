@@ -9,6 +9,8 @@ import com.fonseca.algashop.ordering.core.domain.model.commons.Quantity;
 import com.fonseca.algashop.ordering.core.domain.model.order.shipping.ShippingTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderId;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrderPersistenceEntity;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrderPersistenceEntityDisassembler;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

@@ -5,7 +5,7 @@ import com.fonseca.algashop.ordering.core.domain.model.customer.BirthDate;
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customer;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.core.domain.model.customer.LoyaltyPoints;
-import com.fonseca.algashop.ordering.infrastructure.persistence.commons.AddressEmbeddable;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.commons.AddressEmbeddable;
 import org.springframework.stereotype.Component;
 
 @Component
