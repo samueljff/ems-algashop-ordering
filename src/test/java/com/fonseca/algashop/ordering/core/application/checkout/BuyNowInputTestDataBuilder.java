@@ -2,9 +2,9 @@ package com.fonseca.algashop.ordering.core.application.checkout;
 
 import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
-import com.fonseca.algashop.ordering.core.ports.in.checkout.ShippingInput;
-import com.fonseca.algashop.ordering.core.ports.commons.BillingData;
-import com.fonseca.algashop.ordering.core.ports.commons.RecipientData;
+import com.fonseca.algashop.ordering.core.ports.in.order.ShippingInput;
+import com.fonseca.algashop.ordering.core.ports.in.order.BillingData;
+import com.fonseca.algashop.ordering.core.ports.in.order.RecipientData;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
 

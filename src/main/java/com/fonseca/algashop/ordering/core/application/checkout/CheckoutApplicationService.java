@@ -21,7 +21,7 @@ import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCarts;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingWithShoppingCart;
-import com.fonseca.algashop.ordering.core.ports.in.checkout.ShippingInput;
+import com.fonseca.algashop.ordering.core.ports.in.order.ShippingInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

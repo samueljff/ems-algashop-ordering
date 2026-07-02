@@ -5,7 +5,7 @@ import com.fonseca.algashop.ordering.core.domain.model.commons.*;
 import com.fonseca.algashop.ordering.core.domain.model.order.Recipient;
 import com.fonseca.algashop.ordering.core.domain.model.order.Shipping;
 import com.fonseca.algashop.ordering.core.domain.model.order.shipping.ShippingCostService;
-import com.fonseca.algashop.ordering.core.ports.in.checkout.ShippingInput;
+import com.fonseca.algashop.ordering.core.ports.in.order.ShippingInput;
 import org.springframework.stereotype.Component;
 
 @Component
