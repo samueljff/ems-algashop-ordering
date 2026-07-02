@@ -1,5 +1,7 @@
 package com.fonseca.algashop.ordering.core.application.checkout;
 
+import com.fonseca.algashop.ordering.core.application.order.BillingInputDisassembler;
+import com.fonseca.algashop.ordering.core.application.order.ShippingInputDisassembler;
 import com.fonseca.algashop.ordering.core.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.core.domain.model.DomainException;
 import com.fonseca.algashop.ordering.core.domain.model.commons.Quantity;
@@ -17,7 +19,7 @@ import com.fonseca.algashop.ordering.core.domain.model.product.ProductId;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductNotFoundException;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingProduct;
-import com.fonseca.algashop.ordering.core.ports.in.checkout.ShippingInput;
+import com.fonseca.algashop.ordering.core.ports.in.order.ShippingInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

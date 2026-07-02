@@ -1,7 +1,7 @@
-package com.fonseca.algashop.ordering.core.application.checkout;
+package com.fonseca.algashop.ordering.core.application.order;
 
 import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
-import com.fonseca.algashop.ordering.core.ports.commons.BillingData;
+import com.fonseca.algashop.ordering.core.ports.in.order.BillingData;
 import com.fonseca.algashop.ordering.core.domain.model.commons.*;
 import com.fonseca.algashop.ordering.core.domain.model.order.Billing;
 import org.springframework.stereotype.Component;

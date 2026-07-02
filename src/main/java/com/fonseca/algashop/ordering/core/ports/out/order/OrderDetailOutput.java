@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.core.ports.out.order;
 
-import com.fonseca.algashop.ordering.core.ports.commons.BillingData;
+import com.fonseca.algashop.ordering.core.ports.in.order.BillingData;
 import com.fonseca.algashop.ordering.core.ports.in.order.ShippingData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
