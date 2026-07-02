@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.core.application.checkout;
+package com.fonseca.algashop.ordering.core.application.order;
 
 import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
 import com.fonseca.algashop.ordering.core.ports.commons.BillingData;
