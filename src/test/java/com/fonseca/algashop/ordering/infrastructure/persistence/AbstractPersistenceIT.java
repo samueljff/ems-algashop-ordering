@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.persistence;
 
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.SpringDataAuditingConfig;
+import com.fonseca.algashop.ordering.infrastructure.config.auditing.SpringDataAuditingConfig;
 import com.fonseca.algashop.ordering.utils.TestcontainerPostgreSQLConfig;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

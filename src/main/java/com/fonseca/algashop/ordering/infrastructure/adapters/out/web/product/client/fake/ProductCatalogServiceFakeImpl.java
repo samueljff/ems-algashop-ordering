@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.infrastructure.product.client.fake;
+package com.fonseca.algashop.ordering.infrastructure.adapters.out.web.product.client.fake;
 
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductCatalogService;
 import com.fonseca.algashop.ordering.core.domain.model.commons.Money;

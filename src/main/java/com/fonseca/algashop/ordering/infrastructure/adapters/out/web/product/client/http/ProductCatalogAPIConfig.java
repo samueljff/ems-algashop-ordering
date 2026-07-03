@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.infrastructure.product.client.http;
+package com.fonseca.algashop.ordering.infrastructure.adapters.out.web.product.client.http;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

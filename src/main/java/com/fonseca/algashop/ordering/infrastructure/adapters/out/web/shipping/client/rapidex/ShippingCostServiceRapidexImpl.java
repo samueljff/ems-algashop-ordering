@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.infrastructure.shipping.client.rapidex;
+package com.fonseca.algashop.ordering.infrastructure.adapters.out.web.shipping.client.rapidex;
 
 import com.fonseca.algashop.ordering.core.domain.model.order.shipping.ShippingCostService;
 import com.fonseca.algashop.ordering.core.domain.model.commons.Money;

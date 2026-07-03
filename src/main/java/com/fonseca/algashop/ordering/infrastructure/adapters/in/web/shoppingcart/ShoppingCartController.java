@@ -6,7 +6,7 @@ import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ForManagingShopp
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartItemInput;
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ShoppingCartOutput;
-import com.fonseca.algashop.ordering.presentation.UnprocessableEntityException;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.exceptionhandler.UnprocessableEntityException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

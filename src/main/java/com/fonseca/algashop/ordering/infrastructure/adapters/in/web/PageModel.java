@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.presentation;
+package com.fonseca.algashop.ordering.infrastructure.adapters.in.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

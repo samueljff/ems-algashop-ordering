@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence;
+package com.fonseca.algashop.ordering.infrastructure.config.auditing;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

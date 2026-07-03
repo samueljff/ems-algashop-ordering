@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.infrastructure.product.client.http;
+package com.fonseca.algashop.ordering.infrastructure.adapters.out.web.product.client.http;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.fonseca.algashop.ordering.presentation;
+package com.fonseca.algashop.ordering.infrastructure.adapters.in.web.exceptionhandler;
 
 public class GatewayTimeoutException extends RuntimeException {
     public GatewayTimeoutException() {
