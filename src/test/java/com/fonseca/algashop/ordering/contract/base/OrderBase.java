@@ -4,10 +4,10 @@ import com.fonseca.algashop.ordering.core.application.checkout.BuyNowApplication
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.application.checkout.CheckoutApplicationService;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
-import com.fonseca.algashop.ordering.core.application.order.query.OrderDetailOutputTestDataBuilder;
+import com.fonseca.algashop.ordering.core.application.order.OrderDetailOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
 import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
-import com.fonseca.algashop.ordering.core.application.order.query.OrderSummaryOutputTestDataBuilder;
+import com.fonseca.algashop.ordering.core.application.order.OrderSummaryOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderNotFoundException;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order.OrderController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;

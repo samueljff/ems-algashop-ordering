@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.contract.base;
 
 import com.fonseca.algashop.ordering.core.application.shoppingcart.ShoppingCartManagementApplicationService;
-import com.fonseca.algashop.ordering.core.application.shoppingcart.query.ShoppingCartOutputTestDataBuilder;
+import com.fonseca.algashop.ordering.core.application.shoppingcart.ShoppingCartOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.core.ports.in.shoppingcart.ForQueryingShoppingCarts;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.shoppingcart.ShoppingCartController;

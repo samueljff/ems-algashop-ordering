@@ -1,6 +1,5 @@
 package com.fonseca.algashop.ordering.core.domain.model.commons;
 
-import com.fonseca.algashop.ordering.core.domain.model.commons.Quantity;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
