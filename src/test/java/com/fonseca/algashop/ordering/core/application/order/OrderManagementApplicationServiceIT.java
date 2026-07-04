@@ -1,7 +1,6 @@
 package com.fonseca.algashop.ordering.core.application.order;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
-import com.fonseca.algashop.ordering.core.application.customer.CustomerLoyaltyPointsApplicationService;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customers;
 import com.fonseca.algashop.ordering.core.domain.model.order.*;
@@ -9,6 +8,8 @@ import com.fonseca.algashop.ordering.core.domain.model.order.events.OrderCancele
 import com.fonseca.algashop.ordering.core.domain.model.order.events.OrderPaidEvent;
 import com.fonseca.algashop.ordering.core.domain.model.order.events.OrderPlacedEvent;
 import com.fonseca.algashop.ordering.core.domain.model.order.events.OrderReadyEvent;
+import com.fonseca.algashop.ordering.core.ports.in.customer.ForAddingLoyaltyPoints;
+import com.fonseca.algashop.ordering.core.ports.in.order.ForManagingOrders;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.listener.order.OrderEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
     private Orders orders;
 
     @Autowired
-    private OrderManagementApplicationService orderManagementApplicationService;
+    private ForManagingOrders forManagingOrders;
 
     @Autowired
     private Customers customers;
@@ -37,7 +38,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
     private OrderEventListener orderEventListener;
 
     @MockitoSpyBean
-    CustomerLoyaltyPointsApplicationService customerLoyaltyPointsApplicationService;
+    private ForAddingLoyaltyPoints forAddingLoyaltyPoints;
 
     @BeforeEach
     public void setup() {
@@ -57,7 +58,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
             .build();
         orders.add(order);
 
-        orderManagementApplicationService.cancel(order.id().value().toLong());
+        forManagingOrders.cancel(order.id().value().toLong());
         Optional<Order> updatedOrder = orders.ofId(order.id());
         Assertions.assertThat(updatedOrder).isPresent();
         Assertions.assertThat(updatedOrder.get().status()).isEqualTo(OrderStatus.CANCELED);
@@ -70,7 +71,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
     void shouldThrowOrderNotFoundExceptionWhenCancelingNonExistingOrderId() {
         Long nonExistingOrderId = 999L;
         Assertions.assertThatThrownBy(() ->
-            orderManagementApplicationService.cancel(nonExistingOrderId)
+            forManagingOrders.cancel(nonExistingOrderId)
         ).isInstanceOf(OrderNotFoundException.class);
     }
 
@@ -82,7 +83,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
         orders.add(order);
 
         Assertions.assertThatThrownBy(() ->
-            orderManagementApplicationService.cancel(order.id().value().toLong())
+            forManagingOrders.cancel(order.id().value().toLong())
         ).isInstanceOf(OrderStatusCannotBeChangedException.class);
     }
 
@@ -97,7 +98,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
             .build();
         orders.add(order);
 
-        orderManagementApplicationService.markAsPaid(order.id().value().toLong());
+        forManagingOrders.markAsPaid(order.id().value().toLong());
 
         Optional<Order> updatedOrder = orders.ofId(order.id());
         Assertions.assertThat(updatedOrder).isPresent();
@@ -111,7 +112,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
     void shouldThrowOrderNotFoundExceptionWhenMarkingAsPaidNonExistingOrderId() {
         Long nonExistingOrderId = new OrderId().value().toLong();
         Assertions.assertThatThrownBy(() ->
-            orderManagementApplicationService.markAsPaid(nonExistingOrderId)
+            forManagingOrders.markAsPaid(nonExistingOrderId)
         ).isInstanceOf(OrderNotFoundException.class);
     }
 
@@ -123,7 +124,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
         orders.add(order);
 
         Assertions.assertThatThrownBy(() ->
-            orderManagementApplicationService.markAsPaid(order.id().value().toLong())
+            forManagingOrders.markAsPaid(order.id().value().toLong())
         ).isInstanceOf(OrderStatusCannotBeChangedException.class);
     }
 
@@ -138,7 +139,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
             .build();
         orders.add(order);
 
-        orderManagementApplicationService.markAsReady(order.id().value().toLong());
+        forManagingOrders.markAsReady(order.id().value().toLong());
 
         Optional<Order> updatedOrder = orders.ofId(order.id());
         Assertions.assertThat(updatedOrder).isPresent();
@@ -146,7 +147,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
         Assertions.assertThat(updatedOrder.get().readyAt()).isNotNull();
 
         Mockito.verify(orderEventListener).listen(Mockito.any(OrderReadyEvent.class));
-        Mockito.verify(customerLoyaltyPointsApplicationService).addLoyaltyPoints(
+        Mockito.verify(forAddingLoyaltyPoints).addLoyaltyPoints(
             Mockito.any(UUID.class),
             Mockito.any(String.class)
         );
@@ -156,7 +157,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
     void shouldThrowOrderNotFoundExceptionWhenMarkingAsReadyNonExistingOrderId() {
         Long nonExistingOrderId = 888L;
         Assertions.assertThatThrownBy(() ->
-            orderManagementApplicationService.markAsReady(nonExistingOrderId)
+            forManagingOrders.markAsReady(nonExistingOrderId)
         ).isInstanceOf(OrderNotFoundException.class);
     }
 
@@ -168,7 +169,7 @@ class OrderManagementApplicationServiceIT extends AbstractApplicationIT {
         orders.add(order);
 
         Assertions.assertThatThrownBy(() ->
-            orderManagementApplicationService.markAsReady(order.id().value().toLong())
+            forManagingOrders.markAsReady(order.id().value().toLong())
         ).isInstanceOf(OrderStatusCannotBeChangedException.class);
     }
 

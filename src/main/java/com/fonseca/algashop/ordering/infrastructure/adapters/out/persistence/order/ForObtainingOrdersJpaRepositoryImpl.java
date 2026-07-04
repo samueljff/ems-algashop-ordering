@@ -124,7 +124,7 @@ public class ForObtainingOrdersJpaRepositoryImpl implements ForObtainingOrders {
             predicates.add(builder.equal(root.get("customer").get("id"), filter.getCustomerId()));
         }
 
-        if (filter.getStatus() != null && filter.getStatus().isBlank()) {
+        if (filter.getStatus() != null && !filter.getStatus().isBlank()) {
             predicates.add(builder.equal(root.get("status"), filter.getStatus().toUpperCase()));
         }
 

@@ -2,12 +2,9 @@ package com.fonseca.algashop.ordering.core.application.customer;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
 import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
+import com.fonseca.algashop.ordering.core.ports.in.customer.*;
 import com.fonseca.algashop.ordering.core.ports.out.customer.ForNotifyingCustomers;
-import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerOutput;
-import com.fonseca.algashop.ordering.core.ports.in.customer.ForQueryingCustomers;
 import com.fonseca.algashop.ordering.core.domain.model.customer.*;
-import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerInput;
-import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerUpdateInput;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.listener.customer.CustomerEventListener;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,7 +20,7 @@ import static com.fonseca.algashop.ordering.core.ports.out.customer.ForNotifying
 class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
-    private CustomerManagementApplicationService customerManagementApplicationService;
+    private ForManagingCustomers forManagingCustomers;
 
     @MockitoSpyBean
     private CustomerEventListener customerEventListener;
@@ -38,7 +35,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     public void shouldRegister() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
 
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = forManagingCustomers.create(input);
         Assertions.assertThat(customerId).isNotNull();
 
         CustomerOutput customerOutput = forQueryingCustomers.findById(customerId);
@@ -69,10 +66,10 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         CustomerUpdateInput updateInput = CustomerUpdateInputTestDataBuilder.aCustomerUpdate().build();
 
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = forManagingCustomers.create(input);
         Assertions.assertThat(customerId).isNotNull();
 
-        customerManagementApplicationService.update(customerId, updateInput);
+        forManagingCustomers.update(customerId, updateInput);
 
         CustomerOutput customerOutput = forQueryingCustomers.findById(customerId);
 
@@ -96,9 +93,9 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     public void shouldArchiveCustomerSuccessfully() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = forManagingCustomers.create(input);
 
-        customerManagementApplicationService.archive(customerId);
+        forManagingCustomers.archive(customerId);
 
         CustomerOutput customerOutput = forQueryingCustomers.findById(customerId);
 
@@ -136,28 +133,28 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
         UUID nonExistentId = UUID.randomUUID();
 
         Assertions.assertThatThrownBy(() ->
-                        customerManagementApplicationService.archive(nonExistentId))
+                        forManagingCustomers.archive(nonExistentId))
                 .isInstanceOf(CustomerNotFoundException.class);
     }
 
     @Test
     public void shouldThrowCustomerArchivedExceptionWhenCustomerAlreadyArchived() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = forManagingCustomers.create(input);
 
-        customerManagementApplicationService.archive(customerId);
+        forManagingCustomers.archive(customerId);
 
         Assertions.assertThatThrownBy(() ->
-                        customerManagementApplicationService.archive(customerId))
+                        forManagingCustomers.archive(customerId))
                 .isInstanceOf(CustomerArchivedException.class);
     }
 
     @Test
     void shouldChangeEmailSuccessfully() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = forManagingCustomers.create(input);
 
-        customerManagementApplicationService.changeEmail(customerId, "new.email@email.com");
+        forManagingCustomers.changeEmail(customerId, "new.email@email.com");
 
         CustomerOutput customerOutput = forQueryingCustomers.findById(customerId);
 
@@ -170,7 +167,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
         UUID nonExistingId = UUID.randomUUID();
 
         Assertions.assertThatThrownBy(() ->
-                customerManagementApplicationService.changeEmail(
+                forManagingCustomers.changeEmail(
                         nonExistingId, "email@email.com")
         ).isInstanceOf(CustomerNotFoundException.class);
     }
@@ -182,11 +179,11 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
                 .email("other@email.com")
                 .build();
 
-        UUID customerId1 = customerManagementApplicationService.create(customer1);
-        customerManagementApplicationService.create(customer2);
+        UUID customerId1 = forManagingCustomers.create(customer1);
+        forManagingCustomers.create(customer2);
 
         Assertions.assertThatThrownBy(() ->
-                customerManagementApplicationService.changeEmail(
+                forManagingCustomers.changeEmail(
                         customerId1, "other@email.com")
         ).isInstanceOf(CustomerEmailIsInUseException.class);
     }
@@ -194,11 +191,11 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     void givenArchivedCustomer_whenChangeEmail_thenThrowCustomerArchivedException() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = customerManagementApplicationService.create(input);
-        customerManagementApplicationService.archive(customerId);
+        UUID customerId = forManagingCustomers.create(input);
+        forManagingCustomers.archive(customerId);
 
         Assertions.assertThatThrownBy(() ->
-                customerManagementApplicationService.changeEmail(
+                forManagingCustomers.changeEmail(
                         customerId, "new.email@email.com")
         ).isInstanceOf(CustomerArchivedException.class);
     }
@@ -206,10 +203,10 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     void givenValidCustomer_whenChangeEmailWithInvalidFormat_thenThrowIllegalArgumentException() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = customerManagementApplicationService.create(input);
+        UUID customerId = forManagingCustomers.create(input);
 
         Assertions.assertThatThrownBy(() ->
-                customerManagementApplicationService.changeEmail(
+                forManagingCustomers.changeEmail(
                         customerId, "email-invalido")
         ).isInstanceOf(IllegalArgumentException.class);
     }

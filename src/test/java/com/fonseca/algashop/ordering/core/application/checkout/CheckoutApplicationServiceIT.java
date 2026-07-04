@@ -13,6 +13,7 @@ import com.fonseca.algashop.ordering.core.domain.model.product.Product;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.*;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingWithShoppingCart;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.listener.order.OrderEventListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 class CheckoutApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
-    private CheckoutApplicationService checkoutApplicationService;
+    private ForBuyingWithShoppingCart forBuyingWithShoppingCart;
 
     @Autowired
     private Orders orders;
@@ -81,7 +82,7 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
             .build();
 
 
-        String orderIdCreated = checkoutApplicationService.checkout(checkoutInput);
+        String orderIdCreated = forBuyingWithShoppingCart.checkout(checkoutInput);
 
         assertThat(orderIdCreated).isNotNull();
         assertThat(orderIdCreated).isNotBlank();
@@ -110,7 +111,7 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
             .build();
 
         assertThatExceptionOfType(ShoppingCartNotFoundException.class)
-            .isThrownBy(() -> checkoutApplicationService.checkout(checkoutInput));
+            .isThrownBy(() -> forBuyingWithShoppingCart.checkout(checkoutInput));
     }
 
     @Test
@@ -123,7 +124,7 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
             .build();
 
         assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)
-            .isThrownBy(() -> checkoutApplicationService.checkout(checkoutInput));
+            .isThrownBy(() -> forBuyingWithShoppingCart.checkout(checkoutInput));
     }
 
     @Test
@@ -141,7 +142,7 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
             .build();
 
         assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)
-            .isThrownBy(() -> checkoutApplicationService.checkout(checkoutInput));
+            .isThrownBy(() -> forBuyingWithShoppingCart.checkout(checkoutInput));
     }
 
 }

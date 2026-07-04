@@ -11,6 +11,7 @@ import com.fonseca.algashop.ordering.core.domain.model.product.Product;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductCatalogService;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingProduct;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import java.util.Optional;
 class BuyNowApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
-    private BuyNowApplicationService buyNowApplicationService;
+    private ForBuyingProduct forBuyingProduct;
 
     @Autowired
     private Orders orders;
@@ -58,7 +59,7 @@ class BuyNowApplicationServiceIT extends AbstractApplicationIT {
 
         BuyNowInput input = BuyNowInputTestDataBuilder.aBuyNowInput().build();
 
-        String orderId = buyNowApplicationService.buyNow(input);
+        String orderId = forBuyingProduct.buyNow(input);
 
         Assertions.assertThat(orderId).isNotBlank();
         Assertions.assertThat(orders.exists(new OrderId(orderId))).isTrue();

@@ -7,6 +7,7 @@ import com.fonseca.algashop.ordering.core.domain.model.customer.*;
 import com.fonseca.algashop.ordering.core.domain.model.order.*;
 import com.fonseca.algashop.ordering.core.domain.model.product.Product;
 import com.fonseca.algashop.ordering.core.domain.model.product.ProductTestDataBuilder;
+import com.fonseca.algashop.ordering.core.ports.in.customer.ForAddingLoyaltyPoints;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.listener.customer.CustomerEventListener;
 import io.hypersistence.tsid.TSID;
 import org.assertj.core.api.Assertions;
@@ -19,7 +20,7 @@ import java.util.UUID;
 class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
-    private CustomerLoyaltyPointsApplicationService service;
+    private ForAddingLoyaltyPoints forAddingLoyaltyPoints;
 
     @Autowired
     private Customers customers;
@@ -53,7 +54,7 @@ class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
         orders.add(order);
 
         // When
-        service.addLoyaltyPoints(customer.id().value(), order.id().value().toString());
+        forAddingLoyaltyPoints.addLoyaltyPoints(customer.id().value(), order.id().value().toString());
 
         // Then
         Customer updatedCustomer = customers.ofId(customer.id()).orElseThrow();
@@ -76,7 +77,7 @@ class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
         orders.add(order);
 
         Assertions.assertThatThrownBy(() ->
-            service.addLoyaltyPoints(UUID.randomUUID(), order.id().value().toString())
+            forAddingLoyaltyPoints.addLoyaltyPoints(UUID.randomUUID(), order.id().value().toString())
         ).isInstanceOf(CustomerNotFoundException.class);
     }
 
@@ -87,7 +88,7 @@ class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
 
         String nonExistingOrderId = TSID.fast().toString();
         Assertions.assertThatThrownBy(() ->
-            service.addLoyaltyPoints(customer.id().value(), nonExistingOrderId)
+            forAddingLoyaltyPoints.addLoyaltyPoints(customer.id().value(), nonExistingOrderId)
         ).isInstanceOf(OrderNotFoundException.class);
     }
 
@@ -110,7 +111,7 @@ class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
         orders.add(order);
 
         Assertions.assertThatThrownBy(() ->
-            service.addLoyaltyPoints(customer.id().value(), order.id().value().toString())
+            forAddingLoyaltyPoints.addLoyaltyPoints(customer.id().value(), order.id().value().toString())
         ).isInstanceOf(CustomerArchivedException.class);
     }
 
@@ -134,7 +135,7 @@ class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
         orders.add(order);
 
         Assertions.assertThatThrownBy(() ->
-            service.addLoyaltyPoints(customerA.id().value(), order.id().value().toString())
+            forAddingLoyaltyPoints.addLoyaltyPoints(customerA.id().value(), order.id().value().toString())
         ).isInstanceOf(OrderNotBeLongsToCustomerException.class);
     }
 
@@ -154,7 +155,7 @@ class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
 
         // When / Then
         Assertions.assertThatThrownBy(() ->
-            service.addLoyaltyPoints(customer.id().value(), order.id().value().toString())
+            forAddingLoyaltyPoints.addLoyaltyPoints(customer.id().value(), order.id().value().toString())
         ).isInstanceOf(CanAddLoyaltyPointsOrderIsNotReady.class);
     }
 
@@ -183,7 +184,7 @@ class CustomerLoyaltyPointsApplicationServiceIT extends AbstractApplicationIT {
         orders.add(order);
 
         // When
-        service.addLoyaltyPoints(customer.id().value(), order.id().value().toString());
+        forAddingLoyaltyPoints.addLoyaltyPoints(customer.id().value(), order.id().value().toString());
 
         // Then
         Customer updatedCustomer = customers.ofId(customer.id()).orElseThrow();
