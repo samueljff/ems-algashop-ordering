@@ -1,9 +1,9 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order;
 
-import com.fonseca.algashop.ordering.core.application.checkout.BuyNowApplicationService;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
-import com.fonseca.algashop.ordering.core.application.checkout.CheckoutApplicationService;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingProduct;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingWithShoppingCart;
 import com.fonseca.algashop.ordering.core.ports.out.order.OrderDetailOutput;
 import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
 import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
@@ -23,18 +23,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final ForQueryingOrders orderQueryService;
-    private final CheckoutApplicationService checkoutApplicationService;
-    private final BuyNowApplicationService buyNowApplicationService;
+    private final ForQueryingOrders forQueryingOrders;
+    private final ForBuyingWithShoppingCart forBuyingWithShoppingCart;
+    private final ForBuyingProduct forBuyingProduct;
 
     @GetMapping("/{orderId}")
     public OrderDetailOutput findById(@PathVariable String orderId) {
-        return orderQueryService.findById(orderId);
+        return forQueryingOrders.findById(orderId);
     }
 
     @GetMapping
     public PageModel<OrderSummaryOutput> filter(OrderFilter filter) {
-        return PageModel.of(orderQueryService.filter(filter));
+        return PageModel.of(forQueryingOrders.filter(filter));
     }
 
     @PostMapping(consumes = "application/vnd.order-with-product.v1+json")
@@ -42,11 +42,11 @@ public class OrderController {
     public OrderDetailOutput createWithProduct(@Valid @RequestBody BuyNowInput input) {
         String orderId;
         try {
-            orderId = buyNowApplicationService.buyNow(input);
+            orderId = forBuyingProduct.buyNow(input);
         } catch (CustomerNotFoundException | ProductNotFoundException e){
             throw new UnprocessableEntityException(e.getMessage(), e);
         }
-        return orderQueryService.findById(orderId);
+        return forQueryingOrders.findById(orderId);
     }
 
     @PostMapping(consumes = "application/vnd.order-with-shopping-cart.v1+json")
@@ -54,11 +54,11 @@ public class OrderController {
     public OrderDetailOutput createWithShoppingCart(@Valid @RequestBody CheckoutInput input) {
         String orderId;
         try {
-            orderId = checkoutApplicationService.checkout(input);
+            orderId = forBuyingWithShoppingCart.checkout(input);
         } catch (CustomerNotFoundException | ShoppingCartNotFoundException e){
             throw new UnprocessableEntityException(e.getMessage(), e);
         }
-        return orderQueryService.findById(orderId);
+        return forQueryingOrders.findById(orderId);
     }
 
 }
