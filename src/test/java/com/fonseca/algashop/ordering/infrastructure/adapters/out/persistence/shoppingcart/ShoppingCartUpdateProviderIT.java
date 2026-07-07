@@ -9,11 +9,11 @@ import com.fonseca.algashop.ordering.core.domain.model.product.ProductTestDataBu
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartItem;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
-import com.fonseca.algashop.ordering.infrastructure.config.auditing.SpringDataAuditingConfig;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.AbstractPersistenceIT;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityAssembler;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityDisassembler;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomersPersistenceProvider;
-import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
+import com.fonseca.algashop.ordering.infrastructure.config.auditing.SpringDataAuditingConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 })
 @Sql(scripts = {"classpath:db/clean/afterMigrate.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class ShoppingCartUpdateProviderIT extends AbstractPresentationIT {
+class ShoppingCartUpdateProviderIT extends AbstractPersistenceIT {
 
     private ShoppingCartsPersistenceProvider persistenceProvider;
     private CustomersPersistenceProvider customersPersistenceProvider;
