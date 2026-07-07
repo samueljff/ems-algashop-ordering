@@ -2,9 +2,9 @@ package com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.sh
 
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
+import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.AbstractPersistenceIT;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.UUID;
 
 @TestPropertySource(properties = "spring.flyway.locations=classpath:db/migration,classpath:db/testdata")
-class ShoppingCartPersistenceEntityRepositoryIT extends AbstractPresentationIT {
+class ShoppingCartPersistenceEntityRepositoryIT extends AbstractPersistenceIT {
 
     private static final UUID validCustomerId = UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d");
     private static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");

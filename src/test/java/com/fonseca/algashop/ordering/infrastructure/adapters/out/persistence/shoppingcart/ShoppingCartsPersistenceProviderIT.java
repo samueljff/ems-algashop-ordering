@@ -1,15 +1,15 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart;
 
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customer;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart;
 import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartTestDataBuilder;
-import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.AbstractPersistenceIT;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityAssembler;
-import com.fonseca.algashop.ordering.infrastructure.config.auditing.SpringDataAuditingConfig;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityDisassembler;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomersPersistenceProvider;
+import com.fonseca.algashop.ordering.infrastructure.config.auditing.SpringDataAuditingConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
