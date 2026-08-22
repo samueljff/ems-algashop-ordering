@@ -1,20 +1,20 @@
 package com.fonseca.algashop.ordering.contract.base;
 
 import com.fonseca.algashop.ordering.core.application.checkout.BuyNowApplicationService;
-import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.application.checkout.CheckoutApplicationService;
-import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
 import com.fonseca.algashop.ordering.core.application.order.OrderDetailOutputTestDataBuilder;
-import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
-import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
 import com.fonseca.algashop.ordering.core.application.order.OrderSummaryOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderNotFoundException;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
+import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
+import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
+import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order.OrderController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;

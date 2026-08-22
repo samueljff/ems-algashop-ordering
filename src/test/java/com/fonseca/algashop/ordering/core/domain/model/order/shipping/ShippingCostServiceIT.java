@@ -5,7 +5,6 @@ import com.fonseca.algashop.ordering.core.domain.model.commons.ZipCode;
 import com.fonseca.algashop.ordering.core.domain.model.order.shipping.ShippingCostService.CalculationRequest;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,9 +32,9 @@ class ShippingCostServiceIT extends AbstractDomainIT {
 
     private void setupRapidexWireMock() {
         wireMockRapidex = new WireMockServer(WireMockConfiguration.options()
+            .templatingEnabled(true)
             .port(8780)
             .usingFilesUnderDirectory("src/test/resources/wiremock/rapidex")
-            .extensions(new ResponseTemplateTransformer(true))
         );
     }
 

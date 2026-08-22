@@ -26,7 +26,7 @@ public class ShoppingCartItemPersistenceEntity {
     @Id
     @EqualsAndHashCode.Include
     private UUID id;
-    @JoinColumn
+    @JoinColumn(name = "shopping_cart_id", nullable = false)
     @ManyToOne(optional = false)
     private ShoppingCartPersistenceEntity shoppingCart;
     private UUID productId;
