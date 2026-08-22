@@ -73,14 +73,14 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-flyway-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     constraints {
-        testImplementation('io.rest-assured:rest-assured:6.0.0') {
+        testImplementation('io.rest-assured:rest-assured:6.0.1') {
             version {
-                strictly '6.0.0'
+                strictly '6.0.1'
             }
         }
-        testImplementation('io.rest-assured:spring-mock-mvc:6.0.0') {
+        testImplementation('io.rest-assured:spring-mock-mvc:6.0.1') {
             version {
-                strictly '6.0.0'
+                strictly '6.0.1'
             }
         }
     }
