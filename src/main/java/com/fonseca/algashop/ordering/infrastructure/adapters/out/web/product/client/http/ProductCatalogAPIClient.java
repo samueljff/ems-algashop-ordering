@@ -7,7 +7,7 @@ import org.springframework.web.service.annotation.GetExchange;
 import java.util.UUID;
 
 public interface ProductCatalogAPIClient {
-    @Cacheable(cacheNames = "algashop:product-catalog-api:v1", key = "#productId")
+
     @GetExchange(value = "/api/v1/products/{productId}", accept = "application/json")
     ProductResponse getById(@PathVariable UUID productId);
 }
