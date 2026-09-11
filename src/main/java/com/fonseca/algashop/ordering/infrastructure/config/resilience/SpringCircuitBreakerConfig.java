@@ -25,8 +25,8 @@ public class SpringCircuitBreakerConfig {
         return factory -> {
             factory.configure(builder -> builder
                 .retryPolicy(retryPolicy)
-                .openTimeout(Duration.ofSeconds(10))
-                .resetTimeout(Duration.ofSeconds(25))
+                .openTimeout(Duration.ofSeconds(15))
+                .resetTimeout(Duration.ofSeconds(30))
                 .build(), "productCatalogCB"
             );
         };

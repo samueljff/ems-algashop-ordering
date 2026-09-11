@@ -27,3 +27,6 @@ algashop:
     shipping.provider: RAPIDEX
     rapidex.url: http://localhost:8787
     product-catalog.url: http://localhost:8083
+
+logging.level:
+  com.fonseca.algashop.ordering.infrastructure.adapters.in.web.exceptionhandler: off
