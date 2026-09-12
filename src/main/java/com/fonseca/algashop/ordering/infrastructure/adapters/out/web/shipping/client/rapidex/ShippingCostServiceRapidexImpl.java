@@ -18,33 +18,20 @@ import java.time.LocalDate;
 @ConditionalOnProperty(name = "algashop.integrations.shipping.provider", havingValue = "RAPIDEX")
 public class ShippingCostServiceRapidexImpl implements ShippingCostService {
 
-    private final RapiDexAPIClient rapiDexAPIClient;
+    private final ResilientRapiDexAPIClient rapiDexAPIClient;
 
     @Override
     public CalculationResult calculate(CalculationRequest request) {
-        DeliveryCostResponse response;
-
-        try {
-            response = rapiDexAPIClient.calculate(
-                new DeliveryCostRequest(
-                    request.origin().value(),
-                    request.destination().value()
-                )
-            );
-        } catch (ResourceAccessException e) {
-            throw new GatewayTimeoutException("Rapidex API Timeout", e);
-        } catch (RestClientException e) {
-            if (e.getCause() instanceof SocketTimeoutException) {
-                throw new GatewayTimeoutException("Rapidex API Timeout", e);
-            }
-            throw new BadGatewayException("Rapidex API Bad Gateway", e);
-        }
-
+        DeliveryCostResponse response = rapiDexAPIClient.calculate(
+            new DeliveryCostRequest(
+                request.origin().value(),
+                request.destination().value()
+            ));
         LocalDate expectedDeliveryDate = LocalDate.now().plusDays(response.getEstimatedDaysToDeliver());
 
         return CalculationResult.builder()
-                .cost(new Money(response.getDeliveryCost()))
-                .expectedDate(expectedDeliveryDate)
-                .build();
+            .cost(new Money(response.getDeliveryCost()))
+            .expectedDate(expectedDeliveryDate)
+            .build();
     }
 }
