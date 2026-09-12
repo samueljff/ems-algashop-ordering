@@ -2,15 +2,10 @@ package com.fonseca.algashop.ordering.infrastructure.adapters.out.web.shipping.c
 
 import com.fonseca.algashop.ordering.core.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.core.domain.model.order.shipping.ShippingCostService;
-import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.exceptionhandler.BadGatewayException;
-import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.exceptionhandler.GatewayTimeoutException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
 
-import java.net.SocketTimeoutException;
 import java.time.LocalDate;
 
 @Component
