@@ -32,8 +32,8 @@ public class SpringCircuitBreakerConfig {
 
             factory.configure(builder -> builder
                 .retryPolicy(retryPolicy)
-                .openTimeout(Duration.ofSeconds(15))
-                .resetTimeout(Duration.ofSeconds(20))
+                .openTimeout(Duration.ofSeconds(30))
+                .resetTimeout(Duration.ofSeconds(60))
                 .build(), "rapidexAPICB"
             );
         };
