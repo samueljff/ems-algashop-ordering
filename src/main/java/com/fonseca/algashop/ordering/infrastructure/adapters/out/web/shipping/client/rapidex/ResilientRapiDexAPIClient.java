@@ -18,6 +18,8 @@ import org.springframework.web.client.RestClientException;
 
 import java.net.SocketTimeoutException;
 
+import static com.fonseca.algashop.ordering.infrastructure.config.resilience.SpringCircuitBreakerConfig.rapidexAPICBId;
+
 @Component
 @Slf4j
 public class ResilientRapiDexAPIClient {
@@ -29,7 +31,7 @@ public class ResilientRapiDexAPIClient {
                                         FrameworkRetryConfigBuilder> circuitBreakerFactory,
                                      RapiDexAPIClient rapiDexAPIClient) {
         this.rapiDexAPIClient = rapiDexAPIClient;
-        this.circuitBreaker = (FrameworkRetryCircuitBreaker) circuitBreakerFactory.create("rapidexAPICB");
+        this.circuitBreaker = (FrameworkRetryCircuitBreaker) circuitBreakerFactory.create(rapidexAPICBId);
     }
 
     @ConcurrencyLimit(15)
