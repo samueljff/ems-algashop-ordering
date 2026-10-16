@@ -14,7 +14,7 @@ public class MockJwtDecoderFactory {
 
     public static final String[] DEFAULT_SCOPES = new String[]{
         "orders:read",
-        "orders:write,",
+        "orders:write",
         "customers:read",
         "customers:write",
         "shopping-carts:read",

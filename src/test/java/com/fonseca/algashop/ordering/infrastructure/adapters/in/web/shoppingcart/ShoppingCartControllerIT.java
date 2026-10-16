@@ -1,14 +1,16 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.in.web.shoppingcart;
 
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
-import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,8 +49,7 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
 
         String json = AlgaShopResourceUtils.readContent("json/create-shopping-cart.json");
 
-        UUID shoppingCartId = RestAssured
-            .given()
+        UUID shoppingCartId = givenAuthenticated()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
@@ -74,8 +75,7 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
 
         String json = UUID.randomUUID().toString();
 
-        RestAssured
-            .given()
+        givenAuthenticated()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
@@ -90,8 +90,7 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
     @Test
     public void shouldAddItemToExistingShoppingCart() {
         String json = AlgaShopResourceUtils.readContent("json/add-item-to-shopping-cart.json");
-        RestAssured
-            .given()
+        givenAuthenticated()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
@@ -112,8 +111,7 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
     public void shouldNotAddItemWhenShoppingCartDoesNotExist() {
 
         String json = AlgaShopResourceUtils.readContent("json/add-item-to-shopping-cart.json");
-        RestAssured
-            .given()
+        givenAuthenticated()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)

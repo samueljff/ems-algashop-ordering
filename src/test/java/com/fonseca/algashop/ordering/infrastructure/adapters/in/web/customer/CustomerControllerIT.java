@@ -36,8 +36,7 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
         String json = AlgaShopResourceUtils.readContent("json/create-customer.json");
 
-        UUID customerId = RestAssured
-            .given()
+        UUID customerId =givenAuthenticated()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
@@ -69,8 +68,7 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
         String json = AlgaShopResourceUtils.readContent("json/create-customer-invalid-data.json");
 
-        RestAssured
-            .given()
+        givenAuthenticated()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
@@ -84,8 +82,7 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldArchiveCustomer() {
-        RestAssured
-            .given()
+        givenAuthenticated()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .when()
             .delete("/api/v1/customers/{customerId}", validCustomerId)
@@ -105,8 +102,7 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
         UUID customerId = UUID.randomUUID();
 
-        RestAssured
-            .given()
+        givenAuthenticated()
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .when()
             .delete("/api/v1/customers/{customerId}", customerId)
@@ -125,8 +121,7 @@ public class CustomerControllerIT extends AbstractPresentationIT {
             .build();
 
         CustomerOutput customerOutput =
-            RestAssured
-                .given()
+            givenAuthenticated()
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(input)

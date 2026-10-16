@@ -1,6 +1,7 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence;
 
 import com.fonseca.algashop.ordering.infrastructure.config.auditing.SpringDataAuditingConfig;
+import com.fonseca.algashop.ordering.utils.MockJwtDecoderConfig;
 import com.fonseca.algashop.ordering.utils.TestcontainerPostgreSQLConfig;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
@@ -8,7 +9,7 @@ import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import({TestcontainerPostgreSQLConfig.class, SpringDataAuditingConfig.class})
+@Import({TestcontainerPostgreSQLConfig.class, SpringDataAuditingConfig.class, MockJwtDecoderConfig.class})
 public abstract class AbstractPersistenceIT {
 
 }
