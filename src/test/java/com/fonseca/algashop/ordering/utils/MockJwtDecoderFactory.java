@@ -3,6 +3,7 @@ package com.fonseca.algashop.ordering.utils;
 import org.mockito.Mockito;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtException;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -25,18 +26,26 @@ public class MockJwtDecoderFactory {
     public static final String DEFAULT_SUBJECT = "test-user";
     public static final String DEFAULT_TOKEN_VALUE = "fake.jwt.token";
 
-    public static JwtDecoder createMockJwtDecoder() {
-        return createMockJwtDecoder(DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, DEFAULT_SCOPES);
-    }
+    public static final String NO_SCOPE_TOKEN_VALUE = "fake.jwt.no-scope";
 
-    public static JwtDecoder createMockJwtDecoder(String subject, String issuer, String[] scopes) {
+    public static final String EXPIRED_TOKEN_VALUE = "fake.jwt.expired";
+
+    public static JwtDecoder createMockJwtDecoder() {
         JwtDecoder jwtDecoder = Mockito.mock(JwtDecoder.class);
-        Mockito.when(jwtDecoder.decode(Mockito.anyString()))
-            .thenReturn(buildJwt(subject, issuer, scopes));
+
+        Mockito.when(jwtDecoder.decode(DEFAULT_TOKEN_VALUE))
+            .thenReturn(buildDefaultJwt());
+
+        Mockito.when(jwtDecoder.decode(NO_SCOPE_TOKEN_VALUE))
+            .thenReturn(buildNoScopeJwt());
+
+        Mockito.when(jwtDecoder.decode(EXPIRED_TOKEN_VALUE))
+            .thenThrow(new JwtException("Token is expired"));
+
         return jwtDecoder;
     }
 
-    public static Jwt buildJwt(String subject, String issuer, String[] scopes) {
+    public static Jwt buildJwt(String tokenValue, String subject, String issuer, String[] scopes) {
         Instant now = Instant.now();
         Instant expiresAt = now.plusSeconds(600);
 
@@ -48,7 +57,7 @@ public class MockJwtDecoderFactory {
             claims.put("scope", String.join(" ", scopes));
         }
 
-        return Jwt.withTokenValue(DEFAULT_TOKEN_VALUE)
+        return Jwt.withTokenValue(tokenValue)
             .issuedAt(now)
             .expiresAt(expiresAt)
             .issuer(issuer)
@@ -56,5 +65,13 @@ public class MockJwtDecoderFactory {
             .claims(c -> c.putAll(claims))
             .headers(h -> h.put("alg", "none"))
             .build();
+    }
+
+    private static Jwt buildDefaultJwt() {
+        return buildJwt(DEFAULT_TOKEN_VALUE, DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, DEFAULT_SCOPES);
+    }
+
+    private static Jwt buildNoScopeJwt() {
+        return buildJwt(DEFAULT_TOKEN_VALUE, DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, new String[]{});
     }
 }

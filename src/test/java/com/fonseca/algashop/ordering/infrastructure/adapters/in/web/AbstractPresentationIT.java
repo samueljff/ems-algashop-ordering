@@ -36,8 +36,30 @@ public abstract class AbstractPresentationIT {
     }
 
     protected RequestSpecification givenAuthenticated() {
+        return givenAuthenticated(MockJwtDecoderFactory.DEFAULT_TOKEN_VALUE);
+    }
+
+    protected RequestSpecification givenWithExpiredToken() {
+        return givenWithExpiredToken(MockJwtDecoderFactory.EXPIRED_TOKEN_VALUE);
+    }
+
+    protected RequestSpecification givenAuthenticatedWithNoScopeToken() {
+        return givenAuthenticatedWithNoScopeToken(MockJwtDecoderFactory.NO_SCOPE_TOKEN_VALUE);
+    }
+
+    protected RequestSpecification givenAuthenticated(String tokenValue) {
         return RestAssured.given()
-            .header("Authorization", "Bearer " + MockJwtDecoderFactory.DEFAULT_TOKEN_VALUE);
+            .header("Authorization", "Bearer " + tokenValue);
+    }
+
+    protected RequestSpecification givenWithExpiredToken(String tokenValue) {
+        return RestAssured.given()
+            .header("Authorization", "Bearer " + tokenValue);
+    }
+
+    protected RequestSpecification givenAuthenticatedWithNoScopeToken(String tokenValue) {
+        return RestAssured.given()
+            .header("Authorization", "Bearer " + tokenValue);
     }
 
     protected static void initWireMock() {
