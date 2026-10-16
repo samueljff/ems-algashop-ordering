@@ -1,18 +1,19 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order;
 
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
+import com.fonseca.algashop.ordering.core.domain.model.product.ProductNotFoundException;
+import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingProduct;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingWithShoppingCart;
-import com.fonseca.algashop.ordering.core.ports.out.order.OrderDetailOutput;
-import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
 import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
+import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
+import com.fonseca.algashop.ordering.core.ports.out.order.OrderDetailOutput;
 import com.fonseca.algashop.ordering.core.ports.out.order.OrderSummaryOutput;
-import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerNotFoundException;
-import com.fonseca.algashop.ordering.core.domain.model.product.ProductNotFoundException;
-import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCartNotFoundException;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.PageModel;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.exceptionhandler.UnprocessableEntityException;
+import com.fonseca.algashop.ordering.infrastructure.config.security.SecurityAnnotations.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,17 +29,20 @@ public class OrderController {
     private final ForBuyingProduct forBuyingProduct;
 
     @GetMapping("/{orderId}")
+    @CanReadOrders
     public OrderDetailOutput findById(@PathVariable String orderId) {
         return orderQueryService.findById(orderId);
     }
 
     @GetMapping
+    @CanReadOrders
     public PageModel<OrderSummaryOutput> filter(OrderFilter filter) {
         return PageModel.of(orderQueryService.filter(filter));
     }
 
     @PostMapping(consumes = "application/vnd.order-with-product.v1+json")
     @ResponseStatus(HttpStatus.CREATED)
+    @CanWriteOrders
     public OrderDetailOutput createWithProduct(@Valid @RequestBody BuyNowInput input) {
         String orderId;
         try {
@@ -51,6 +55,7 @@ public class OrderController {
 
     @PostMapping(consumes = "application/vnd.order-with-shopping-cart.v1+json")
     @ResponseStatus(HttpStatus.CREATED)
+    @CanWriteOrders
     public OrderDetailOutput createWithShoppingCart(@Valid @RequestBody CheckoutInput input) {
         String orderId;
         try {

@@ -20,7 +20,23 @@ spring:
       password: algashop
       database: 1
       timeout: 600
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://algashop-authorization-server:8081
+      client:
+        provider:
+          algashop:
+            token-uri: http://algashop-authorization-server:8081/oauth2/token
+        registration:
+          algashop-ordering:
+            provider: algashop
+            client-id: algashop-test
+            client-secret: testing123
+            authorization-grant-type: client_credentials
+            client-authentication-method: client_secret_basic
+            scope: products:read
 algashop:
   integrations:
     shipping.provider: RAPIDEX

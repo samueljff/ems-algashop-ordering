@@ -36,7 +36,7 @@ public class ResilientProductCatalogAPIClient {
         this.circuitBreaker = (FrameworkRetryCircuitBreaker) circuitBreakerFactory.create(productCatalogCBId);
     }
 
-    @Cacheable(cacheNames = "algashop:product-catalog-api:v1", key = "#productId")
+    @Cacheable(cacheNames = "algashop:product-catalog-api:v1", key = "#productId", unless = "#result == null")
     @ConcurrencyLimit(10)
     public Optional<ProductResponse> getById(UUID productId) {
         log.info("Trying to load product {}", productId);
