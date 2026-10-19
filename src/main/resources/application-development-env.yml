@@ -24,11 +24,11 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://algashop-authorization-server:8081
+          issuer-uri: ${algashop.integrations.authorization-server.url}
       client:
         provider:
           algashop-as:
-            issuer-uri: http://algashop-authorization-server:8081
+            token-uri: ${algashop.integrations.authorization-server.url}/oauth2/token
         registration:
           algashop-ordering-service-client:
             provider: algashop-as
@@ -39,6 +39,7 @@ spring:
             scope: products:read
 algashop:
   integrations:
+    authorization-server.url: http://algashop-authorization-server:8081/oauth2/token
     shipping.provider: RAPIDEX
     rapidex.url: http://localhost:8787
     product-catalog:
