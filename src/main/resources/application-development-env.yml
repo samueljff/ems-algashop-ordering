@@ -28,7 +28,7 @@ spring:
       client:
         provider:
           algashop-as:
-            token-uri: http://algashop-authorization-server:8081
+            issuer-uri: http://algashop-authorization-server:8081
         registration:
           algashop-ordering-service-client:
             provider: algashop-as
@@ -41,7 +41,9 @@ algashop:
   integrations:
     shipping.provider: RAPIDEX
     rapidex.url: http://localhost:8787
-    product-catalog.url: http://localhost:8083
+    product-catalog:
+      url: http://localhost:8083
+      oauth2-client-registration-id: algashop-ordering-service-client
 
 #logging.level:
 #  com.fonseca.algashop.ordering.infrastructure.adapters.in.web.exceptionhandler: off
