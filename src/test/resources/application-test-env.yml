@@ -21,11 +21,11 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://algashop-authorization-server:8081
+          issuer-uri: http://auth.algashop.local:8081
       client:
         provider:
           algashop:
-            token-uri: http://algashop-authorization-server:8081/oauth2/token
+            token-uri: http://auth.algashop.local:8081/oauth2/token
         registration:
           algashop-ordering:
             provider: algashop
