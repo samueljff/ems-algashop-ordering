@@ -2,6 +2,7 @@ package com.fonseca.algashop.ordering.core.application.checkout;
 
 import com.fonseca.algashop.ordering.core.application.order.BillingInputDisassembler;
 import com.fonseca.algashop.ordering.core.application.order.ShippingInputDisassembler;
+import com.fonseca.algashop.ordering.core.application.security.SecurityCheckApplicationService;
 import com.fonseca.algashop.ordering.core.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.core.domain.model.DomainException;
 import com.fonseca.algashop.ordering.core.domain.model.commons.Quantity;
@@ -21,10 +22,12 @@ import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingProduct;
 import com.fonseca.algashop.ordering.core.ports.in.order.ShippingInput;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -42,10 +45,14 @@ public class BuyNowApplicationService implements ForBuyingProduct {
     private final ShippingInputDisassembler shippingInputDisassembler;
     private final BillingInputDisassembler billingInputDisassembler;
 
+    private final SecurityCheckApplicationService securityCheck;
+
     @Transactional
     @Override
     public String buyNow(BuyNowInput input) {
         Objects.requireNonNull(input);
+
+        verifyCanOrderFor(input.getCustomerId());
 
         PaymentMethod paymentMethod = PaymentMethod.valueOf(input.getPaymentMethod());
         CustomerId customerId = new CustomerId(input.getCustomerId());
@@ -79,6 +86,12 @@ public class BuyNowApplicationService implements ForBuyingProduct {
         orders.add(order);
 
         return order.id().toString();
+    }
+
+    private void verifyCanOrderFor(UUID customerId) {
+        if (!(securityCheck.isCustomer() && securityCheck.getAuthenticatedUserId().equals(customerId))) {
+            throw new AccessDeniedException("Cannot Order For Customer " + customerId);
+        }
     }
 
     private ShippingCostService.CalculationResult calculateShippingCost(ShippingInput shipping) {

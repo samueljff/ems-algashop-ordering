@@ -2,6 +2,7 @@ package com.fonseca.algashop.ordering.core.application.checkout;
 
 import com.fonseca.algashop.ordering.core.application.order.BillingInputDisassembler;
 import com.fonseca.algashop.ordering.core.application.order.ShippingInputDisassembler;
+import com.fonseca.algashop.ordering.core.application.security.SecurityCheckApplicationService;
 import com.fonseca.algashop.ordering.core.domain.model.CreditCardId;
 import com.fonseca.algashop.ordering.core.domain.model.DomainException;
 import com.fonseca.algashop.ordering.core.domain.model.commons.ZipCode;
@@ -23,10 +24,12 @@ import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.ForBuyingWithShoppingCart;
 import com.fonseca.algashop.ordering.core.ports.in.order.ShippingInput;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +46,7 @@ public class CheckoutApplicationService implements ForBuyingWithShoppingCart {
     private final ProductCatalogService productCatalogService;
     private final Orders orders;
     private final Customers customers;
+    private final SecurityCheckApplicationService securityCheck;
 
     @Transactional
     @Override
@@ -63,6 +67,8 @@ public class CheckoutApplicationService implements ForBuyingWithShoppingCart {
         ShoppingCartId shoppingCartId = new ShoppingCartId(input.getShoppingCartId());
 
         ShoppingCart shoppingCart = shoppingCarts.ofId(shoppingCartId).orElseThrow(() -> new ShoppingCartNotFoundException());
+
+        verifyCanOrderFor(shoppingCart.customerId().value());
 
         Customer customer = customers.ofId(shoppingCart.customerId()).orElseThrow(() -> new CustomerNotFoundException());
 
@@ -89,4 +95,11 @@ public class CheckoutApplicationService implements ForBuyingWithShoppingCart {
         return productCatalogService.ofId(productId)
             .orElseThrow(() -> new ProductNotFoundException());
     }
+
+    private void verifyCanOrderFor(UUID customerId) {
+        if (!(securityCheck.isCustomer() && securityCheck.getAuthenticatedUserId().equals(customerId))) {
+            throw new AccessDeniedException("Cannot Order For Customer " + customerId);
+        }
+    }
+
 }

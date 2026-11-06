@@ -27,19 +27,19 @@ public class OrderQueryService implements ForQueryingOrders {
         return order;
     }
 
-    private boolean canAccess(OrderDetailOutput order) {
-        if (!securityCheck.isCustomer() && securityCheck.isAuthenticated()) {
-            return true;
-        }
-        return securityCheck.isCustomer()
-            && securityCheck.getAuthenticatedUserId().equals(order.getCustomer().getId());
-    }
-
     @Override
     public Page<OrderSummaryOutput> filter(OrderFilter filter) {
         if (securityCheck.isCustomer()) {
             filter.setCustomerId(securityCheck.getAuthenticatedUserId());
         }
         return forQueryingOrders.filter(filter);
+    }
+
+    private boolean canAccess(OrderDetailOutput order) {
+        if (!securityCheck.isCustomer() && securityCheck.isAuthenticated()) {
+            return true;
+        }
+        return securityCheck.isCustomer()
+            && securityCheck.getAuthenticatedUserId().equals(order.getCustomer().getId());
     }
 }
