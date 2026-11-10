@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MockJwtDecoderFactory {
+public class MockJwtFactory {
 
     public static final String DEFAULT_ISSUER_URI = "http://auth.algashop.local:8081";
 
@@ -23,12 +23,16 @@ public class MockJwtDecoderFactory {
         "shipping-costs:preview"
     };
 
-    public static final String DEFAULT_SUBJECT = "test-user";
+    public static final String DEFAULT_SUBJECT = "6e148bd5-47f6-4022-b9da-07cfaa294f7a";
     public static final String DEFAULT_TOKEN_VALUE = "fake.jwt.token";
 
     public static final String NO_SCOPE_TOKEN_VALUE = "fake.jwt.no-scope";
 
     public static final String EXPIRED_TOKEN_VALUE = "fake.jwt.expired";
+
+    public static final String DEFAULT_ROLE = "CUSTOMER";
+
+    public static final String[] DEFAULT_AUDIENCES = {"ecommerce-web-app"};
 
     public static JwtDecoder createMockJwtDecoder() {
         JwtDecoder jwtDecoder = Mockito.mock(JwtDecoder.class);
@@ -45,13 +49,15 @@ public class MockJwtDecoderFactory {
         return jwtDecoder;
     }
 
-    public static Jwt buildJwt(String tokenValue, String subject, String issuer, String[] scopes) {
+    public static Jwt buildJwt(String tokenValue, String subject, String issuer, String[] scopes, String role, String[] audiences) {
         Instant now = Instant.now();
         Instant expiresAt = now.plusSeconds(600);
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", subject);
         claims.put("iss", issuer);
+        claims.put("role", role);
+        claims.put("aud", audiences);
 
         if (scopes != null && scopes.length > 0) {
             claims.put("scope", String.join(" ", scopes));
@@ -68,10 +74,10 @@ public class MockJwtDecoderFactory {
     }
 
     private static Jwt buildDefaultJwt() {
-        return buildJwt(DEFAULT_TOKEN_VALUE, DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, DEFAULT_SCOPES);
+        return buildJwt(DEFAULT_TOKEN_VALUE, DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, DEFAULT_SCOPES, DEFAULT_ROLE, DEFAULT_AUDIENCES);
     }
 
     private static Jwt buildNoScopeJwt() {
-        return buildJwt(DEFAULT_TOKEN_VALUE, DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, new String[]{});
+        return buildJwt(DEFAULT_TOKEN_VALUE, DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, new String[]{}, DEFAULT_ROLE, DEFAULT_AUDIENCES);
     }
 }

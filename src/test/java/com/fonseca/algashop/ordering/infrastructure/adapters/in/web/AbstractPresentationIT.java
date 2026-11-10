@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.in.web;
 
 import com.fonseca.algashop.ordering.utils.MockJwtDecoderConfig;
-import com.fonseca.algashop.ordering.utils.MockJwtDecoderFactory;
+import com.fonseca.algashop.ordering.utils.MockJwtFactory;
 import com.fonseca.algashop.ordering.utils.TestcontainerPostgreSQLConfig;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
@@ -36,15 +36,15 @@ public abstract class AbstractPresentationIT {
     }
 
     protected RequestSpecification givenAuthenticated() {
-        return givenAuthenticated(MockJwtDecoderFactory.DEFAULT_TOKEN_VALUE);
+        return givenAuthenticated(MockJwtFactory.DEFAULT_TOKEN_VALUE);
     }
 
     protected RequestSpecification givenWithExpiredToken() {
-        return givenWithExpiredToken(MockJwtDecoderFactory.EXPIRED_TOKEN_VALUE);
+        return givenWithExpiredToken(MockJwtFactory.EXPIRED_TOKEN_VALUE);
     }
 
     protected RequestSpecification givenAuthenticatedWithNoScopeToken() {
-        return givenAuthenticatedWithNoScopeToken(MockJwtDecoderFactory.NO_SCOPE_TOKEN_VALUE);
+        return givenAuthenticatedWithNoScopeToken(MockJwtFactory.NO_SCOPE_TOKEN_VALUE);
     }
 
     protected RequestSpecification givenAuthenticated(String tokenValue) {
