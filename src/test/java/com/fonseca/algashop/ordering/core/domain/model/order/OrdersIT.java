@@ -1,21 +1,14 @@
 package com.fonseca.algashop.ordering.core.domain.model.order;
 
 import com.fonseca.algashop.ordering.core.domain.model.AbstractDomainIT;
-import com.fonseca.algashop.ordering.core.domain.model.customer.Customers;
-import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityAssembler;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrderPersistenceEntityAssembler;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityDisassembler;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrderPersistenceEntityDisassembler;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomersPersistenceProvider;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrdersPersistenceProvider;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
+import com.fonseca.algashop.ordering.core.domain.model.customer.Customers;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import java.time.Year;
@@ -24,14 +17,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Import({
-        OrdersPersistenceProvider.class,
-        OrderPersistenceEntityAssembler.class,
-        OrderPersistenceEntityDisassembler.class,
-        CustomersPersistenceProvider.class,
-        CustomerPersistenceEntityAssembler.class,
-        CustomerPersistenceEntityDisassembler.class
-})
 class OrdersIT extends AbstractDomainIT {
     private Orders orders;
     private Customers customers;
