@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.jwt.JwtException;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MockJwtFactory {
@@ -57,11 +58,8 @@ public class MockJwtFactory {
         claims.put("sub", subject);
         claims.put("iss", issuer);
         claims.put("role", role);
-        claims.put("aud", audiences);
-
-        if (scopes != null && scopes.length > 0) {
-            claims.put("scope", String.join(" ", scopes));
-        }
+        claims.put("aud", List.of(audiences));
+        claims.put("scope", List.of(scopes));
 
         return Jwt.withTokenValue(tokenValue)
             .issuedAt(now)

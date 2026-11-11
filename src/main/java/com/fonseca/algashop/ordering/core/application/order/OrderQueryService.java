@@ -1,6 +1,6 @@
 package com.fonseca.algashop.ordering.core.application.order;
 
-import com.fonseca.algashop.ordering.core.application.security.SecurityCheckApplicationService;
+import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
 import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
 import com.fonseca.algashop.ordering.core.ports.out.order.ForObtainingOrders;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class OrderQueryService implements ForQueryingOrders {
 
     private final ForObtainingOrders forQueryingOrders;
-    private final SecurityCheckApplicationService securityCheck;
+    private final SecurityChecks securityCheck;
 
     @Override
     public OrderDetailOutput findById(String id) {
