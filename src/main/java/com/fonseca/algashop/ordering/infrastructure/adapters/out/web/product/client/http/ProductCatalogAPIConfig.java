@@ -2,6 +2,7 @@ package com.fonseca.algashop.ordering.infrastructure.adapters.out.web.product.cl
 
 import jakarta.validation.constraints.NotBlank;
 import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,12 +26,8 @@ public class ProductCatalogAPIConfig {
 
     @Bean
     ProductCatalogAPIClient productCatalogAPIClient(RestClient.Builder builder,
-        ProductCatalogIntegrationProperties properties, OAuth2AuthorizedClientManager manager) {
-
-        var interceptor = new OAuth2ClientHttpRequestInterceptor(manager);
-
-        interceptor.setClientRegistrationIdResolver(_ -> properties.getOauth2ClientRegistrationId());
-        interceptor.setPrincipalResolver(_ -> generatePrincipal(properties.getOauth2ClientRegistrationId()));
+        ProductCatalogIntegrationProperties properties,
+        @Qualifier("productCatalogAPIClientInterceptor") OAuth2ClientHttpRequestInterceptor interceptor) {
 
         RestClient restClient = builder.baseUrl(properties.getUrl())
             .requestFactory(generateClientHttpRequestFactory())
@@ -39,6 +36,17 @@ public class ProductCatalogAPIConfig {
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory.builderFor(adapter).build();
         return proxyFactory.createClient(ProductCatalogAPIClient.class);
+    }
+
+    @Bean("productCatalogAPIClientInterceptor")
+    public OAuth2ClientHttpRequestInterceptor productCatalogAPIClientInterceptor(
+        ProductCatalogIntegrationProperties properties, OAuth2AuthorizedClientManager manager) {
+
+        var interceptor = new OAuth2ClientHttpRequestInterceptor(manager);
+        interceptor.setClientRegistrationIdResolver(_ -> properties.getOauth2ClientRegistrationId());
+        interceptor.setPrincipalResolver(_ -> generatePrincipal(properties.getOauth2ClientRegistrationId()));
+
+        return interceptor;
     }
 
     private Authentication generatePrincipal(String principalName) {

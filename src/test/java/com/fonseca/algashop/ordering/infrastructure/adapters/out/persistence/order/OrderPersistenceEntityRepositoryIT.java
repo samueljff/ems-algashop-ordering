@@ -25,7 +25,8 @@ class OrderPersistenceEntityRepositoryIT extends AbstractPersistenceIT {
     }
 
     @BeforeEach
-    void setup() {
+    public void setup() {
+        super.setup();
         UUID customerId = CustomerTestDataBuilder.DEFAULT_CUSTOMER_ID.value();
         customerPersistenceEntity = customerPersistenceEntityRepository
                 .findById(customerId)

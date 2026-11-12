@@ -30,8 +30,8 @@ class ShoppingCartPersistenceEntityRepositoryIT extends AbstractPersistenceIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+//    @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+//    @Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void shouldPersistShoppingCartWithItems() {
         CustomerPersistenceEntity customerPersistenceEntity = customerPersistenceEntityRepository
             .findById(validCustomerId).orElseThrow(() -> new CustomerNotFoundException());
@@ -68,8 +68,8 @@ class ShoppingCartPersistenceEntityRepositoryIT extends AbstractPersistenceIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+//    @Sql(scripts = "classpath:db/clean/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+//    @Sql(scripts = "classpath:db/testdata/afterMigrate.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     public void shouldAutomaticallySetAuditingFieldsOnPersist() {
         CustomerPersistenceEntity customerPersistenceEntity = customerPersistenceEntityRepository
             .findById(validCustomerId).orElseThrow(() -> new CustomerNotFoundException());

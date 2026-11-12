@@ -1,6 +1,7 @@
 package com.fonseca.algashop.ordering.core.application.order;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
+import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customer;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
@@ -13,11 +14,17 @@ import com.fonseca.algashop.ordering.core.domain.model.order.Orders;
 import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
 import com.fonseca.algashop.ordering.core.ports.out.order.OrderDetailOutput;
 import com.fonseca.algashop.ordering.core.ports.out.order.OrderSummaryOutput;
+import com.fonseca.algashop.ordering.utils.WithMockJwt;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import java.util.UUID;
 
 class OrderQueryServiceIT extends AbstractApplicationIT {
 
@@ -145,6 +152,7 @@ class OrderQueryServiceIT extends AbstractApplicationIT {
     }
 
     @Test
+    @WithMockJwt(role = "", audiences = "machine-client-id", subject = "machine-client-id")
     public void shouldOrderByStatus() {
         Customer customer1 = CustomerTestDataBuilder.existingCustomer().build();
         customers.add(customer1);
@@ -163,6 +171,11 @@ class OrderQueryServiceIT extends AbstractApplicationIT {
         filter.setSortDirection(Sort.Direction.ASC);
 
         Page<OrderSummaryOutput> page = forQueryingOrders.filter(filter);
+
+        Assertions.assertThat(page.getTotalElements()).isEqualTo(5);
+        Assertions.assertThat(page.getContent())
+            .extracting(OrderSummaryOutput::getStatus)
+            .containsExactly("CANCELED", "DRAFT", "PAID", "PLACED", "READY");
 
         Assertions.assertThat(page.getContent().getFirst().getStatus()).isEqualTo(OrderStatus.CANCELED.toString());
     }
