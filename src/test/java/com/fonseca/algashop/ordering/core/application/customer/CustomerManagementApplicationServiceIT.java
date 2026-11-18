@@ -35,7 +35,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     public void shouldRegister() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
 
-        UUID customerId = forManagingCustomers.create(input);
+        UUID customerId = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), input);
         Assertions.assertThat(customerId).isNotNull();
 
         CustomerOutput customerOutput = forQueryingCustomers.findById(customerId);
@@ -66,7 +66,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
         CustomerUpdateInput updateInput = CustomerUpdateInputTestDataBuilder.aCustomerUpdate().build();
 
-        UUID customerId = forManagingCustomers.create(input);
+        UUID customerId = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), input);
         Assertions.assertThat(customerId).isNotNull();
 
         forManagingCustomers.update(customerId, updateInput);
@@ -93,7 +93,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     public void shouldArchiveCustomerSuccessfully() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = forManagingCustomers.create(input);
+        UUID customerId = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), input);
 
         forManagingCustomers.archive(customerId);
 
@@ -140,7 +140,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     public void shouldThrowCustomerArchivedExceptionWhenCustomerAlreadyArchived() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = forManagingCustomers.create(input);
+        UUID customerId = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), input);
 
         forManagingCustomers.archive(customerId);
 
@@ -152,7 +152,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     void shouldChangeEmailSuccessfully() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = forManagingCustomers.create(input);
+        UUID customerId = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), input);
 
         forManagingCustomers.changeEmail(customerId, "new.email@email.com");
 
@@ -179,8 +179,8 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
                 .email("other@email.com")
                 .build();
 
-        UUID customerId1 = forManagingCustomers.create(customer1);
-        forManagingCustomers.create(customer2);
+        UUID customerId1 = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), customer1);
+        forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), customer2);
 
         Assertions.assertThatThrownBy(() ->
                 forManagingCustomers.changeEmail(
@@ -191,7 +191,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     void givenArchivedCustomer_whenChangeEmail_thenThrowCustomerArchivedException() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = forManagingCustomers.create(input);
+        UUID customerId = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), input);
         forManagingCustomers.archive(customerId);
 
         Assertions.assertThatThrownBy(() ->
@@ -203,7 +203,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
     @Test
     void givenValidCustomer_whenChangeEmailWithInvalidFormat_thenThrowIllegalArgumentException() {
         CustomerInput input = CustomerInputTestDataBuilder.aCustomer().build();
-        UUID customerId = forManagingCustomers.create(input);
+        UUID customerId = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), input);
 
         Assertions.assertThatThrownBy(() ->
                 forManagingCustomers.changeEmail(
