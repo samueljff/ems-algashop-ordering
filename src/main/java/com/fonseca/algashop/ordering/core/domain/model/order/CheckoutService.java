@@ -27,10 +27,14 @@ public class CheckoutService {
             CreditCardId creditCardId
     ) {
 
-        if (shoppingCart.isEmpty() || shoppingCart.containsUnavailableItems()) {
-            throw new ShoppingCartCantProceedToCheckoutException();
+        if (shoppingCart.isEmpty()) {
+            throw new ShoppingCartCantProceedToCheckoutException("Shopping cart is empty");
+        }
+        if (shoppingCart.containsUnavailableItems()) {
+            throw new ShoppingCartCantProceedToCheckoutException("Shopping cart contains unavailable items");
         }
 
+        Set<ShoppingCartItem> items = shoppingCart.items();
         Order order = Order.draft(shoppingCart.customerId());
         order.changeBilling(billing);
         if (haveFreeShipping(customer)){
@@ -40,8 +44,6 @@ public class CheckoutService {
             order.changeShipping(shipping);
         }
         order.changePaymentMethod(paymentMethod, creditCardId);
-
-        Set<ShoppingCartItem> items = shoppingCart.items();
 
         for (ShoppingCartItem item : items) {
             order.addItem(new Product(item.productId(), item.name(),

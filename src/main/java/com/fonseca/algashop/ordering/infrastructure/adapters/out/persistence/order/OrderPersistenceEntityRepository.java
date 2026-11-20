@@ -48,4 +48,7 @@ public interface OrderPersistenceEntityRepository extends JpaRepository<OrderPer
     @Override
     @EntityGraph(attributePaths = {"customer", "items"})
     Optional<OrderPersistenceEntity> findById(Long id);
+
+    @EntityGraph(attributePaths = {"customer", "items"})
+    Optional<OrderPersistenceEntity> findByIdAndCustomerId(Long orderId, UUID customerId);
 }

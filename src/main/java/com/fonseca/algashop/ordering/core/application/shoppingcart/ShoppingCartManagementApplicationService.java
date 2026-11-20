@@ -29,7 +29,7 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
     public void addItem(ShoppingCartItemInput input) {
         Objects.requireNonNull(input);
         ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(input.getShoppingCartId()))
-            .orElseThrow(() -> new ShoppingCartNotFoundException());
+            .orElseThrow(() -> new ShoppingCartNotFoundException("Shopping cart not found"));
 
         ProductId productId = new ProductId(input.getProductId());
         Product product = productCatalogService.ofId(productId)
@@ -54,7 +54,7 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
     @Override
     public void removeItem(UUID rawShoppingCartId, UUID rawShoppingCartItemId) {
         ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawShoppingCartId))
-            .orElseThrow(ShoppingCartNotFoundException::new);
+            .orElseThrow(() -> new ShoppingCartNotFoundException(rawShoppingCartId));
 
         shoppingCart.removeItem(new ShoppingCartItemId(rawShoppingCartItemId));
         shoppingCarts.add(shoppingCart);
@@ -64,7 +64,7 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
     @Override
     public void empty(UUID rawShoppingCartId) {
         ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawShoppingCartId))
-            .orElseThrow(ShoppingCartNotFoundException::new);
+            .orElseThrow(() -> new ShoppingCartNotFoundException(rawShoppingCartId));
 
         shoppingCart.empty();
         shoppingCarts.add(shoppingCart);
@@ -74,7 +74,7 @@ public class ShoppingCartManagementApplicationService implements ForManagingShop
     @Override
     public void delete(UUID rawShoppingCartId) {
         ShoppingCart shoppingCart = shoppingCarts.ofId(new ShoppingCartId(rawShoppingCartId))
-            .orElseThrow(ShoppingCartNotFoundException::new);
+            .orElseThrow(() -> new ShoppingCartNotFoundException(rawShoppingCartId));
 
         shoppingCarts.remove(shoppingCart.id());
     }
