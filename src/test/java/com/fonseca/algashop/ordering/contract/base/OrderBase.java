@@ -4,11 +4,13 @@ import com.fonseca.algashop.ordering.core.application.checkout.BuyNowApplication
 import com.fonseca.algashop.ordering.core.application.checkout.CheckoutApplicationService;
 import com.fonseca.algashop.ordering.core.application.order.OrderDetailOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.core.application.order.OrderSummaryOutputTestDataBuilder;
+import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderNotFoundException;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
 import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
 import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order.MyOrdersController;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order.OrderController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,8 +24,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 
-@WebMvcTest(controllers = OrderController.class)
+@WebMvcTest(controllers = {OrderController.class, MyOrdersController.class})
 public class OrderBase {
 
     @Autowired
@@ -38,11 +41,16 @@ public class OrderBase {
     @MockitoBean
     private CheckoutApplicationService checkoutApplicationService;
 
+    @MockitoBean
+    private SecurityChecks securityChecks;
+
     public static final String validOrderId = "01226N0640J7Q";
     public static final String notFoundOrderId = "01226N0693HDH";
+    private final UUID userId = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(userId);
         RestAssuredMockMvc.mockMvc(
             MockMvcBuilders.webAppContextSetup(context)
                 .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)

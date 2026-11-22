@@ -1,8 +1,10 @@
 package com.fonseca.algashop.ordering.core.application.checkout;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
+import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.core.domain.model.commons.Money;
 import com.fonseca.algashop.ordering.core.domain.model.commons.Quantity;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customers;
 import com.fonseca.algashop.ordering.core.domain.model.order.*;
@@ -25,7 +27,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -56,6 +57,9 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
     @MockitoSpyBean
     private OrderEventListener orderEventListener;
 
+    @Autowired
+    private SecurityChecks securityChecks;
+
     @BeforeEach
     public void setup() {
         Mockito.when(shippingCostService.calculate(Mockito.any(ShippingCostService.CalculationRequest.class)))
@@ -78,7 +82,7 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
         shoppingCarts.add(shoppingCart);
 
         CheckoutInput checkoutInput = CheckoutInputTestDataBuilder.aCheckoutInput()
-            .shoppingCartId(shoppingCart.id().value())
+            .customerId(new CustomerId(securityChecks.getAuthenticatedUserId()).value())
             .build();
 
 
@@ -107,7 +111,7 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
     @Test
     void shouldThrowShoppingCartNotFoundExceptionWhenCheckoutWithNonExistingShoppingCart() {
         CheckoutInput checkoutInput = CheckoutInputTestDataBuilder.aCheckoutInput()
-            .shoppingCartId(UUID.randomUUID())
+            .customerId(new CustomerId(securityChecks.getAuthenticatedUserId()).value())
             .build();
 
         assertThatExceptionOfType(ShoppingCartNotFoundException.class)
@@ -120,7 +124,7 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
         shoppingCarts.add(shoppingCart);
 
         CheckoutInput checkoutInput = CheckoutInputTestDataBuilder.aCheckoutInput()
-            .shoppingCartId(shoppingCart.id().value())
+            .customerId(new CustomerId(securityChecks.getAuthenticatedUserId()).value())
             .build();
 
         assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)
@@ -138,7 +142,7 @@ class CheckoutApplicationServiceIT extends AbstractApplicationIT {
         shoppingCarts.add(shoppingCart);
 
         CheckoutInput checkoutInput = CheckoutInputTestDataBuilder.aCheckoutInput()
-            .shoppingCartId(shoppingCart.id().value())
+            .customerId(new CustomerId(securityChecks.getAuthenticatedUserId()).value())
             .build();
 
         assertThatExceptionOfType(ShoppingCartCantProceedToCheckoutException.class)

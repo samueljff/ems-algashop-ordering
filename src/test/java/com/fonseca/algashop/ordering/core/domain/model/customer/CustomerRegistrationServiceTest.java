@@ -1,7 +1,7 @@
 package com.fonseca.algashop.ordering.core.domain.model.customer;
 
+import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.core.domain.model.commons.*;
-import com.fonseca.algashop.ordering.core.domain.model.customer.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerRegistrationServiceTest {
@@ -27,6 +28,7 @@ class CustomerRegistrationServiceTest {
                 .thenReturn(true);
 
         Customer customer = customerRegistrationService.register(
+                new CustomerId(UUID.randomUUID()),
                 new FullName("John", "Doe"),
                 new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("johndoe@email.com"),
@@ -47,6 +49,4 @@ class CustomerRegistrationServiceTest {
         Assertions.assertThat(customer.fullName()).isEqualTo(new FullName("John", "Doe"));
         Assertions.assertThat(customer.email()).isEqualTo(new Email("johndoe@email.com"));
     }
-
-
 }

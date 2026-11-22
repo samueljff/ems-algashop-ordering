@@ -12,7 +12,7 @@ public class CheckoutInputTestDataBuilder {
 
     public static CheckoutInput.CheckoutInputBuilder aCheckoutInput() {
         return CheckoutInput.builder()
-            .shoppingCartId(UUID.randomUUID())
+            .customerId(UUID.randomUUID())
             .paymentMethod("CREDIT_CARD")
             .creditCardId(UUID.randomUUID())
             .shipping(ShippingInput.builder()

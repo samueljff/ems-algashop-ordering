@@ -5,7 +5,7 @@ import org.springframework.cloud.contract.spec.Contract
 Contract.make {
     request {
         method POST()
-        url "/api/v1/orders"
+        url "/api/v1/customers/me/orders"
         headers {
             contentType("application/vnd.order-with-shopping-cart.v1+json")
         }

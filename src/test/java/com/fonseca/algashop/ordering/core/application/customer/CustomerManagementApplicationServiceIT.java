@@ -1,6 +1,7 @@
 package com.fonseca.algashop.ordering.core.application.customer;
 
 import com.fonseca.algashop.ordering.core.application.AbstractApplicationIT;
+import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.core.ports.commons.AddressData;
 import com.fonseca.algashop.ordering.core.ports.in.customer.*;
 import com.fonseca.algashop.ordering.core.ports.out.customer.ForNotifyingCustomers;
@@ -10,6 +11,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.time.LocalDate;
@@ -30,6 +32,9 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
 
     @Autowired
     private ForQueryingCustomers forQueryingCustomers;
+
+    @Autowired
+    private SecurityChecks securityChecks;
 
     @Test
     public void shouldRegister() {
@@ -180,7 +185,7 @@ class CustomerManagementApplicationServiceIT extends AbstractApplicationIT {
                 .build();
 
         UUID customerId1 = forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), customer1);
-        forManagingCustomers.create(securityChecks.getAuthenticatedUserId(), customer2);
+        forManagingCustomers.create(UUID.randomUUID(), customer2);
 
         Assertions.assertThatThrownBy(() ->
                 forManagingCustomers.changeEmail(

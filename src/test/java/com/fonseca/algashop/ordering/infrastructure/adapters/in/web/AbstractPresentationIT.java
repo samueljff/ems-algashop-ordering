@@ -1,5 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.in.web;
 
+import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.utils.MockJwtDecoderConfig;
 import com.fonseca.algashop.ordering.utils.MockJwtFactory;
 import com.fonseca.algashop.ordering.utils.TestcontainerPostgreSQLConfig;
@@ -7,6 +8,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
 import io.restassured.path.json.config.JsonPathConfig;
 import io.restassured.specification.RequestSpecification;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -14,6 +16,8 @@ import org.springframework.security.oauth2.client.web.client.OAuth2ClientHttpReq
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static io.restassured.config.JsonConfig.jsonConfig;
