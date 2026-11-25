@@ -1,11 +1,11 @@
-package contracts.shoppingCart
+package contracts.shoppingCartNotFound
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
     request {
         method POST()
-        url "/api/v1/shopping-carts"
+        url "/api/v1/customers/me/shopping-cart"
         headers {
             contentType("application/json")
         }
@@ -14,18 +14,14 @@ Contract.make {
         ])
     }
     response {
-        status 400
+        status 404
         headers {
             contentType("application/problem+json")
         }
         body([
             instance: fromRequest().path(),
-            type    : "/errors/invalid-fields",
-            title   : "Invalid fields",
-            detail  : "One or more fields are invalid",
-            fields  : [
-                customerId: anyNonBlankString()
-            ]
+            type    : "/errors/not-found",
+            title   : "Not Found"
         ])
     }
 }

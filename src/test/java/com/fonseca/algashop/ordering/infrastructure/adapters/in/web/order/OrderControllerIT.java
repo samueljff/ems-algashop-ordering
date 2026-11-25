@@ -74,7 +74,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
     public void shouldCreateOrderUsingProduct() {
         Mockito.doReturn(true).when(securityChecks).canOrderFor(validCustomerId);
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-product.json");
-        String createOrderId = givenAuthenticated()
+        String createOrderId = givenAuthenticated(validCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType("application/vnd.order-with-product.v1+json")
                 .body(json)
@@ -99,7 +99,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
         Mockito.doReturn(true).when(securityChecks).canOrderFor(validCustomerId);
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-invalid-product.json");
 
-        givenAuthenticated()
+        givenAuthenticated(validCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType("application/vnd.order-with-product.v1+json")
                 .body(json)
@@ -116,7 +116,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
     public void shouldNotCreateOrderUsingProductWhenCustomerWasNotFound() {
         Mockito.doReturn(true).when(securityChecks).canOrderFor(unauthenticatedCustomer);
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-product-and-invalid-customer.json");
-        givenAuthenticated()
+        givenAuthenticated(unauthenticatedCustomer)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType("application/vnd.order-with-product.v1+json")
                 .body(json)
@@ -138,7 +138,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
             .creditCardId(creditCardId)
             .build();
 
-        OrderDetailOutput orderDetailOutput = givenAuthenticated()
+        OrderDetailOutput orderDetailOutput = givenAuthenticated(validCustomerId)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType("application/vnd.order-with-product.v1+json")
             .body(input)
@@ -169,7 +169,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
         Mockito.doReturn(true).when(securityChecks).canOrderFor(validCustomerId);
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-shopping-cart.json");
 
-        OrderDetailOutput orderDetailOutput = givenAuthenticated()
+        OrderDetailOutput orderDetailOutput = givenAuthenticated(validCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType("application/vnd.order-with-shopping-cart.v1+json")
                 .body(json)
@@ -207,7 +207,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
         Mockito.doReturn(true).when(securityChecks).canOrderFor(shoppingCartCustomerId);
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-invalid-shopping-cart.json");
 
-        givenAuthenticated()
+        givenAuthenticated(validCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType("application/vnd.order-with-shopping-cart.v1+json")
                 .body(json)

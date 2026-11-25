@@ -1,11 +1,11 @@
-package contracts.shoppingCart
+package contracts.shoppingCartNotFound
 
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
     request {
-        method GET()
-        urlPath("/api/v1/shopping-carts/00000000-0000-0000-0000-000000000000")
+        method DELETE()
+        urlPath("/api/v1/customers/me/shopping-cart/items")
     }
     response {
         status 404

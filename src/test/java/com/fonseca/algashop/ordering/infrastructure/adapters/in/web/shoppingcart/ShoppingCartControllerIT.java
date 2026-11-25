@@ -1,7 +1,6 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.in.web.shoppingcart;
 
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
@@ -21,13 +20,11 @@ import java.util.UUID;
 public class ShoppingCartControllerIT extends AbstractPresentationIT {
 
     @Autowired
-    private CustomerPersistenceEntityRepository customerRepository;
-
-    @Autowired
     private ShoppingCartPersistenceEntityRepository shoppingCartRepository;
 
-    private static final UUID validCustomerId = UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d");
-    private static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");
+    private static final UUID validCustomerId = UUID.fromString("6e148bd5-47f6-4022-b9da-07cfaa294f7a");
+    private static final UUID customerIdWithoutShoppingCart = UUID.fromString("3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d");
+    private static final UUID invalidCustomerId = UUID.fromString("00000000-0000-9a0b-1c2d-3e4f5a6b7c8d");
 
     @BeforeEach
     public void setup() {
@@ -46,22 +43,21 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldCreateShoppingCart() {
+        String json = customerIdWithoutShoppingCart.toString();
 
-        String json = AlgaShopResourceUtils.readContent("json/create-shopping-cart.json");
-
-        UUID shoppingCartId = givenAuthenticated()
+        UUID shoppingCartId = givenAuthenticated(customerIdWithoutShoppingCart)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
             .when()
-            .post("/api/v1/shopping-carts")
+            .post("/api/v1/customers/me/shopping-cart")
             .then()
             .assertThat()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .statusCode(HttpStatus.CREATED.value())
             .body(
                 "id", Matchers.not(Matchers.emptyString()),
-                "customerId", Matchers.is(validCustomerId.toString())
+                "customerId", Matchers.is(customerIdWithoutShoppingCart.toString())
             )
             .extract().jsonPath().getUUID("id");
 
@@ -72,35 +68,34 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldNotCreateShoppingCartWithInvalidData() {
+        String json = invalidCustomerId.toString();
 
-        String json = UUID.randomUUID().toString();
-
-        givenAuthenticated()
+        givenAuthenticated(invalidCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
             .when()
-                .post("/api/v1/shopping-carts")
+                .post("/api/v1/customers/me/shopping-cart")
             .then()
                 .assertThat()
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-                .statusCode(HttpStatus.BAD_REQUEST.value());
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     public void shouldAddItemToExistingShoppingCart() {
         String json = AlgaShopResourceUtils.readContent("json/add-item-to-shopping-cart.json");
-        givenAuthenticated()
+        givenAuthenticated(validCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
             .when()
-                .post("/api/v1/shopping-carts/{shoppingCartId}/items", validShoppingCartId)
+                .post("/api/v1/customers/me/shopping-cart/items")
             .then()
                 .assertThat()
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
-        var updatedShoppingCart = shoppingCartRepository.findById(validShoppingCartId).orElseThrow();
+        var updatedShoppingCart = shoppingCartRepository.findByCustomer_Id(validCustomerId).orElseThrow();
 
         Assertions.assertThat(updatedShoppingCart.getItems()).hasSize(1);
 
@@ -109,14 +104,13 @@ public class ShoppingCartControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldNotAddItemWhenShoppingCartDoesNotExist() {
-
         String json = AlgaShopResourceUtils.readContent("json/add-item-to-shopping-cart.json");
-        givenAuthenticated()
+        givenAuthenticated(invalidCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
             .when()
-                .post("/api/v1/shopping-carts/{shoppingCartId}/items", UUID.randomUUID().toString())
+                .post("/api/v1/customers/me/shopping-cart/items")
             .then()
                 .assertThat()
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)

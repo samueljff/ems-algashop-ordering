@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class MockJwtFactory {
 
@@ -34,6 +35,16 @@ public class MockJwtFactory {
     public static final String DEFAULT_ROLE = "CUSTOMER";
 
     public static final String[] DEFAULT_AUDIENCES = {"ecommerce-web-app"};
+
+    public static void registerCustomerToken(JwtDecoder jwtDecoder, UUID customerId) {
+        Mockito.when(jwtDecoder.decode(DEFAULT_TOKEN_VALUE))
+            .thenReturn(buildDefaultJwt(customerId.toString()));
+    }
+
+    public static void registerCustomerTokenWithoutScopes(JwtDecoder jwtDecoder, UUID customerId) {
+        Mockito.when(jwtDecoder.decode(NO_SCOPE_TOKEN_VALUE))
+            .thenReturn(buildNoScopeJwt(customerId.toString()));
+    }
 
     public static JwtDecoder createMockJwtDecoder() {
         JwtDecoder jwtDecoder = Mockito.mock(JwtDecoder.class);
@@ -72,10 +83,46 @@ public class MockJwtFactory {
     }
 
     private static Jwt buildDefaultJwt() {
-        return buildJwt(DEFAULT_TOKEN_VALUE, DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, DEFAULT_SCOPES, DEFAULT_ROLE, DEFAULT_AUDIENCES);
+        return buildJwt(
+            DEFAULT_TOKEN_VALUE,
+            DEFAULT_SUBJECT,
+            DEFAULT_ISSUER_URI,
+            DEFAULT_SCOPES,
+            DEFAULT_ROLE,
+            DEFAULT_AUDIENCES
+        );
+    }
+
+    private static Jwt buildDefaultJwt(String subject) {
+        return buildJwt(
+            DEFAULT_TOKEN_VALUE,
+            subject,
+            DEFAULT_ISSUER_URI,
+            DEFAULT_SCOPES,
+            DEFAULT_ROLE,
+            DEFAULT_AUDIENCES
+        );
     }
 
     private static Jwt buildNoScopeJwt() {
-        return buildJwt(DEFAULT_TOKEN_VALUE, DEFAULT_SUBJECT, DEFAULT_ISSUER_URI, new String[]{}, DEFAULT_ROLE, DEFAULT_AUDIENCES);
+        return buildJwt(
+            DEFAULT_TOKEN_VALUE,
+            DEFAULT_SUBJECT,
+            DEFAULT_ISSUER_URI,
+            new String[]{},
+            DEFAULT_ROLE,
+            DEFAULT_AUDIENCES
+        );
+    }
+
+    private static Jwt buildNoScopeJwt(String subject) {
+        return buildJwt(
+            NO_SCOPE_TOKEN_VALUE,
+            subject,
+            DEFAULT_ISSUER_URI,
+            new String[]{}, // Sem scopes
+            DEFAULT_ROLE,
+            DEFAULT_AUDIENCES
+        );
     }
 }

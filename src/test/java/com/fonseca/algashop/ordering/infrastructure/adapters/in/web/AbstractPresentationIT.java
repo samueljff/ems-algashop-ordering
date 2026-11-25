@@ -1,6 +1,5 @@
 package com.fonseca.algashop.ordering.infrastructure.adapters.in.web;
 
-import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.utils.MockJwtDecoderConfig;
 import com.fonseca.algashop.ordering.utils.MockJwtFactory;
 import com.fonseca.algashop.ordering.utils.TestcontainerPostgreSQLConfig;
@@ -8,11 +7,11 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
 import io.restassured.path.json.config.JsonPathConfig;
 import io.restassured.specification.RequestSpecification;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.client.web.client.OAuth2ClientHttpRequestInterceptor;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -38,6 +37,9 @@ public abstract class AbstractPresentationIT {
     @MockitoBean("productCatalogAPIClientInterceptor")
     protected OAuth2ClientHttpRequestInterceptor productCatalogAPIClientInterceptor;
 
+    @MockitoBean
+    protected JwtDecoder jwtDecoder;
+
     protected void beforeEach() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
@@ -56,9 +58,20 @@ public abstract class AbstractPresentationIT {
         return givenAuthenticatedWithNoScopeToken(MockJwtFactory.NO_SCOPE_TOKEN_VALUE);
     }
 
+    protected RequestSpecification givenAuthenticatedWithNoScopeToken(UUID customerId) {
+        MockJwtFactory.registerCustomerTokenWithoutScopes(jwtDecoder, customerId);
+
+        return givenAuthenticatedWithNoScopeToken(MockJwtFactory.NO_SCOPE_TOKEN_VALUE);
+    }
+
     protected RequestSpecification givenAuthenticated(String tokenValue) {
         return RestAssured.given()
             .header("Authorization", "Bearer " + tokenValue);
+    }
+
+    protected RequestSpecification givenAuthenticated(UUID customerId) {
+        MockJwtFactory.registerCustomerToken(jwtDecoder, customerId);
+        return givenAuthenticated(MockJwtFactory.DEFAULT_TOKEN_VALUE);
     }
 
     protected RequestSpecification givenWithExpiredToken(String tokenValue) {

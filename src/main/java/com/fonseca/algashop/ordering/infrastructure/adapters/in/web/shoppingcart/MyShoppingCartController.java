@@ -33,26 +33,26 @@ public class MyShoppingCartController {
 	public ResponseEntity<ShoppingCartOutput> create() {
 		forManagingShoppingCarts.createNew(securityChecks.getAuthenticatedUserId());
 		return ResponseEntity.created(URI.create("/api/v1/customers/me/shopping-cart"))
-				.body(findAuthenticatedCustomerShoppingCart());
+				.body(loadAuthenticatedCustomerShoppingCart());
 	}
 
 	@CanReadMyShoppingCart
 	@GetMapping
 	public ShoppingCartOutput findById() {
-		return findAuthenticatedCustomerShoppingCart();
+		return loadAuthenticatedCustomerShoppingCart();
 	}
 
 	@CanReadMyShoppingCart
 	@GetMapping("/items")
 	public ShoppingCartItemListModel findCartItems() {
-		return new ShoppingCartItemListModel(findAuthenticatedCustomerShoppingCart().getItems());
+		return new ShoppingCartItemListModel(loadAuthenticatedCustomerShoppingCart().getItems());
 	}
 
 	@CanWriteMyShoppingCart
 	@DeleteMapping("/items")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void empty() {
-		ShoppingCartOutput shoppingCart = findAuthenticatedCustomerShoppingCart();
+		ShoppingCartOutput shoppingCart = loadAuthenticatedCustomerShoppingCart();
 		forManagingShoppingCarts.empty(shoppingCart.getId());
 	}
 
@@ -60,7 +60,7 @@ public class MyShoppingCartController {
 	@PostMapping("/items")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void addItem(@RequestBody @Valid ShoppingCartItemInput input) {
-		ShoppingCartOutput shoppingCart = findAuthenticatedCustomerShoppingCart();
+		ShoppingCartOutput shoppingCart = loadAuthenticatedCustomerShoppingCart();
 		input.setShoppingCartId(shoppingCart.getId());
 		try {
 			forManagingShoppingCarts.addItem(input);
@@ -73,11 +73,11 @@ public class MyShoppingCartController {
 	@DeleteMapping("/items/{itemId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removeItem(@PathVariable UUID itemId) {
-		ShoppingCartOutput shoppingCart = findAuthenticatedCustomerShoppingCart();
+		ShoppingCartOutput shoppingCart = loadAuthenticatedCustomerShoppingCart();
 		forManagingShoppingCarts.removeItem(shoppingCart.getId(), itemId);
 	}
 
-	private ShoppingCartOutput findAuthenticatedCustomerShoppingCart() {
+	private ShoppingCartOutput loadAuthenticatedCustomerShoppingCart() {
 		return forQueryingShoppingCarts.findByCustomerId(securityChecks.getAuthenticatedUserId());
 	}
 }

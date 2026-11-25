@@ -4,9 +4,9 @@ import com.fonseca.algashop.ordering.core.application.customer.CustomerInputTest
 import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerInput;
 import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerOutput;
+import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
@@ -33,16 +33,15 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
     @BeforeEach
     public void setup() {
-        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         super.beforeEach();
     }
 
     @Test
     public void shouldCreateCustomer() {
-
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         String json = AlgaShopResourceUtils.readContent("json/create-customer.json");
 
-        UUID customerId = givenAuthenticated()
+        UUID customerId = givenAuthenticated(validCustomerId)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
@@ -71,10 +70,10 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldNotCreateCustomerWithInvalidData() {
-
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         String json = AlgaShopResourceUtils.readContent("json/create-customer-invalid-data.json");
 
-        givenAuthenticated()
+        givenAuthenticated(validCustomerId)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
@@ -120,14 +119,14 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldCreateCustomer_DTO() {
-
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         CustomerInput input = CustomerInputTestDataBuilder
             .aCustomer()
             .email("johndoe1234@email.com")
             .build();
 
         CustomerOutput customerOutput =
-            givenAuthenticated()
+            givenAuthenticated(validCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(input)
@@ -156,9 +155,10 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldReturnForbiddenWhenCreatingCustomerWithoutWriteScope() {
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         String json = AlgaShopResourceUtils.readContent("json/create-customer.json");
 
-        givenAuthenticatedWithNoScopeToken()
+        givenAuthenticatedWithNoScopeToken(validCustomerId)
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
