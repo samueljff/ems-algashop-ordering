@@ -4,6 +4,7 @@ import com.fonseca.algashop.ordering.core.application.customer.CustomerInputTest
 import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
 import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerInput;
 import com.fonseca.algashop.ordering.core.ports.in.customer.CustomerOutput;
+import com.fonseca.algashop.ordering.core.ports.in.customer.ForQueryingCustomers;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntity;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
@@ -28,20 +29,23 @@ public class CustomerControllerIT extends AbstractPresentationIT {
     @Autowired
     private CustomerPersistenceEntityRepository customerRepository;
 
+    @Autowired
+    private ForQueryingCustomers forQueryingCustomers;
+
     @MockitoBean
     private SecurityChecks securityChecks;
 
     @BeforeEach
     public void setup() {
         super.beforeEach();
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
     }
 
     @Test
     public void shouldCreateCustomer() {
-        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         String json = AlgaShopResourceUtils.readContent("json/create-customer.json");
 
-        UUID customerId = givenAuthenticated(validCustomerId)
+        UUID customerId = givenAuthenticated(securityChecks.getAuthenticatedUserId())
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
@@ -70,10 +74,9 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldNotCreateCustomerWithInvalidData() {
-        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         String json = AlgaShopResourceUtils.readContent("json/create-customer-invalid-data.json");
 
-        givenAuthenticated(validCustomerId)
+        givenAuthenticated(securityChecks.getAuthenticatedUserId())
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
@@ -119,14 +122,13 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldCreateCustomer_DTO() {
-        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         CustomerInput input = CustomerInputTestDataBuilder
             .aCustomer()
             .email("johndoe1234@email.com")
             .build();
 
         CustomerOutput customerOutput =
-            givenAuthenticated(validCustomerId)
+            givenAuthenticated(securityChecks.getAuthenticatedUserId())
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(input)
@@ -155,10 +157,9 @@ public class CustomerControllerIT extends AbstractPresentationIT {
 
     @Test
     public void shouldReturnForbiddenWhenCreatingCustomerWithoutWriteScope() {
-        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(UUID.randomUUID());
         String json = AlgaShopResourceUtils.readContent("json/create-customer.json");
 
-        givenAuthenticatedWithNoScopeToken(validCustomerId)
+        givenAuthenticatedWithNoScopeToken(securityChecks.getAuthenticatedUserId())
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(json)
@@ -182,5 +183,82 @@ public class CustomerControllerIT extends AbstractPresentationIT {
             .then()
             .assertThat()
             .statusCode(HttpStatus.UNAUTHORIZED.value());
+    }
+
+
+    @Test
+    public void shouldFindAuthenticatedCustomer() {
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(validCustomerId);
+        UUID authenticatedId = securityChecks.getAuthenticatedUserId();
+        CustomerOutput expected = forQueryingCustomers.findById(authenticatedId);
+
+        CustomerOutput actual = givenAuthenticated(authenticatedId)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when()
+            .get("/api/v1/customers/me")
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.OK.value())
+            .extract()
+            .as(CustomerOutput.class);
+
+        Assertions.assertThat(actual.getId()).isEqualTo(authenticatedId);
+        Assertions.assertThat(actual.getFirstName()).isEqualTo(expected.getFirstName());
+        Assertions.assertThat(actual.getLastName()).isEqualTo(expected.getLastName());
+        Assertions.assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
+        Assertions.assertThat(actual.getDocument()).isEqualTo(expected.getDocument());
+        Assertions.assertThat(actual.getBirthDate()).isEqualTo(expected.getBirthDate());
+        Assertions.assertThat(actual.getArchived()).isFalse();
+    }
+
+    @Test
+    public void shouldUpdateAuthenticatedCustomer() {
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(validCustomerId);
+        String json = """
+            {
+              "firstName": "Marina Atualizada",
+              "lastName": "Costa",
+              "email": "marina.costa@email.com",
+              "phone": "1191234564",
+              "promotionNotificationsAllowed": true,
+              "address": {
+                "street": "Bourbon Street",
+                "number": "2000",
+                "complement": "apt 122",
+                "neighborhood": "North Ville",
+                "city": "Yostfort",
+                "state": "South Carolina",
+                "zipCode": "12321"
+              }
+            }
+            """;
+
+        CustomerOutput output = givenAuthenticated(validCustomerId)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(json)
+            .when()
+            .put("/api/v1/customers/me")
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.OK.value())
+            .body(
+                "id", Matchers.equalTo(validCustomerId.toString()),
+                "firstName", Matchers.equalTo("Marina Atualizada"),
+                "promotionNotificationsAllowed", Matchers.is(true)
+            )
+            .extract()
+            .as(CustomerOutput.class);
+
+        Assertions.assertThat(output.getId()).isEqualTo(validCustomerId);
+
+        CustomerPersistenceEntity customer = customerRepository
+            .findById(validCustomerId)
+            .orElseThrow();
+
+        Assertions.assertThat(customer.getFirstName())
+            .isEqualTo("Marina Atualizada");
     }
 }

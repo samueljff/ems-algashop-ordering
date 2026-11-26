@@ -34,7 +34,14 @@ public class MockJwtFactory {
 
     public static final String DEFAULT_ROLE = "CUSTOMER";
 
+    public static final String GENERIC_ROLE_TOKEN_VALUE = "fake.jwt.generic-role";
+
     public static final String[] DEFAULT_AUDIENCES = {"ecommerce-web-app"};
+
+    public static void registerCustomerTokenWithRole(JwtDecoder jwtDecoder, UUID customerId, String role) {
+        Mockito.when(jwtDecoder.decode(GENERIC_ROLE_TOKEN_VALUE))
+            .thenReturn(buildGenericRoleJwt(customerId.toString(), role));
+    }
 
     public static void registerCustomerToken(JwtDecoder jwtDecoder, UUID customerId) {
         Mockito.when(jwtDecoder.decode(DEFAULT_TOKEN_VALUE))
@@ -100,6 +107,17 @@ public class MockJwtFactory {
             DEFAULT_ISSUER_URI,
             DEFAULT_SCOPES,
             DEFAULT_ROLE,
+            DEFAULT_AUDIENCES
+        );
+    }
+
+    private static Jwt buildGenericRoleJwt(String subject, String role) {
+        return buildJwt(
+            GENERIC_ROLE_TOKEN_VALUE,
+            subject,
+            DEFAULT_ISSUER_URI,
+            DEFAULT_SCOPES,
+            role,
             DEFAULT_AUDIENCES
         );
     }

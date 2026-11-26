@@ -50,6 +50,16 @@ public abstract class AbstractPresentationIT {
         return givenAuthenticated(MockJwtFactory.DEFAULT_TOKEN_VALUE);
     }
 
+    protected RequestSpecification givenAuthenticated(UUID customerId) {
+        MockJwtFactory.registerCustomerToken(jwtDecoder, customerId);
+        return givenAuthenticated(MockJwtFactory.DEFAULT_TOKEN_VALUE);
+    }
+
+    protected RequestSpecification givenAuthenticatedWithRole(UUID customerId, String role) {
+        MockJwtFactory.registerCustomerTokenWithRole(jwtDecoder, customerId, role);
+        return givenAuthenticated(MockJwtFactory.GENERIC_ROLE_TOKEN_VALUE);
+    }
+
     protected RequestSpecification givenWithExpiredToken() {
         return givenWithExpiredToken(MockJwtFactory.EXPIRED_TOKEN_VALUE);
     }
@@ -67,11 +77,6 @@ public abstract class AbstractPresentationIT {
     protected RequestSpecification givenAuthenticated(String tokenValue) {
         return RestAssured.given()
             .header("Authorization", "Bearer " + tokenValue);
-    }
-
-    protected RequestSpecification givenAuthenticated(UUID customerId) {
-        MockJwtFactory.registerCustomerToken(jwtDecoder, customerId);
-        return givenAuthenticated(MockJwtFactory.DEFAULT_TOKEN_VALUE);
     }
 
     protected RequestSpecification givenWithExpiredToken(String tokenValue) {

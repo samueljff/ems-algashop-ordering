@@ -5,11 +5,14 @@ import com.fonseca.algashop.ordering.core.application.checkout.CheckoutApplicati
 import com.fonseca.algashop.ordering.core.application.order.OrderDetailOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.core.application.order.OrderSummaryOutputTestDataBuilder;
 import com.fonseca.algashop.ordering.core.application.security.SecurityChecks;
+import com.fonseca.algashop.ordering.core.domain.model.customer.Customer;
+import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerTestDataBuilder;
 import com.fonseca.algashop.ordering.core.domain.model.order.OrderNotFoundException;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.ports.in.checkout.CheckoutInput;
 import com.fonseca.algashop.ordering.core.ports.in.order.ForQueryingOrders;
 import com.fonseca.algashop.ordering.core.ports.in.order.OrderFilter;
+import com.fonseca.algashop.ordering.core.ports.out.order.CustomerMinimalOutput;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order.MyOrdersController;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.order.OrderController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -64,6 +67,13 @@ public class OrderBase {
         mockCreateOrderWithProduct();
         mockCreateOrderWithShoppingCart();
         mockFilterOrders();
+        mockFindMyOrderById();
+        mockFilterMyOrders();
+    }
+
+    private void mockFindMyOrderById() {
+        Mockito.when(orderQueryService.findByIdAndCustomerId(validOrderId, userId))
+            .thenReturn(OrderDetailOutputTestDataBuilder.placedOrder(validOrderId).build());
     }
 
     private void mockFilterOrders() {
@@ -71,6 +81,24 @@ public class OrderBase {
             .thenReturn(new PageImpl<>(List.of(
                 OrderSummaryOutputTestDataBuilder.placedOrder(validOrderId).build()
             )));
+    }
+
+    private void mockFilterMyOrders() {
+        CustomerMinimalOutput customerOutput = CustomerTestDataBuilder
+            .customerMinimalOutput()
+            .id(userId)
+            .build();
+
+        Mockito.when(orderQueryService.filter(
+            Mockito.argThat(filter ->
+                filter != null && userId.equals(filter.getCustomerId())
+            )
+        )).thenReturn(new PageImpl<>(List.of(
+            OrderSummaryOutputTestDataBuilder
+                .placedOrder(validOrderId)
+                .customer(customerOutput)
+                .build()
+        )));
     }
 
     private void mockCreateOrderWithShoppingCart() {

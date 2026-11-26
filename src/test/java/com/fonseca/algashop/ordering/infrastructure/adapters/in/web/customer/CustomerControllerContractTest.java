@@ -57,15 +57,16 @@ class CustomerControllerContractTest {
 
     @Test
     public void createCustomerContract() {
-
-        CustomerOutput customerOutput = CustomerOutputTestDataBuilder.existing().build();
-
-        UUID customerId = UUID.randomUUID();
-        Mockito.when(forManagingCustomers.create(Mockito.any(UUID.class), Mockito.any(CustomerInput.class)))
+        UUID customerId = securityChecks.getAuthenticatedUserId();
+        CustomerOutput customerOutput = CustomerOutputTestDataBuilder
+            .existing()
+            .id(customerId)
+            .build();
+        Mockito.when(forManagingCustomers.create(Mockito.eq(customerId), Mockito.any(CustomerInput.class)))
                 .thenReturn(customerId);
 
-        Mockito.when(forQueryingCustomers.findById(Mockito.any(UUID.class)))
-                .thenReturn(customerOutput);
+        Mockito.when(forQueryingCustomers.findById(customerId)).thenReturn(customerOutput);
+
         String jsonInput = """
                 {
                   "firstName": "John",
@@ -100,6 +101,7 @@ class CustomerControllerContractTest {
                 .header("Location", Matchers.containsString("/api/v1/customers/me"))
                 .body(
                         "id", Matchers.notNullValue(),
+                        "id", Matchers.is(customerId.toString()),
                         "registeredAt", Matchers.notNullValue(),
                         "firstName", Matchers.is("John"),
                         "lastName", Matchers.is("Doe"),
@@ -418,13 +420,16 @@ class CustomerControllerContractTest {
 
     @Test
     public void updateCustomerContract() {
-        CustomerOutput customer = CustomerOutputTestDataBuilder.existing().build();
+        UUID authenticatedUserId = securityChecks.getAuthenticatedUserId();
+        CustomerOutput customer = CustomerOutputTestDataBuilder
+            .existing()
+            .id(authenticatedUserId)
+            .build();
         DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
         AddressData address = customer.getAddress();
 
-        UUID customerId = UUID.randomUUID();
-        Mockito.when(forQueryingCustomers.findById(Mockito.any(UUID.class)))
-                .thenReturn(customer);
+        Mockito.when(forQueryingCustomers.findById(authenticatedUserId))
+            .thenReturn(customer);
 
         String jsonInput = """
         {
@@ -453,13 +458,14 @@ class CustomerControllerContractTest {
                 .body(jsonInput)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
             .when()
-                .put("/api/v1/customers/me", customerId)
+                .put("/api/v1/customers/me")
             .then()
                 .assertThat()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .statusCode(HttpStatus.OK.value())
                 .body(
                         "id", Matchers.equalTo(customer.getId().toString()),
+                        "id", Matchers.is(customer.getId().toString()),
                         "firstName", Matchers.equalTo(customer.getFirstName()),
                         "lastName", Matchers.is(customer.getLastName()),
                         "email", Matchers.is(customer.getEmail()),
@@ -478,6 +484,14 @@ class CustomerControllerContractTest {
                         "address.state", Matchers.is(address.getState()),
                         "address.zipCode", Matchers.is(address.getZipCode())
                 );
+        Mockito.verify(forManagingCustomers)
+            .update(
+                Mockito.eq(authenticatedUserId),
+                Mockito.any(CustomerUpdateInput.class)
+            );
+
+        Mockito.verify(forQueryingCustomers)
+            .findById(authenticatedUserId);
     }
 
     @Test
@@ -561,11 +575,9 @@ class CustomerControllerContractTest {
 
     @Test
     public void updateCustomerError409Contract() {
-        UUID customerId = UUID.randomUUID();
-        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(customerId);
+        UUID customerId = securityChecks.getAuthenticatedUserId();
         Mockito.doThrow(CustomerEmailIsInUseException.class)
-                .when(forManagingCustomers)
-            .update(Mockito.eq(customerId), Mockito.any(CustomerUpdateInput.class));
+                .when(forManagingCustomers).update(Mockito.eq(customerId), Mockito.any(CustomerUpdateInput.class));
 
         String jsonInput = """
         {
@@ -607,8 +619,7 @@ class CustomerControllerContractTest {
 
     @Test
     public void updateCustomerError422Contract() {
-        UUID customerId = UUID.randomUUID();
-        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(customerId);
+        UUID customerId = securityChecks.getAuthenticatedUserId();
         Mockito.doThrow(DomainException.class)
                 .when(forManagingCustomers)
                 .update(Mockito.eq(customerId), Mockito.any(CustomerUpdateInput.class));
@@ -649,5 +660,37 @@ class CustomerControllerContractTest {
                         "title", Matchers.notNullValue(),
                         "instance", Matchers.notNullValue()
                 );
+    }
+
+    @Test
+    public void findMyCustomerContract() {
+        UUID authenticatedUserId = securityChecks.getAuthenticatedUserId();
+
+        CustomerOutput customer = CustomerOutputTestDataBuilder
+            .existing()
+            .id(authenticatedUserId)
+            .build();
+
+        Mockito.when(forQueryingCustomers.findById(authenticatedUserId))
+            .thenReturn(customer);
+
+        RestAssuredMockMvc
+            .given()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when()
+            .get("/api/v1/customers/me")
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.OK.value())
+            .body(
+                "id", Matchers.notNullValue(),
+            "id", Matchers.is(authenticatedUserId.toString()),
+                "firstName", Matchers.equalTo(customer.getFirstName()),
+                "lastName", Matchers.equalTo(customer.getLastName()),
+                "email", Matchers.equalTo(customer.getEmail())
+            );
+
+        Mockito.verify(forQueryingCustomers).findById(authenticatedUserId);
     }
 }

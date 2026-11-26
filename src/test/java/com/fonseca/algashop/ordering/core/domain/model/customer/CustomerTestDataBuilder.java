@@ -5,6 +5,7 @@ import com.fonseca.algashop.ordering.core.domain.model.customer.BirthDate;
 import com.fonseca.algashop.ordering.core.domain.model.customer.Customer;
 import com.fonseca.algashop.ordering.core.domain.model.customer.CustomerId;
 import com.fonseca.algashop.ordering.core.domain.model.customer.LoyaltyPoints;
+import com.fonseca.algashop.ordering.core.ports.out.order.CustomerMinimalOutput;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -60,6 +61,16 @@ public class CustomerTestDataBuilder {
                         .complement("Apt. 114")
                         .build())
                 ;
+    }
+
+    public static CustomerMinimalOutput.CustomerMinimalOutputBuilder customerMinimalOutput() {
+        return CustomerMinimalOutput.builder()
+            .id(new CustomerId().value())
+            .firstName("Alice")
+            .lastName("Cooper")
+            .document("67890")
+            .email("alice.cooper@email.com")
+            .phone("1199887766");
     }
 
     public static Customer.ExistingCustomerBuild existingAnonymizedCustomer() {

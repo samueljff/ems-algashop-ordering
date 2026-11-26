@@ -62,7 +62,5 @@ public class OrderControllerWithoutProductCatalogIT extends AbstractPresentation
                 .assertThat()
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
                 .statusCode(HttpStatus.GATEWAY_TIMEOUT.value());
-
     }
-
 }

@@ -8,9 +8,7 @@ import com.fonseca.algashop.ordering.core.domain.model.shoppingcart.ShoppingCart
 import com.fonseca.algashop.ordering.core.ports.in.checkout.BuyNowInput;
 import com.fonseca.algashop.ordering.core.ports.out.order.OrderDetailOutput;
 import com.fonseca.algashop.ordering.infrastructure.adapters.in.web.AbstractPresentationIT;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.customer.CustomerPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.order.OrderPersistenceEntityRepository;
-import com.fonseca.algashop.ordering.infrastructure.adapters.out.persistence.shoppingcart.ShoppingCartPersistenceEntityRepository;
 import com.fonseca.algashop.ordering.utils.AlgaShopResourceUtils;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
@@ -30,12 +28,6 @@ import java.util.UUID;
 public class OrderControllerIT extends AbstractPresentationIT {
 
     @Autowired
-    private CustomerPersistenceEntityRepository customerRepository;
-
-    @Autowired
-    private ShoppingCartPersistenceEntityRepository shoppingCartRepository;
-
-    @Autowired
     private OrderPersistenceEntityRepository orderRepository;
 
     @MockitoBean
@@ -46,9 +38,9 @@ public class OrderControllerIT extends AbstractPresentationIT {
 
     private static final UUID validCustomerId = UUID.fromString("6e148bd5-47f6-4022-b9da-07cfaa294f7a");
     private static final UUID validProductId = UUID.fromString("fffe6ec2-7103-48b3-8e4f-3b58e43fb75a");
-    private static final UUID validShoppingCartId = UUID.fromString("4f31582a-66e6-4601-a9d3-ff608c2d4461");
     private static final UUID unauthenticatedCustomer = UUID.fromString("ac154d94-171a-45c8-8f7f-5ae6f2f15c05");
     private static final UUID shoppingCartCustomerId = UUID.fromString("f6a7b8c9-d0e1-f2a3-b4c5-d6e7f8a9b0c1");
+    private static final String orderId = "1727196000001";
 
     @BeforeEach
     public void setup() {
@@ -73,6 +65,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
     @Test
     public void shouldCreateOrderUsingProduct() {
         Mockito.doReturn(true).when(securityChecks).canOrderFor(validCustomerId);
+        securityChecks.canOrderFor(validCustomerId);
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-product.json");
         String createOrderId = givenAuthenticated(validCustomerId)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -115,6 +108,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
     @Test
     public void shouldNotCreateOrderUsingProductWhenCustomerWasNotFound() {
         Mockito.doReturn(true).when(securityChecks).canOrderFor(unauthenticatedCustomer);
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(unauthenticatedCustomer);
         String json = AlgaShopResourceUtils.readContent("json/create-order-with-product-and-invalid-customer.json");
         givenAuthenticated(unauthenticatedCustomer)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -125,7 +119,7 @@ public class OrderControllerIT extends AbstractPresentationIT {
             .then()
                 .assertThat()
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-                .statusCode(HttpStatus.FORBIDDEN.value());
+                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
 
     @Test
@@ -217,5 +211,107 @@ public class OrderControllerIT extends AbstractPresentationIT {
                 .assertThat()
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+    }
+
+    /**
+     * Buscando pedidos com Roles especificas
+     * */
+    @Test
+    public void shouldAllowAdminToListAllOrders() {
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(validCustomerId);
+        givenAuthenticatedWithRole(validCustomerId, "MANAGER")
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when()
+            .get("/api/v1/orders")
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void shouldReturnForbiddenWhenCustomerTriesToListAllOrders() {
+        Mockito.when(securityChecks.getAuthenticatedUserId()).thenReturn(validCustomerId);
+        givenAuthenticatedWithRole(validCustomerId, "CUSTOMER")
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when()
+            .get("/api/v1/orders")
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+            .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void shouldAllowAdminToFindOrderById() {
+        Mockito.doReturn(true).when(securityChecks).canOrderFor(validCustomerId);
+
+        String json = AlgaShopResourceUtils.readContent(
+            "json/create-order-with-product.json"
+        );
+
+        String orderId = givenAuthenticated(validCustomerId)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .contentType("application/vnd.order-with-product.v1+json")
+            .body(json)
+            .when()
+            .post("/api/v1/customers/me/orders")
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.CREATED.value())
+            .body(
+                "id", Matchers.not(Matchers.emptyString()),
+                "customer.id", Matchers.is(validCustomerId.toString())
+            )
+            .extract()
+            .jsonPath()
+            .getString("id");
+
+        boolean orderExists = orderRepository.existsById(
+            new OrderId(orderId).value().toLong()
+        );
+
+        Assertions.assertThat(orderExists).isTrue();
+
+        givenAuthenticatedWithRole(validCustomerId, "MANAGER")
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when()
+            .get("/api/v1/orders/{orderId}", orderId)
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .statusCode(HttpStatus.OK.value());
+    }
+
+
+    @Test
+    public void shouldReturnForbiddenWhenClientToRetrieveOrder() {
+        Mockito.doReturn(true).when(securityChecks).canOrderFor(validCustomerId);
+
+        String json = AlgaShopResourceUtils.readContent(
+            "json/create-order-with-product.json"
+        );
+
+        String orderId = givenAuthenticated(validCustomerId)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .contentType("application/vnd.order-with-product.v1+json")
+            .body(json)
+            .when()
+            .post("/api/v1/customers/me/orders")
+            .then()
+            .statusCode(HttpStatus.CREATED.value())
+            .extract()
+            .jsonPath()
+            .getString("id");
+
+        givenAuthenticatedWithRole(validCustomerId, "CUSTOMER")
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .when()
+            .get("/api/v1/orders/{orderId}", orderId)
+            .then()
+            .assertThat()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE)
+            .statusCode(HttpStatus.FORBIDDEN.value());
     }
 }
