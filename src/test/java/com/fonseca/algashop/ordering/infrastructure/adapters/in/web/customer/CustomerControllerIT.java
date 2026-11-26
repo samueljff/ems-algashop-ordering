@@ -199,6 +199,7 @@ public class CustomerControllerIT extends AbstractPresentationIT {
             .then()
             .assertThat()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
+
             .statusCode(HttpStatus.OK.value())
             .extract()
             .as(CustomerOutput.class);
